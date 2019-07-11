@@ -1,0 +1,11 @@
+{
+  "name": "微信小程序学习笔记",
+  "version": "1.0.0",
+  "dependencies": {
+    
+  },
+  "scripts": {
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
+  }
+}
