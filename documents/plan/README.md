@@ -2,17 +2,21 @@
 > 该计划预计时间为8，9，10月。
 
 
-5. 学习原生canvas,并且调研canvas绘图框架
+1. 学习原生canvas,并且调研canvas绘图框架
 >  输出：图片裁剪组件，接龙圈分享接龙海报
-4. 重学git
+2. 微信小程序
+![weixin](./img/weixin.png)
+2. 重学git
 >  输出：前端分享
-6. 学习音视频传输，编码解码原理
+
+![git](./img/git.png)
+3. 学习音视频传输，编码解码原理
 >  输出：一对一视频直播
-1. 调研uni-app,Mpx和Chameleon
-2. 读Vant Weapp源码，总结微信小程序UI组件开发经验。
+4. 调研uni-app,Mpx和Chameleon
+5. 读Vant Weapp源码，总结微信小程序UI组件开发经验。
 >  输出：UI组件库
-3. 总结出通用的微信小程序项目结构
-            1,2,3目的：了解
+
+![计划](./img/UI.png)
 
 
 
