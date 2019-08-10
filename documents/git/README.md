@@ -41,3 +41,7 @@ refs文件夹中保存了这个仓库中所有的分支(refs/heads)和标签(ref
 refs/heads文件夹中保存当前仓库以分支名命名的文件(如master,dev等),这些文件中保存了一个commit,表示这个文件对应的指针指向的commit。例如，master文件中保存的是master指针指向的commit，dev文件中保存的是dev指针指向的commit
 #### refs/tags文件夹
 refs/tags文件夹中保存了当前仓库以标签名命名的文件(如v1.0.0等)，这些文件中保存了一个commit.
+
+## git中三大对象commit , tree 和 blob
+每次执行git commit操作都会生成一个commit对象，每个commit对象中会包含一个tree对象。tree对象中保存了本次执行commit操作时本项目仓库中所有文件夹和文件的快照，在git中blob对象表示文件，如果两个文件如果文件内容一样，那么对应同一个blob。
+> git cat-file -p 哈希值 ： 显示这个哈希值中的内容。git cat-file -t 哈希值：显示这个哈希值的对象类型
