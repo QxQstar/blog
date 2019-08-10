@@ -17,3 +17,15 @@
 2. git config --list --local
 3. git config --list --global
 4. git config --list --system
+
+## 给文件重命名
+git mv 旧的文件名 新的文件名
+
+## git log 查看版本演变历史
+1. git log 查看当前分支的演变历史
+2. git log --oneline 查看当前分支的简洁版演变历史
+3. git log --all 查看所有分支演变历史
+4. git log --graph 图形化查看当前分支的演变历史（在存在多个分支时会显示当前分支与其他分支之间的合并记录以及从当前分支检出新分支的记录）
+5. git log 分支名 查看指定分支的历史演变记录
+6. git log -n4(-nx) 显示当前分支最近的4条记录
+> --oneline , --all,分支名,--graph,-nx这些参数可以组合使用。在使用了--all参数的同时又指定了某个分支名，分支名会被忽略。
