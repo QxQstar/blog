@@ -29,3 +29,15 @@ git mv 旧的文件名 新的文件名
 5. git log 分支名 查看指定分支的历史演变记录
 6. git log -n4(-nx) 显示当前分支最近的4条记录
 > --oneline , --all,分支名,--graph,-nx这些参数可以组合使用。在使用了--all参数的同时又指定了某个分支名，分支名会被忽略。
+
+## .git目录
+### HEAD文件
+HEAD文件中保存了一个引用，这个引用指向当前工作的分支。
+### config文件
+config文件中保存的是这个仓库的配置信息，当使用git config --local 会修改/显示这个文件中的内容
+### refs文件夹
+refs文件夹中保存了这个仓库中所有的分支(refs/heads)和标签(refs/tags)
+#### refs/heads文件夹
+refs/heads文件夹中保存当前仓库以分支名命名的文件(如master,dev等),这些文件中保存了一个commit,表示这个文件对应的指针指向的commit。例如，master文件中保存的是master指针指向的commit，dev文件中保存的是dev指针指向的commit
+#### refs/tags文件夹
+refs/tags文件夹中保存了当前仓库以标签名命名的文件(如v1.0.0等)，这些文件中保存了一个commit.
