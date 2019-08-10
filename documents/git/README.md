@@ -51,3 +51,8 @@ refs/tags文件夹中保存了当前仓库以标签名命名的文件(如v1.0.0�
 
 ## HEAD指针和branch的关系
 不管是在分离头指针的状态（即：HEAD不与任何一个分支绑定）还是HEAD与某个分支绑定，HEAD指针的落脚点都是某个commit。切换到新的分支，HEAD会指向新分支最近一次的commit。
+
+## 删除分支
+1. git branch -d 分支名
+2. git branch -D 分支名
+> `git branch -d 分支名` 命令删除分支，如果这个这个分支还没有被合并，git会给提示。`git branch -D 分支名`表示强制删除分支
