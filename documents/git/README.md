@@ -65,3 +65,5 @@ git rebase -i < commit >
 > 如果要修改某次commit的message信息，可以使用`git rebase -i < commit >`命令，参数-i后的commit值是需要修改message信息的commit的父commit的哈希值。执行这个命名后根据命令行中的交互进行操作就可以达到修改commit message的目的。通过变基修改了一个commit的message信息，会导致这个commit的hash值以及后续commit的hash值发生变化。***不要对已经推送的commit进行变基操作***
 
 修改commit的message信息会导致commit的hash值发生变化（实际上是新创建的commit）。只要commit的hash值，更新时间，parent，作者等属性发生了变化，在git眼里就是不同的commit。
+### 将多个连续的commit合并成一个commit
+> git rebase -i < commit >。-i参数后的commit hash值是需要合并成一个commit的多个连续commit的最近的父commit的hash值
