@@ -19,8 +19,32 @@ js错误可以通过两种方式产生，一种是浏览器自身在解析js代�
 ## 通过编程来获取追溯栈
 在Chrome中，可以简单的调用Error.captureStackTrace API来获取到追溯栈，关于该API的使用可以通过如下链接了解： [https://v8.dev/docs/stack-trace-api](https://v8.dev/docs/stack-trace-api)
 ## 异步追溯栈
-异步调用入口往往会给追溯栈带来问题，因为异步代码会生成一个新的执行上下文，而追溯栈又会重新形成追溯帧。Chrome DevTools 已经支持了异步追溯栈
+异步调用入口往往会给追溯栈带来问题，因为异步代码会生成一个新的执行上下文，而追溯栈又会重新形成追溯帧。Chrome DevTools 已经支持了异步追溯栈。可以从[https://www.html5rocks.com/en/tutorials/developertools/async-call-stack/](https://www.html5rocks.com/en/tutorials/developertools/async-call-stack/)获取更多信息
+## 捕获JS 错误
+1. window.onerror
 
+给window.onerror定义一个事件处理程序，在程序中未被捕获的错误往往能够被window.onerror上注册的监听函数捕获到。详情查看[https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onerror](https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onerror)
 
+```javascript
+window.onerror = function(msg, url, line, col, err) {
+  console.log('Application encountered an error: ' + msg);
+  console.log('Stack trace: ' + err.stack);}
+```
+
+使用window.onerror捕获错误存在的问题
+* 浏览器支持不统一。
+    
+    第5个参数是Error对象，但是不是所有的浏览器都能够正确的给window.onerror回调函数中提供一个error对象。Safari 和 IE10还不支持在window.onerror的回调函数中使用第五个参数
+* Cross domain sanitization
+    
+    在Chrome中可以捕获到从其他域引用的js代码中的错误，并且将这些错误标记为script error。其他浏览器不会捕获到从其他域引用的js代码中的错误。
+* window.addEventListener(“error”)
+
+    window.addEventListener(“error”) API 的效果和window.onerror API相同。
+* 错误会显示在控制台中
+    给window.onerror设置回调函数不能阻止错误信息显示在控制台中。如果不想错误信息显示在控制台，可以在window.addEventListener(“error”)中使用e.preventDefault()。
+> 使用 window.onerror捕获错误推荐的做法是:只有当JS错误带有一个合法的Error 对象和追溯栈时才将其报告给服务器.
+
+    
 ## 参考文章
 1. [JavaScript Errors 指南](https://mp.weixin.qq.com/s/e4_AdSWMxl1BXLfMl-sAgA)
