@@ -23,28 +23,44 @@ js错误可以通过两种方式产生，一种是浏览器自身在解析js代�
 ## 捕获JS 错误
 1. window.onerror
 
-给window.onerror定义一个事件处理程序，在程序中未被捕获的错误往往能够被window.onerror上注册的监听函数捕获到。详情查看[https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onerror](https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onerror)
-
-```javascript
-window.onerror = function(msg, url, line, col, err) {
-  console.log('Application encountered an error: ' + msg);
-  console.log('Stack trace: ' + err.stack);}
-```
-
-使用window.onerror捕获错误存在的问题
-* 浏览器支持不统一。
+    给window.onerror定义一个事件处理程序，在程序中未被捕获的错误往往能够被window.onerror上注册的监听函数捕获到。详情查看[https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onerror](https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onerror)
     
-    第5个参数是Error对象，但是不是所有的浏览器都能够正确的给window.onerror回调函数中提供一个error对象。Safari 和 IE10还不支持在window.onerror的回调函数中使用第五个参数
-* Cross domain sanitization
+    ```javascript
+    window.onerror = function(msg, url, line, col, err) {
+      console.log('Application encountered an error: ' + msg);
+      console.log('Stack trace: ' + err.stack);}
+    ```
     
-    在Chrome中可以捕获到从其他域引用的js代码中的错误，并且将这些错误标记为script error。其他浏览器不会捕获到从其他域引用的js代码中的错误。
-* window.addEventListener(“error”)
+    使用window.onerror捕获错误存在的问题
+    * 浏览器支持不统一。
+        
+        第5个参数是Error对象，但是不是所有的浏览器都能够正确的给window.onerror回调函数中提供一个error对象。Safari 和 IE10还不支持在window.onerror的回调函数中使用第五个参数
+    * Cross domain sanitization
+        
+        在Chrome中可以捕获到从其他域引用的js代码中的错误，并且将这些错误标记为script error，如果不想处理其他域的错误信息，可以使用script error过滤掉，如果在Chrome想要得到完整的跨域信息，还需要对跨域资源进行其他设置。其他浏览器不会检测到其他源上面的文件错误，即便是Chrome浏览器，如果使用try/catch将跨域资源代码包围，Chrome也不会检测到跨域错误。
+        
+        如何在Chrome上获取完整的错误信息：
+            
+            1.给script标签添加crossorigin属性，并且服务器上对这个资源设置Access-Control-Allow-Origin。
+       
+    * window.addEventListener(“error”)
+    
+        window.addEventListener(“error”) API 的效果和window.onerror API相同。
+    * 错误会显示在控制台中
+        给window.onerror设置回调函数不能阻止错误信息显示在控制台中。如果不想错误信息显示在控制台，可以在window.addEventListener(“error”)中使用e.preventDefault()。
+    > 使用 window.onerror捕获错误推荐的做法是:只有当JS错误带有一个合法的Error 对象和追溯栈时才将其报告给服务器.
 
-    window.addEventListener(“error”) API 的效果和window.onerror API相同。
-* 错误会显示在控制台中
-    给window.onerror设置回调函数不能阻止错误信息显示在控制台中。如果不想错误信息显示在控制台，可以在window.addEventListener(“error”)中使用e.preventDefault()。
-> 使用 window.onerror捕获错误推荐的做法是:只有当JS错误带有一个合法的Error 对象和追溯栈时才将其报告给服务器.
+2. window.onunhandlerejection
+    window.onunhandlerejection可以用来捕获未被处理的promise错误。
 
+3. try/catch
+
+    用try/catch包围代码块，当被包围的代码块发生错误，这些错误会被try/catch捕获，并且错误不会显示在控制台。我们通过try/catch来获取使用window.onerror获取不到的错误。
+    
+    使用try/catch存在的不足
+    
+    * 不能捕获所有错误。比如try/catch就不能够捕获window.setTimeout等异步操作抛出的错误。虽然try/catch不能够捕获异步代码中的错误，但是在Chrome中会把错误抛向全局然后window.onerror可以将其捕获。
+    * 不利于性能优化。在V8引擎中，包裹在try/catch中的语句不会被V8引擎优化（在未来可能会被解决）。可以通过将代码写在一个函数中，然后在try/catch中调用这个函数的方式来解决这个问题。
     
 ## 参考文章
 1. [JavaScript Errors 指南](https://mp.weixin.qq.com/s/e4_AdSWMxl1BXLfMl-sAgA)
