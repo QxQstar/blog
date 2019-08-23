@@ -79,9 +79,9 @@ try {
 > 以setTimeout为例
 ```javascript
     function protectEntryPoint(fn) {
-        return function protectedFn () {
+        return function protectedFn (...arg) {
             try {
-                fn()
+               fn.apply(this, arg)
             }catch (e) {
     
             }
@@ -93,5 +93,34 @@ try {
         return oldSetTimeout.call(window,protectEntryPoint(fn),timeout)
     }
 ```
+## 捕获Promise中的错误
+1. 使用Promise.prototype.catch方法捕获错误
+2. 监听unhandledrejection事件。
+3. 使用 try-catch 对 await promise 语句进行捕捉
+```javascript
+    
+ function task () {
+     return new Promise(function (resolve, reject) {
+        setTimeout(() => {
+            reject(() => {
+                console.log('error')
+            });
+        },100)
+
+    })
+}
+
+async function f() {
+    try {
+        return await task();
+
+    } catch (e) {
+        console.log(e);
+    }
+}
+```
+
 ## 参考文章
 1. [JavaScript Errors 指南](https://mp.weixin.qq.com/s/e4_AdSWMxl1BXLfMl-sAgA)
+2. [How to write async await without try-catch blocks in Javascript](https://blog.grossman.io/how-to-write-async-await-without-try-catch-blocks-in-javascript/)
+3. [从不用 try-catch 实现的 async/await 语法说错误处理](https://segmentfault.com/a/1190000011802045)
