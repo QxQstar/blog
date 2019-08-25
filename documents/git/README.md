@@ -80,3 +80,17 @@ git diff
 ### 比较工作区和HEAD所含文件的差异
 git diff HEAD
 > 如果不指定文件，就是比较所有文件的差异。git diff -- <filename> 只比较指定文件的差异。-- 是为了让git在读取命令参数时消除歧义用的，--后面的是文件或目录（可以是多个文件和目录）
+
+## 恢复文件
+### 将暂存区恢复成和HEAD一样的
+git reset HEAD <filename>...
+> 第一次修改了readme文件，然后添加到暂存区，然后继续修改readme文件，这个时候执行git reset HEAD，会把暂存区恢复成HEAD一样，工作区还是保持最后修改的文件状态。
+
+git reset 命令还可以加--hard || --soft || --mixed
+1. --hard : 将暂存区，工作区恢复成HEAD一样的。
+2. --mixed: 将暂存区恢复成和HEAD一样的(默认)
+3. --soft:
+
+### 将工作区恢复成和暂存区一样的
+git checkout -- <filename>... 
+
