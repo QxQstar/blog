@@ -85,11 +85,14 @@ git diff HEAD
 ### 将暂存区恢复成和HEAD一样的
 git reset HEAD <filename>...
 > 第一次修改了readme文件，然后添加到暂存区，然后继续修改readme文件，这个时候执行git reset HEAD，会把暂存区恢复成HEAD一样，工作区还是保持最后修改的文件状态。
+### 消除最近的几次提交
+git reset <commit>
+> 将HEAD指向某次commit
 
 git reset 命令还可以加--hard || --soft || --mixed
 1. --hard : 将暂存区，工作区恢复成HEAD一样的。
-2. --mixed: 将暂存区恢复成和HEAD一样的(默认)
-3. --soft:
+2. --mixed: 将暂存区恢复成和HEAD一样的，工作区的修改保留(默认)
+3. --soft:工作区和暂存区的修改都保留
 
 ### 将工作区恢复成和暂存区一样的
 git checkout -- <filename>... 
