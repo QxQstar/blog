@@ -70,4 +70,13 @@ git rebase -i < commit >
 ### 将间隔的多个commit合并成一个commit
 > git rebase -i < commit >。在交互界面中使用s命令，并且将间隔的commit放在一起
 
-如果要修改第一次提交的commit message， 在提交列表中，可以手工将根commit添加进来。更简单的方式是使用 `git rebase -i --root` 命令，该命令允许你在分支上变基根提交
+如果要修改第一次提交的commit message， 在提交列表中，可以手工将根commit添加进来。更简单的方式是使用 `git rebase -i --root` 命令，该命令允许你在分支上变基根提交.
+
+## 比较文件的差异
+### 比较暂存区和HEAD所含文件的差异
+git diff --cached
+### 比较工作区和暂存区的差异
+git diff
+### 比较工作区和HEAD所含文件的差异
+git diff HEAD
+> 如果不指定文件，就是比较所有文件的差异。git diff -- <filename> 只比较指定文件的差异。-- 是为了让git在读取命令参数时消除歧义用的，--后面的是文件或目录（可以是多个文件和目录）
