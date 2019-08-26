@@ -79,8 +79,11 @@ git diff --cached
 git diff
 ### 比较工作区和HEAD所含文件的差异
 git diff HEAD
-> 如果不指定文件，就是比较所有文件的差异。git diff -- <filename> 只比较指定文件的差异。-- 是为了让git在读取命令参数时消除歧义用的，--后面的是文件或目录（可以是多个文件和目录）
-
+### 比较两个commit所含文件的差异
+git diff commitId1 commitId2
+## 比较两个分支所含文件的差异
+git diff branch1 branch2。比较分支的差异其实也是比较commit的差异。分支名就是一个指针，它指向某个commit。
+> 如果不指定文件，就是比较所有文件的差异。git diff -- <filename> 只比较指定文件的差异。-- 是为了让git在读取命令参数时消除歧义用的，--后面的是文件或目录（可以是多个文件和目录）。
 ## 恢复文件
 ### 将暂存区恢复成和HEAD一样的
 git reset HEAD <filename>...
