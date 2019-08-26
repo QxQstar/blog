@@ -103,3 +103,20 @@ git checkout -- <filename>...
 ## 删除文件
 git rm <filename>
 
+## 储藏
+### 将工作区和暂存区的更改储藏
+git stash <save stashname>
+### 应用储藏的内容
+git stash apply <stashname> . 如果不指定stashname就应用最新储藏的内容。
+### 移除储藏的内容
+git stash drop <stashname> 如果不指定stashname就移除最新储藏的内容
+### 应用并移除储藏
+git stash pop <stashname>
+### 显示储藏内容列表
+git stash list
+### 从储藏中创建分支
+git stash branch <branchname> 这会创建一个新的分支，并在新分支上应用储藏的内容，如果成功，将会丢弃储藏。
+
+> 你可以在其中一个分支上保留一份储藏，随后切换到另外一个分支，再重新应用这些变更。在工作目录里包含已修改和未提交的文件时，你也可以应用储藏——Git 会给出归并冲突如果有任何变更无法干净地被应用。
+
+
