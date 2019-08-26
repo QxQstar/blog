@@ -100,3 +100,6 @@ git reset 命令还可以加--hard || --soft || --mixed
 ### 将工作区恢复成和暂存区一样的
 git checkout -- <filename>... 
 
+## 删除文件
+git rm <filename>
+
