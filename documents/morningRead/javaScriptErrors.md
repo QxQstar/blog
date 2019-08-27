@@ -37,11 +37,11 @@ js错误可以通过两种方式产生，一种是浏览器自身在解析js代�
         第5个参数是Error对象，但是不是所有的浏览器都能够正确的给window.onerror回调函数中提供一个error对象。Safari 和 IE10还不支持在window.onerror的回调函数中使用第五个参数
     * Cross domain sanitization
         
-        在Chrome中可以捕获到从其他域引用的js代码中的错误，并且将这些错误标记为script error，如果不想处理其他域的错误信息，可以使用script error过滤掉，如果在Chrome想要得到完整的跨域信息，还需要对跨域资源进行其他设置。其他浏览器不会检测到其他源上面的文件错误，即便是Chrome浏览器，如果使用try/catch将跨域资源代码包围，Chrome也不会检测到跨域错误。
+        在Chrome中可以捕获到从其他域引用的js代码中的错误，并且将这些错误标记为script error，如果不想处理其他域的错误信息，可以使用script error过滤掉，如果想要得到完整的跨域信息，还需要对跨域资源进行其他设置。其他浏览器不会检测到其他源上面的文件错误，即便是Chrome浏览器，如果使用try/catch将跨域资源代码包围，Chrome也不会检测到跨域错误。
         
-        如何在Chrome上获取完整的错误信息：
+        如何获取完整的错误信息：
             
-            1.给script标签添加crossorigin属性，并且服务器上对这个资源设置Access-Control-Allow-Origin。
+            1.给script标签添加crossorigin='anonymous'属性，并且服务器上对这个资源设置Access-Control-Allow-Origin。
        
     * window.addEventListener(“error”)
     
