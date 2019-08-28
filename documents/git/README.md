@@ -148,9 +148,14 @@ git clone 命令有三种用法，分别如下：
 * 用法2和用法3创建的克隆版本库不包含工作区，直接是版本库的内容，是一个裸仓库。上述例子中克隆出的裸版本库目录名是directory.git。
 * 用法2和用法3的差别是，用法3克隆出的裸仓库对上游版本库进行了注册，可以在裸版本库中执行git fetch命令和上游版本库进行持续同步
 
-例子
+### 备份到本地
+1. 不使用 --bare 和 --mirror参数克隆的仓库会包含工作区，源仓库的工作区和备份仓库的工作区是对等的。对于这种对等工作区模式，版本库的同步只有一种可行的操作方式：在备份库中执行 git pull 命令从源仓库中拉取新的提交实现版本库同步。
 
-用法1：git clone file:///Users/kyrie/Desktop/myDocuments/mini /Users/kyrie/Desktop/learn_doc
-用法2：git clone --bare file:///Users/kyrie/Desktop/myDocuments/mini /Users/kyrie/Desktop/bare/doc.git
-用法3：git clone --mirror file:///Users/kyrie/Desktop/myDocuments/mini /Users/kyrie/Desktop/bare/doc.git
+    例子：git clone file:///Users/kyrie/Desktop/myDocuments/mini learn_doc
+2. 备份生成裸版本库（更常用）。可以从源版本库向备份裸版本库执行推送操作，但是推送命令还需要加上裸版本库的路径
+
+    例子 git clone --bare file:///Users/kyrie/Desktop/myDocuments/mini doc.git
+        
+        git push /Users/kyrie/Desktop/bare/doc.git
+        
 
