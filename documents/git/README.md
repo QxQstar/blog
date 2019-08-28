@@ -123,3 +123,20 @@ git stash branch <branchname> 这会创建一个新的分支，并在新分支�
 .gitignore
 > .gitignore中的设置对已经被提交到暂存区或者已经被git管理的文件不会起作用
 
+## git备份
+使用git clone命令建立版本库克隆，并且使用git pull和git push 命令使各个克隆之间同步。
+
+git的版本库和工作区在一起，所以存在删除项目工作区的同时将版本库也删除的可能性，一个项目仅仅在一个工作区维护太危险了，所以将git备份是很明智的。
+### 在git中常用的协议
+|协议名|语法格式|说明|
+|---|---|---|
+|本地协议1|/path/to/repo.git|哑协议|
+|本地协议2|file:///path/to/repo.git|智能协议|
+|http/https协议|http://git-server.com/path/to/repo.git|智能协议|
+|ssh协议|user@git-server.com/to/path/repo.git|智能协议|
+
+哑协议传输速度慢，不显示传输进度。智能协议传输速度快且显示传输进度
+
+
+
+
