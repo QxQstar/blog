@@ -137,6 +137,20 @@ git的版本库和工作区在一起，所以存在删除项目工作区的同�
 
 哑协议传输速度慢，不显示传输进度。智能协议传输速度快且显示传输进度
 
+### git clone命令
+git clone 命令有三种用法，分别如下：
+1. `git clone <repository> <directory>`
+2. `git clone --bare   <repository> <directory.git>`
+3. `git clone --mirror <repository> <directory.git>`
 
+这三种用法的区别
+* 用法1会将`<repository>`指向的版本库克隆到`<directory>`目录中，目录`<directory>`相当于版本库的工作区，文件会被检出，版本库位于工作区下的.git目录中。
+* 用法2和用法3创建的克隆版本库不包含工作区，直接是版本库的内容，是一个裸仓库。上述例子中克隆出的裸版本库目录名是directory.git。
+* 用法2和用法3的差别是，用法3克隆出的裸仓库对上游版本库进行了注册，可以在裸版本库中执行git fetch命令和上游版本库进行持续同步
 
+例子
+
+用法1：git clone file:///Users/kyrie/Desktop/myDocuments/mini /Users/kyrie/Desktop/learn_doc
+用法2：git clone --bare file:///Users/kyrie/Desktop/myDocuments/mini /Users/kyrie/Desktop/bare/doc.git
+用法3：git clone --mirror file:///Users/kyrie/Desktop/myDocuments/mini /Users/kyrie/Desktop/bare/doc.git
 
