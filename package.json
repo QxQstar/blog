@@ -8,10 +8,11 @@
     "docs:dev": "vuepress dev",
     "docs:build": "vuepress build",
     "commit": "git cz",
-    "commitmsg": "validate-commit-msg",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^8.1.0",
+    "@commitlint/config-conventional": "^8.1.0",
     "commitizen": "^4.0.3",
     "conventional-changelog-cli": "^2.0.23",
     "cz-conventional-changelog": "^3.0.2",
@@ -21,6 +22,11 @@
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   }
 }
