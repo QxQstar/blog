@@ -164,5 +164,10 @@ git remote add docRemote file:///Users/kyrie/Desktop/myDocuments/mini doc.git
 
 这样就给源仓库添加了一个叫做 docRemote 的远端仓库。下一次想往docRemote同步代码的时候就可以使用 git push docRemote
 
-        
+## git还原
+有三种方式实现还原，分别如下:
+
+1. `git clone <备份仓库> <directory>`
+2. git init 创建一个新仓库，在这个新仓库上添加 remote , 再把备份仓库的数据拉到新仓库
+3. git init 创建一个新仓库，在备份仓库上添加remote，再把备份仓库的数据推到新仓库
 
