@@ -157,5 +157,12 @@ git clone 命令有三种用法，分别如下：
     例子 git clone --bare file:///Users/kyrie/Desktop/myDocuments/mini doc.git
         
         git push /Users/kyrie/Desktop/bare/doc.git
+### 添加远端仓库
+一个源仓库可以通过git clone 克隆到多个地方，实现一个仓库多处备份，如果想把源仓库的代码同步在其他仓库，可以使用git push 命令，但是需要加上克隆仓库的地址，如下`git push /Users/kyrie/Desktop/bare/doc.git`。可以使用git remote add 命令将克隆仓库添加为源仓库的远端仓库，这样在推送的时候就不必带上很长的仓库地址了。如下所示：
+
+git remote add docRemote file:///Users/kyrie/Desktop/myDocuments/mini doc.git
+
+这样就给源仓库添加了一个叫做 docRemote 的远端仓库。下一次想往docRemote同步代码的时候就可以使用 git push docRemote
+
         
 
