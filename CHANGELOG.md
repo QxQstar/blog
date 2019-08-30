@@ -1,7 +1,13 @@
-# Change Log
+# [1.3.0](https://github.com/QxQstar/doc/compare/v1.3.0...v1.0.0) (2019-08-30)
 
 
-## [1.2.0](https://github.com/QxQstar/doc/compare/v1.0.0...v1.2.0) (2019-08-30)
+### Features
+
+* git仓库的还原 ([125ee2f](https://github.com/QxQstar/doc/commit/125ee2f))
+
+
+
+# [1.2.0](https://github.com/QxQstar/doc/compare/v1.0.0...v1.2.0) (2019-08-30)
 
 
 ### Features
@@ -13,7 +19,7 @@
 
 
 
-## [1.0.0](https://github.com/QxQstar/doc/compare/668c18c...v1.0.0) (2019-08-27)
+# [1.0.0](https://github.com/QxQstar/doc/compare/668c18c...v1.0.0) (2019-08-27)
 
 
 ### Bug Fixes
