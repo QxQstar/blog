@@ -121,7 +121,7 @@ git stash branch <branchname> 这会创建一个新的分支，并在新分支�
 
 ## 设置git忽略文件
 .gitignore
-> .gitignore中的设置对已经被提交到暂存区或者已经被git管理的文件不会起作用
+> .gitignore中的设置对已经被提交到暂存区或者已经被git管理的文件不会起作用,如果想将错提交到git版本管理库中的文件删除，但是不删除工作区中的文件可以使用git rm --cached filename
 
 ## git备份
 使用git clone命令建立版本库克隆，并且使用git pull和git push 命令使各个克隆之间同步。
