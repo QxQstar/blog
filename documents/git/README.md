@@ -174,3 +174,26 @@ git remote add docRemote file:///Users/kyrie/Desktop/myDocuments/mini doc.git
 2. git init 创建一个新仓库，在这个新仓库上添加 remote , 再把备份仓库的数据拉到新仓库
 3. git init 创建一个新仓库，在备份仓库上添加remote，再把备份仓库的数据推到新仓库
 
+## 变基
+提取某一个分支上的修改，将修改应用到另一分支上，这种操作变基。通过变基能够完成的操作有：合并代码和修改commit message 信息。修改commit message信息上面已经介绍了，这里主要介绍使用变基合并代码的操作。
+
+在如下的例子中执行变基操作：
+
+![变基的例子](./basic-rebase-1.png)
+将experiment变基到master分支上的操作步骤:
+
+* git checkout experiment
+* git rebase master
+
+到这一步时，分支示意图如下：
+
+![变基示意图](./basic-rebase.png)
+* git checkout master
+* git merge experiment
+
+按照上述步骤执行的结果
+![变基示意图](./basic-rebase-4.png)
+
+在变基过程中可能会出现冲突，如果出现了冲突就根据git的提示解决冲突，并且继续进行变基。变基过程的原理是首先找到两个分支最近的公共祖先C2，然后对比当前分支(即:experiment)相对与该组件的历次提交，提取相应的修改并保存为临时文件，然后将当前分支指向目标基底C3,最后将之前存为临时文件的修改依序在C3上应用，然后回到目标分支进行一次快进合并。
+
+
