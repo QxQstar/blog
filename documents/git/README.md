@@ -196,4 +196,9 @@ git remote add docRemote file:///Users/kyrie/Desktop/myDocuments/mini doc.git
 
 在变基过程中可能会出现冲突，如果出现了冲突就根据git的提示解决冲突，并且继续进行变基。变基过程的原理是首先找到两个分支最近的公共祖先C2，然后对比当前分支(即:experiment)相对与该组件的历次提交，提取相应的修改并保存为临时文件，然后将当前分支指向目标基底C3,最后将之前存为临时文件的修改依序在C3上应用，然后回到目标分支进行一次快进合并。
 
+## gitHub
+
+### 在gitHub上搭建个人博客
+
+详情可查看[jekyll-now](https://github.com/barryclark/jekyll-now),根据说明文档，简单的几步就可以生成一个个人博客
 
