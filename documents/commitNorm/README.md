@@ -6,7 +6,6 @@ git 版本管理主要从以下几个方面来制定规范。
 3. 统一的changelog 文件信息
 4. 分支管理
 
-
 ## commit message 规范
 每个 commit message 包含一个 header, 一个 body 和一个 footer。header由 type，scope，subject 组成。header中的 type 和 subject 是必填的，scope 选填。body 和 footer 选填。
 
@@ -77,7 +76,7 @@ tag标签管理分为三种情况，产品没有明确的版本概念，产品�
 ### 产品没有明确的版本概念
 个人觉得tag的作用之一是以便回退到此版本，所以在产品没有明确版本的概念时以本期大的功能修改作为版本号，不管是小程序，单页应用还是多页应用，都会涉及到路由，所以使用路由的简称作为版本，如果涉及到多个功能模版的修改，多个模块以点(.)分割，最多不超过两个点(.)，如果版本发布之后有修订版就在版本后面加上后缀，用中划线分隔，fix后面加上次数，即第几次fix。例如：userDetail.home.depDetail userDetail.home.depDetail-fix1  
 
-版本发布之前打tag，如果在本次打tag之后有修改则根据实际情况版本递增。
+版本发布之前打tag，如果在本次打tag之后有修改则根据实际情况版本递增，打tag之后使用 `git push origin --tags` 推送所有本地新增的tag到远端。
 ## 禁止的操作
 1. 禁止在团队公共分支上执行git push -f 操作
 2. 禁止在团队公共分支执行git base变基操作，团队的公共分支的变更记录只能往前走，不能历史的变更记录
