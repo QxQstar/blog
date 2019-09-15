@@ -5,7 +5,9 @@ git 版本管理主要从以下几个方面来制定规范。
 2. tag 标签管理
 3. 统一的changelog 文件信息
 4. 分支管理
-
+5. 禁止的操作
+6. git的基本概览
+7. git的某些操作
 ## commit message 规范
 每个 commit message 包含一个 header, 一个 body 和一个 footer。header由 type，scope，subject 组成。header中的 type 和 subject 是必填的，scope 选填。body 和 footer 选填。
 
@@ -74,13 +76,86 @@ tag标签管理分为三种情况，产品没有明确的版本概念，产品�
 ### 产品有明确的版本概念
 版本格式与产品的版本一致，如果版本发布之后有修订版就在版本后面加上后缀，用中划线分隔，fix后面加上次数，即第几次fix。例如: v1.2.4   v1.2.4-fix1
 ### 产品没有明确的版本概念
-个人觉得tag的作用之一是以便回退到此版本，所以在产品没有明确版本的概念时以本期大的功能修改作为版本号，不管是小程序，单页应用还是多页应用，都会涉及到路由，所以使用路由的简称作为版本，如果涉及到多个功能模版的修改，多个模块以点(.)分割，最多不超过两个点(.)，如果版本发布之后有修订版就在版本后面加上后缀，用中划线分隔，fix后面加上次数，即第几次fix。例如：userDetail.home.depDetail userDetail.home.depDetail-fix1  
+在产品没有明确版本的概念时以本期大的功能修改作为版本号，如果涉及到多个功能模版的修改，模块之间以点(.)分割，最多不超过两个点(.)，如果版本发布之后有修订版就在版本后面加上后缀，用中划线分隔，fix后面加上次数，即第几次fix。例如：userDetail.home.depDetail userDetail.home.depDetail-fix1  
 
 版本发布之前打tag，如果在本次打tag之后有修改则根据实际情况版本递增，打tag之后使用 `git push origin --tags` 推送所有本地新增的tag到远端。
+## 统一的 changelog 文件信息
+对于开发的工具库或者UI组件库，使用conventional-changelog-cli生成changelog日志文件，它会根据commits生成日志文件。
+## 分支管理
+### 分支名
+* 线上bug修复：fix-feature/xxx，xxx表示要修复的功能
+* 线上环境的分支：默认只有一个线上环境，所以线上环境的默认分支是master，如果存在多个线上环境，除master之外的线上环境分支为:master-xxx,xxx代表功能，例如: master-saas。
+* 需求分支：如果本次需求有发布或者最终完成的时间（完成指开发且测试通过），分支名为feat-20191019，如果没有确定的时间，分支名为feat-feature/xxx。如果本次需求由多人协同开发，就在大分支名后面加后缀。如：feat-20190405-bella，feat-feature/goodsManger-bella
+* 性能优化分支: 分支命名规则与需求分支的命名规则类似，只是将前缀feat改成pref
+### 开发的工作流程
+1. 修复线上bug：从线上环境对应的分支checkout一个fix分支用于修复bug，bug修复完成之后如果这个bug需要立即上线，就以这个fix分支提测，测试通过上线，将fix分支合入线上环境的分支,删除fix分支；如果这个bug要等到下一次和功能需求一起上线，就将这个fix分支合入功能分支上与功能需求一起上线
+```html
+切换到master分支
+git checkout master
+
+基于master 建一个fix分支
+git checkout -b fix-feature/home
+
+提测
+以fix-feature/home分支的代码推送到测试环境
+
+上线之后
+git checkout master
+git merge fix-feature/home
+
+将所有的分支推送到远端仓库
+git push --all
+
+删除分支
+git branch -d fix-feature/home
+```
+2. 需求开发：从线上环境对应的分支checkout一个feat分支，如果本次需求由多人协同开发，就基于大的feat分支checkout个人feat分支,开发完成之后每个人将自己的分支合如feat分支，以feat分支提测，测试通过上线将feat分支合入线上分支，删除feat分支。
+```
+切换到master分支
+git checkout master
+
+基于master分支建feat分支
+git checkout -b feat-20190102
+
+如果涉及多人开发，每个人创建自己的开发分支
+git checkout -b feat-20190102-bella
+
+多人开发完成，将自己的代码合并到这次共同的开发分支上
+git checkout feat-20190102
+git merge feat-20190102-bella
+
+提测
+以feat-20190102分支的代码推送到测试环境
+
+上线之后
+git checkout master
+git merge feat-20190102
+
+将所有的分支推送到远端仓库
+git push --all
+
+删除分支
+git branch -d feat-20190102
+
+```
+## 工作流程
+1. 基于线上分支创建功能分支
+2. 功能开发
+3. 根据功能提交 commit
+4. 将多人协同开发的代码合并
+5. 提测
+6. 生成统一的changelog文件信息(可选)
+7. 上线
+8. 将变更合并到线上分支
+9. 打标签
+10. 删除功能分支
+11. push
+
+> 上述流程是前端和后端同时发布，如果是前后端分开分布，工作流程会变成1,2,3,4,5,8,6.9,7,10,11
 ## 禁止的操作
 1. 禁止在团队公共分支上执行git push -f 操作
 2. 禁止在团队公共分支执行git base变基操作，团队的公共分支的变更记录只能往前走，不能历史的变更记录
-3. 禁止在团队公共分支执行git reset 操作回滚，使用git revert 进行代码回滚
+3. 禁止在团队公共分支执行git reset 操作回滚，如果需要回滚就使用git revert 进行代码回滚
 
 ## git的基本概念
 1. git中三大对象commit , tree 和 blob
