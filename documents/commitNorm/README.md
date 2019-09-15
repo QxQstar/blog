@@ -165,7 +165,64 @@ git branch -d feat-20190102
 ### 变基
 提取某一个分支上的修改，将修改应用到另一分支上，这种操作变基。通过变基能够完成的操作有：合并代码和修改commit message 信息。
 ## git的操作
-1. 配置git
-2. 修改commit message 信息
-3. 回退版本
-4. 打标签
+### 配置git
+```
+配置user.name : git config --global user.name 'your name'
+配置user.email : git config --global user.email 'your email'
+```
+1. config 参数
+* git config --local : 只对某个仓库有效
+* git config --global : 对当前用户所有的仓库有效
+* git config --system : 对系统所有的登录用户有效
+2. 显示config的配置
+
+ `git config --list`会将所有范围的config配置都显示出来。如果只想显示某一个范围的config配置，就要加范围参数(如：--local,--global,--system)
+### 修改commit message 信息
+1. 修改最新的commit
+```
+git commit --amend
+```
+2. 修改老的commit的message
+```html
+git rebase -i  <commit>
+```
+
+参数-i后的commit值是需要修改message信息的commit的父commit的哈希值。执行这个命名后根据命令行中的提示进行操作就可以达到修改commit message的目的，在交互界面使用r命令。
+
+3. 将多个连续的commit合并成一个commit
+```
+git rebase -i  <commit>
+```
+
+git rebase -i < commit >。-i参数后的commit hash值是需要合并成一个commit的多个连续commit的最近的父commit的hash值。在交互界面使用s命令
+
+4. 将间隔的多个commit合并成一个commit
+
+```html
+git rebase -i <commit>
+```
+
+在交互界面中使用s命令，并且将间隔的commit放在一起
+> 在commit没有被推送到远端仓库之前可以修改commit message，禁止修改公共分支上的commit message。如果要修改第一次提交的commit message， 在提交列表中，可以手工将根commit添加进来。更简单的方式是使用 `git rebase -i --root` 命令，该命令允许你在分支上变基根提交.
+### 回退版本
+```
+git revert <commit>…​
+```
+
+还原一个或者多个commit 的修改。
+```
+git revert commit2..commit5
+```
+恢复commit2(不包含)到commit5(包含)之间变更
+### 打标签
+```
+git tag v1.0.0
+```
+1. 后期加tag
+```
+git tag -a v1.0.0 commitId
+```
+2. 将本地新增的标签推送到远端
+```
+git push --tags
+```
