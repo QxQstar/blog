@@ -6,6 +6,7 @@ module.exports = {
         sidebar: {
             'weixin': {collapsable: false,children:['/documents/weixin']},
             'plan':{collapsable: false,children:['/documents/plan']},
+            'git normal':{collapsable:false,children:['/documents/commitNorm']}
         }
     },
     base: '/doc/',
