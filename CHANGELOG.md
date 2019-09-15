@@ -1,4 +1,13 @@
-# [1.4.0](https://github.com/QxQstar/doc/compare/v1.3.1...v1.0.0) (2019-09-15)
+# [1.0.0](https://github.com/QxQstar/doc/compare/v1.4.0...v1.0.0) (2019-09-15)
+
+
+### Bug Fixes
+
+* 修改工作流程的顺序 ([fd4e5d6](https://github.com/QxQstar/doc/commit/fd4e5d6))
+
+
+
+# [1.4.0](https://github.com/QxQstar/doc/compare/v1.3.1...v1.4.0) (2019-09-15)
 
 
 ### Bug Fixes
