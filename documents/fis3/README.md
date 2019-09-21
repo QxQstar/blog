@@ -15,3 +15,11 @@
     3. spriter 图片合并扩展点，如 csssprites
     4. postpackager 打包后处理插件扩展点
 > 打包阶段插件设置时必须分配给所有文件，设置时必须 match ::package，不然不做处理。
+
+## fis3-postpackager-loader
+他会将页面中的零散资源进行整合，默认会把页面中用到的样式插入在 header 中，脚本插入在 body 底部。如果想修改，要在页面中自己插入<!--SCRIPT_PLACEHOLDER--> 和 <!--STYLE_PLACEHOLDER--> 占位符来控制位置。此插件会收集所有的资源，如果希望某个资源不被收集，要在资源结尾处如 </script> 后面加上 <!--ignore--> 注释.
+```html
+<script src="lib.js"></script><!--ignore-->
+```
+
+> 被 ignore 的资源，不会被修改位置，同时也不会参与 allInOne 合并。
