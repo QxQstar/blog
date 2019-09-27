@@ -188,4 +188,57 @@ webpack-dev-server 会以publicPath的值确定从哪个位置开启服务
 * 'anonymous': Enable cross-origin loading without credentials
 * 'use-credentials': Enable cross-origin loading with credentials
 
+## devtool
+控制怎么生成source map，这个值会影响构建速度，除了通过设置devtool来控制生成source map，还能使用SourceMapDevToolPlugin/EvalSourceMapDevToolPlugin来控制，但是不用即设置devtool有使用插件
+```javascript
+module.exports = {
+    devtool:''
+}
+```
+## context
+用于指定webpack的主目录，它是一个绝对路径，默认是当前路径，推荐给context指定一个值。entry和module.rules.loader相对这个路径resolve。
+```javascript
+module.exports = {
+    context:__dirname
+}
+```
 
+## target
+webpack能够编译多种软件包, 默认为web。target可以是字符串也能是function (compiler)
+```javascript
+module.exports = {
+    target:'web'
+}
+```
+
+target的可选值
+
+|可选值|描述|
+|-----|----|
+|async-node|编译为在类node.js文件运行的软件包。使用fs和vm异步加载文件|
+|electron-main|编译为在 Electron 运行的主程序|
+|electron-renderer|编译为在Electron运行的渲染程序，在浏览器环境中提供JsonpTemplatePlugin , FunctionModulePlugin，在CommonJS 和 Electron built-in modules中提供NodeTargetPlugin and ExternalsPlugin|
+|electron-preload|编译为在Electron运行的渲染程序，在浏览器环境中提供NodeTemplatePlugin ，FunctionModulePlugin 和 asyncChunkLoading ，并把asyncChunkLoading设置为true，在CommonJS 和 Electron built-in modules中提供NodeTargetPlugin and ExternalsPlugin|
+|node|编译为在类node.js文件运行的软件包。使用require加载文件|
+|node-webkit|编译为在WebKit运行并且使用JSONP加载文件的软件包，并且可以import NodeJs的内置模块|
+|web|编译为 i在浏览器运行的软件包(默认值)|
+|webworker|编译为WebWorker|
+
+如果上述target字符串都不满足你的要求，你可以将target设置为函数
+```javascript
+//  把应用任何插件
+module.exports = {
+    target:(compiler) => {
+        return undefined
+    }
+}
+
+module.exports = {
+    target:(compiler) => {
+        return compiler.apply(
+              new webpack.JsonpTemplatePlugin(options.output),
+              new webpack.LoaderTargetPlugin('web')
+            );
+    }
+}
+```
