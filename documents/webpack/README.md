@@ -242,3 +242,51 @@ module.exports = {
     }
 }
 ```
+## webpack-dev-server
+使用webpack-dev-server能够快速的在本地开启一个web服务器。
+
+安装webpack-dev-server
+```
+npm install webpack-dev-server --save-dev
+```
+
+在命令行中执行如下命令，启动一个web服务
+```
+webpack-dev-server --config webpack.dev.config.js
+```
+
+> webpack-dev-server 默认使用的配置文件是webpack.dev.config.js，可以通过 --config指定配置文件
+
+除了在命令行中直接输入webpack-dev-server启动服务，还可以在package.json中的scripts增加字段，然后使用scripts中字段启动服务
+
+package.json
+```
+"scripts": {
+  "start":"webpack-dev-server --config webpack.dev.config.js"
+}
+```
+
+cli
+```
+npm run start
+```
+
+webpack配置文件中的devServer可以用于指定webpack-dev-server的行为
+
+### devServer
+#### devServer.compress
+是否开启gzip 压缩
+```javascript
+module.exports = {
+    // do something
+    
+    devServer:{
+        compress:true
+    }
+}
+```
+或者
+
+```
+webpack-dev-server --compress
+```
