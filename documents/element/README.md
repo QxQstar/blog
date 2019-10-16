@@ -96,8 +96,24 @@ styleLibraryName的值要以～开头，并且～后面的值是主题文件相�
 
 > 使用babel-plugin-component按需引入组件的同时也会引入组件的样式，所有不需要自己在项目中引入组件的样式。生成的这个变量文件(即：element-variables.scss)在项目中不需要使用，它只是用于生成主题css样式文件
 
+## element-theme
 
+element-theme是一个Element主题生成工具，他使用gulp将sass转成css文件，默认将element-theme-chalk中的sass文件转成css文件，支持自定义主题，甚至可以指定saas文件所在的库。
 
+在package.json中配置element-theme字段自定义主题
 
+```json
+{
+  "element-theme": {
+    "browsers": ["ie > 9", "last 2 versions"],
+    "out": "./theme",
+    "config": "./element-variables.css",
+    "theme": "element-theme-chalk",
+    "minimize": false,
+    "components": ["button", "input"]
+  }
+}
+```
 
+除了可以通过配置package.json的方式自定义主题，还可以在命令行传参数的方式自定义主题
 
