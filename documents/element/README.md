@@ -57,7 +57,26 @@ import './assets/theme/index.css'
 ### 按需引入组件和组件样式
 > 假如只引入Button
 
-配置babel.config.js
+
+#### 生成主题文件
+安装element-theme，element-theme-chalk
+```cli
+npm i element-theme element-theme-chalk -D
+```
+在命令行中执行如下命令，生成element-ui变量文件。
+
+```cli
+et -i ./src/element-variables.scss
+```
+
+生成变量文件之后将文件中的变量修改成自己想要的主题颜色。
+
+生成主题文件，并且将文件保存到src/assets/theme
+```cli
+    et -c ./src/element-variables.scss -o ./src/assets/theme
+```
+
+#### 配置babel.config.js
 ```javascript
 module.exports = {
   presets: [["es2015", { "modules": false }]],
@@ -66,77 +85,17 @@ module.exports = {
       "component",
       {
         "libraryName": "element-ui",
-        "styleLibraryName": "theme-chalk"
+        "styleLibraryName": "~src/assets/theme"
       }
     ]
   ]
 }
 ```
-#### 在支持scss的项目
-在系统中创建一个scss文件，如element-variables.scss，文件内容如下：
 
-```scss
-$--color-primary: red;
-// icon路径
-$--font-path: "~element-ui/lib/theme-chalk/fonts";
-//  基础样式
-@import "~element-ui/packages/theme-chalk/src/base.scss";
-// 组件样式
-@import "~element-ui/packages/theme-chalk/src/button.scss";
-```
+styleLibraryName的值要以～开头，并且～后面的值是主题文件相对babel.config.js的路径。
 
-在项目主文件中引入element-variables.scss
+> 使用babel-plugin-component按需引入组件的同时也会引入组件的样式，所有不需要自己在项目中引入组件的样式。生成的这个变量文件(即：element-variables.scss)在项目中不需要使用，它只是用于生成主题css样式文件
 
-```javascript
-import './element-variables.scss'
-```
-
-还要在主文件中按需引入组件，在这儿不加以描述
-
-#### 在不支持scss的项目中
-
-在不支持scss的项目中按需引入自定义element-ui的样式，需要将scss文件编译成css文件，可以gulp编译
-```javascript
-// gulpfile.js
-
-'use strict';
-
-const { series, src, dest } = require('gulp');
-const sass = require('gulp-sass');
-const autoprefixer = require('gulp-autoprefixer');
-const cssmin = require('gulp-cssmin');
-
-function compile() {
-    return src('./src/element-ui-scss/src/index.scss')
-        .pipe(sass.sync())
-        .pipe(autoprefixer({
-            browsers: ['ie > 9', 'last 2 versions'],
-            cascade: false
-        }))
-        .pipe(cssmin())
-        .pipe(dest('./src/assets/element-theme'));
-}
-
-function copyfont() {
-    return src('./src/element-ui-scss/src/fonts/**')
-        .pipe(cssmin())
-        .pipe(dest('./src/assets/element-theme/fonts'));
-}
-
-exports.build = series(compile, copyfont);
-```
-
-> 将element-ui的样式源码文件拷贝到src/element-ui-scss中，将src/element-ui-scss/src/index.scss文件修改为只引入需要的组件的样式。
-
-在命令行中执行
-```
-gulp build
-```
-
-在入口文件中引入生成的样式文件
-```cli
-import './assets/element-theme/index.css'
-```
 
 
 
