@@ -117,3 +117,20 @@ element-theme是一个Element主题生成工具，他使用gulp将sass转成css�
 
 除了可以通过配置package.json的方式自定义主题，还可以在命令行传参数的方式自定义主题
 
+## Commander
+
+在element-theme中使用Commander解析命令行中的参数。
+
+```js
+var program = require('commander')
+
+program
+  .version(require('../package.json').version)
+  .option('-i --init [filePath]', 'init variables file')
+  .option('-w --watch', 'watch variable changes then build')
+  .option('-o --out [outPath]', 'output path', function (out) {config.out = out})
+  .option('-m --minimize', 'compressed file', function (minimize) {config.minimize = minimize !== false})
+  .option('-c --config [filePath]', 'variables file', function (c) {config.config = c})
+  .option('-b --browsers <items>', 'set browsers', function (browsers) {config.browsers = browsers.split(',')})
+  .parse(process.argv)
+```
