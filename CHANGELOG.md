@@ -1,7 +1,21 @@
-# [1.5.0](https://github.com/QxQstar/doc/compare/v1.4.1...v1.0.0) (2019-09-25)
+# [1.6.0](https://github.com/QxQstar/doc/compare/v1.5.0...v1.6.0) (2019-11-01)
 
 
-## Features
+### Bug Fixes
+
+* 修改微前端项目结构图 ([1ca94e7](https://github.com/QxQstar/doc/commit/1ca94e7))
+
+
+### Features
+
+* 基于single-spa的vue微前端项目 ([32c05c8](https://github.com/QxQstar/doc/commit/32c05c8))
+
+
+
+# [1.5.0](https://github.com/QxQstar/doc/compare/v1.4.1...v1.5.0) (2019-09-25)
+
+
+### Features
 
 * git rm --cached filename 删除暂存区的文件，不删除工作区的文件 ([8be8372](https://github.com/QxQstar/doc/commit/8be8372))
 * 变基之合并不同分支的代码 ([b2f1b8b](https://github.com/QxQstar/doc/commit/b2f1b8b))
@@ -9,10 +23,10 @@
 
 
 
-# [1.4.1](https://github.com/QxQstar/doc/compare/v1.4.0...v1.4.1) (2019-09-15)
+## [1.4.1](https://github.com/QxQstar/doc/compare/v1.4.0...v1.4.1) (2019-09-15)
 
 
-## Bug Fixes
+### Bug Fixes
 
 * 修改工作流程的顺序 ([fd4e5d6](https://github.com/QxQstar/doc/commit/fd4e5d6))
 
@@ -21,13 +35,13 @@
 # [1.4.0](https://github.com/QxQstar/doc/compare/v1.3.1...v1.4.0) (2019-09-15)
 
 
-## Bug Fixes
+### Bug Fixes
 
 * tag 标签管理-- 推送所有本地新增的tag到远端 ([937b14f](https://github.com/QxQstar/doc/commit/937b14f))
 * 修改禁止的操作 ([2001ade](https://github.com/QxQstar/doc/commit/2001ade))
 
 
-## Features
+### Features
 
 * git分支管理 ([571f372](https://github.com/QxQstar/doc/commit/571f372))
 * git版本管理之禁止的操作 ([321673b](https://github.com/QxQstar/doc/commit/321673b))
@@ -39,10 +53,10 @@
 
 
 
-# [1.3.1](https://github.com/QxQstar/doc/compare/v1.3.0...v1.3.1) (2019-09-03)
+## [1.3.1](https://github.com/QxQstar/doc/compare/v1.3.0...v1.3.1) (2019-09-03)
 
 
-## Features
+### Features
 
 * git仓库的还原 ([125ee2f](https://github.com/QxQstar/doc/commit/125ee2f))
 * git版本管理规范 ([368af10](https://github.com/QxQstar/doc/commit/368af10))
@@ -53,7 +67,7 @@
 # [1.2.0](https://github.com/QxQstar/doc/compare/v1.0.0...v1.2.0) (2019-08-30)
 
 
-## Features
+### Features
 
 * git备份之git clone ([221ab44](https://github.com/QxQstar/doc/commit/221ab44))
 * git备份之备份到本地 ([26e64c4](https://github.com/QxQstar/doc/commit/26e64c4))
@@ -65,7 +79,7 @@
 # [1.0.0](https://github.com/QxQstar/doc/compare/668c18c...v1.0.0) (2019-08-27)
 
 
-## Bug Fixes
+### Bug Fixes
 
 * **javascripterrors.md:** 获取其他文件的错误信息 ([668c18c](https://github.com/QxQstar/doc/commit/668c18c))
 
