@@ -4,11 +4,15 @@
 ### Bug Fixes
 
 * 修改微前端项目结构图 ([1ca94e7](https://github.com/QxQstar/doc/commit/1ca94e7))
+* 修改按需引入组件并让组件使用自定义主题的方式 ([9f21a00](https://github.com/QxQstar/doc/commit/9f21a00))
 
 
 ### Features
 
+* element主题生成工具:element-theme ([07b1ff9](https://github.com/QxQstar/doc/commit/07b1ff9))
+* 命令行参数解析工具Commander ([1db8dd7](https://github.com/QxQstar/doc/commit/1db8dd7))
 * 基于single-spa的vue微前端项目 ([32c05c8](https://github.com/QxQstar/doc/commit/32c05c8))
+* 自定义element-ui的主题 ([5fa8680](https://github.com/QxQstar/doc/commit/5fa8680))
 
 
 
