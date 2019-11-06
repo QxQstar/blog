@@ -185,3 +185,45 @@ brew services restart nginx
 nginx -s reload
 ```
 
+## nginx访问权限
+
+在location中设置allow 和 deny可以控制访问
+```
+ location / {
+            root   html; #服务默认启动目录
+            index  index.html index.htm; #默认访问文件
+        }
+    location =/admin {
+        deny all
+    }
+    location =/img {
+        allow all
+    }
+    location =/src {
+        allow 192.168.5.214
+    }
+    location ~\.php$ {
+        deny all
+    }
+```
+
+* 用`=`表示精确匹配，用`~` 表示正则匹配。
+* 写在上面的权限控制的优先级高于下面的权限控制，如果上面的匹配到了就不会往下走了 
+
+## nginx 设置虚拟主机
+> 虚拟主机是指在一台物理主机服务器上划分出多个磁盘空间，每个磁盘空间都是一个虚拟主机，每台虚拟主机都可以对外提供Web服务，并且互不干扰。在外界看来，虚拟主机就是一台独立的服务器主机，这意味着用户能够利用虚拟主机把多个不同域名的网站部署在同一台服务器上，而不必再为某一个网站单独购买一台服务器，既解决了维护服务器技术的难题，同时又极大地节省了服务器硬件成本和相关的维护费用。
+
+### 基于端口好设置虚拟主机
+新增一个server
+
+```
+server {
+        listen       8001;
+        server_name  localhost;
+
+        location / {
+            root   /usr/local/Cellar/nginx/1.17.3_1/8001root;
+            index  index.html index.htm;
+        }
+    }
+```
