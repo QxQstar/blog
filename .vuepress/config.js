@@ -1,5 +1,5 @@
 module.exports = {
-    title: 'Bella\'s documents',
+    title: 'Bella\'s blog',
     description: '我见青山多妩媚，料青山见我应如是',
     themeConfig: {
         nav:[
