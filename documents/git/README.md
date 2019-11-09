@@ -1,5 +1,4 @@
 # git
-
 ## 最小配置
 ### 配置user信息
 1. 配置user.name : git config --global user.name 'your name'
@@ -47,49 +46,69 @@ refs/tags文件夹中保存了当前仓库以标签名命名的文件(如v1.0.0�
 > git cat-file -p 哈希值 ： 显示这个哈希值中的内容。git cat-file -t 哈希值：显示这个哈希值的对象类型
 
 ## 分离头指针
-执行 git checkout < commit > 命令会让git出于分离头指针的状态。在处于分离头指针的状态可以继续开发也可以继续产生commit而且不会影响其他分支。分离头指针的本质就是当前工作在没有分支的状态下，在这种状态下做的变更不与任何分支绑定，在分离头指针的状态下做了变更并产生了commit，然后又切换到其他分支，之前产生的变更很可能会被git当作垃圾清理掉
+执行 `git checkout < commit >` 命令会让git出于分离头指针的状态。在处于分离头指针的状态可以继续开发也可以继续产生commit而且不会影响其他分支。分离头指针的本质就是当前工作在没有分支的状态下，在这种状态下做的变更不与任何分支绑定，在分离头指针的状态下做了变更并产生了commit，然后又切换到其他分支，之前产生的变更很可能会被git当作垃圾清理掉
 
 ## HEAD指针和branch的关系
 不管是在分离头指针的状态（即：HEAD不与任何一个分支绑定）还是HEAD与某个分支绑定，HEAD指针的落脚点都是某个commit。切换到新的分支，HEAD会指向新分支最近一次的commit。
 
 ## 删除分支
-1. git branch -d 分支名
-2. git branch -D 分支名
+```cli
+ git branch -d 分支名
+ 或者
+ git branch -D 分支名
+```
 > `git branch -d 分支名` 命令删除分支，如果这个这个分支还没有被合并，git会给提示。`git branch -D 分支名`表示强制删除分支
 
 ## 修改commit的message
 ### 修改最新一次commit的message
+```cli
 git commit --amend
+```
 ### 修改老的commit的message
-git rebase -i < commit >
+```cli
+ git rebase -i < commit >
+```
+
 > 如果要修改某次commit的message信息，可以使用`git rebase -i < commit >`命令，参数-i后的commit值是需要修改message信息的commit的父commit的哈希值。执行这个命名后根据命令行中的交互进行操作就可以达到修改commit message的目的，在交互界面使用r命令。通过变基修改了一个commit的message信息，会导致这个commit的hash值以及后续commit的hash值发生变化。***不要对已经推送的commit进行变基操作***
 
 修改commit的message信息会导致commit的hash值发生变化（实际上是新创建的commit）。只要commit的hash值，更新时间，parent，作者等属性发生了变化，在git眼里就是不同的commit。
 ### 将多个连续的commit合并成一个commit
-> git rebase -i < commit >。-i参数后的commit hash值是需要合并成一个commit的多个连续commit的最近的父commit的hash值。在交互界面使用s命令
+> `git rebase -i < commit >`。-i参数后的commit hash值是需要合并成一个commit的多个连续commit的最近的父commit的hash值。在交互界面使用s命令
 ### 将间隔的多个commit合并成一个commit
-> git rebase -i < commit >。在交互界面中使用s命令，并且将间隔的commit放在一起
+> `git rebase -i < commit >`。在交互界面中使用s命令，并且将间隔的commit放在一起
 
 如果要修改第一次提交的commit message， 在提交列表中，可以手工将根commit添加进来。更简单的方式是使用 `git rebase -i --root` 命令，该命令允许你在分支上变基根提交.
 
 ## 比较文件的差异
 ### 比较暂存区和HEAD所含文件的差异
+```cli
 git diff --cached
+```
 ### 比较工作区和暂存区的差异
+```cli
 git diff
+```
 ### 比较工作区和HEAD所含文件的差异
+```cli
 git diff HEAD
+```
 ### 比较两个commit所含文件的差异
+```cli
 git diff commitId1 commitId2
+```
 ## 比较两个分支所含文件的差异
-git diff branch1 branch2。比较分支的差异其实也是比较commit的差异。分支名就是一个指针，它指向某个commit。
-> 如果不指定文件，就是比较所有文件的差异。git diff -- <filename> 只比较指定文件的差异。-- 是为了让git在读取命令参数时消除歧义用的，--后面的是文件或目录（可以是多个文件和目录）。
+`git diff branch1 branch2`。比较分支的差异其实也是比较commit的差异。分支名就是一个指针，它指向某个commit。
+> 如果不指定文件，就是比较所有文件的差异。`git diff -- <filename>` 只比较指定文件的差异。-- 是为了让git在读取命令参数时消除歧义用的，--后面的是文件或目录（可以是多个文件和目录）。
 ## 恢复文件
 ### 将暂存区恢复成和HEAD一样的
+```cli
 git reset HEAD <filename>...
+```
 > 第一次修改了readme文件，然后添加到暂存区，然后继续修改readme文件，这个时候执行git reset HEAD，会把暂存区恢复成HEAD一样，工作区还是保持最后修改的文件状态。
 ### 消除最近的几次提交
+```cli
 git reset <commit>
+```
 > 将HEAD指向某次commit
 
 git reset 命令还可以加--hard || --soft || --mixed
@@ -98,33 +117,53 @@ git reset 命令还可以加--hard || --soft || --mixed
 3. --soft:工作区和暂存区的修改都保留
 
 ### 将工作区恢复成和暂存区一样的
+```cli
 git checkout -- <filename>... 
+```
 
 ## 删除文件
+```cli
 git rm <filename>
+```
 
 ## 储藏
 ### 将工作区和暂存区的更改储藏
+```cli
 git stash <save stashname>
+```
+
 ### 应用储藏的内容
-git stash apply <stashname> . 如果不指定stashname就应用最新储藏的内容。
+```cli
+git stash apply <stashname> 
+```
+如果不指定stashname就应用最新储藏的内容。
 ### 移除储藏的内容
-git stash drop <stashname> 如果不指定stashname就移除最新储藏的内容
+```cli
+git stash drop <stashname> 
+```
+如果不指定stashname就移除最新储藏的内容
 ### 应用并移除储藏
+```cli
 git stash pop <stashname>
+```
 ### 显示储藏内容列表
+```cli
 git stash list
+```
 ### 从储藏中创建分支
-git stash branch <branchname> 这会创建一个新的分支，并在新分支上应用储藏的内容，如果成功，将会丢弃储藏。
+```cli
+git stash branch <branchname> 
+```
+这会创建一个新的分支，并在新分支上应用储藏的内容，如果成功，将会丢弃储藏。
 
 > 你可以在其中一个分支上保留一份储藏，随后切换到另外一个分支，再重新应用这些变更。在工作目录里包含已修改和未提交的文件时，你也可以应用储藏——Git 会给出归并冲突如果有任何变更无法干净地被应用。
 
 ## 设置git忽略文件
 .gitignore
-> .gitignore中的设置对已经被提交到暂存区或者已经被git管理的文件不会起作用,如果想将错提交到git版本管理库中的文件删除，但是不删除工作区中的文件可以使用git rm --cached filename
+> .gitignore中的设置对已经被提交到暂存区或者已经被git管理的文件不会起作用,如果想将错提交到git版本管理库中的文件删除，但是不删除工作区中的文件可以使用`git rm --cached filename`
 
 ## git备份
-使用git clone命令建立版本库克隆，并且使用git pull和git push 命令使各个克隆之间同步。
+使用`git clone`命令建立版本库克隆，并且使用`git pull`和`git push` 命令使各个克隆之间同步。
 
 git的版本库和工作区在一起，所以存在删除项目工作区的同时将版本库也删除的可能性，一个项目仅仅在一个工作区维护太危险了，所以将git备份是很明智的。
 ### 在git中常用的协议
@@ -151,19 +190,24 @@ git clone 命令有三种用法，分别如下：
 ### 备份到本地
 1. 不使用 --bare 和 --mirror参数克隆的仓库会包含工作区，源仓库的工作区和备份仓库的工作区是对等的。对于这种对等工作区模式，版本库的同步只有一种可行的操作方式：在备份库中执行 git pull 命令从源仓库中拉取新的提交实现版本库同步。
 
-    例子：git clone file:///Users/kyrie/Desktop/myDocuments/mini learn_doc
+    例子：`git clone file:///Users/kyrie/Desktop/myDocuments/mini learn_doc`
 2. 备份生成裸版本库（更常用）。可以从源版本库向备份裸版本库执行推送操作，但是推送命令还需要加上裸版本库的路径
 
-    例子 git clone --bare file:///Users/kyrie/Desktop/myDocuments/mini doc.git
-        
-        git push /Users/kyrie/Desktop/bare/doc.git
+    例子 
+```cli 
+    git clone --bare file:///Users/kyrie/Desktop/myDocuments/mini doc.git`
+    
+    git push /Users/kyrie/Desktop/bare/doc.git
+```
 ### 备份到远端
 1. 在远端创建一个裸仓库，然后将本地仓库push到远端。
 2. 在远端创建一个仓库，然后将远端的仓库克隆到本地，最后将本地的代码push到远端
 ### 添加远端仓库
 一个源仓库可以通过git clone 克隆到多个地方，实现一个仓库多处备份，如果想把源仓库的代码同步在其他仓库，可以使用git push 命令，但是需要加上克隆仓库的地址，如下`git push /Users/kyrie/Desktop/bare/doc.git`。可以使用git remote add 命令将克隆仓库添加为源仓库的远端仓库，这样在推送的时候就不必带上很长的仓库地址了。如下所示：
 
+```cli
 git remote add docRemote file:///Users/kyrie/Desktop/myDocuments/mini doc.git
+```
 
 这样就给源仓库添加了一个叫做 docRemote 的远端仓库。下一次想往docRemote同步代码的时候就可以使用 git push docRemote
 
@@ -171,28 +215,32 @@ git remote add docRemote file:///Users/kyrie/Desktop/myDocuments/mini doc.git
 有三种方式实现还原，分别如下:
 
 1. `git clone <备份仓库> <directory>`
-2. git init 创建一个新仓库，在这个新仓库上添加 remote , 再把备份仓库的数据拉到新仓库
-3. git init 创建一个新仓库，在备份仓库上添加remote，再把备份仓库的数据推到新仓库
+2. `git init` 创建一个新仓库，在这个新仓库上添加 remote , 再把备份仓库的数据拉到新仓库
+3. `git init` 创建一个新仓库，在备份仓库上添加remote，再把备份仓库的数据推到新仓库
 
 ## 变基
 提取某一个分支上的修改，将修改应用到另一分支上，这种操作变基。通过变基能够完成的操作有：合并代码和修改commit message 信息。修改commit message信息上面已经介绍了，这里主要介绍使用变基合并代码的操作。
 
 在如下的例子中执行变基操作：
 
-![变基的例子](./basic-rebase-1.png)
+![变基的例子](./img/basic-rebase-1.png)
 将experiment变基到master分支上的操作步骤:
-
-* git checkout experiment
-* git rebase master
+```cli
+git checkout experiment
+git rebase master
+```
 
 到这一步时，分支示意图如下：
 
-![变基示意图](./basic-rebase.png)
-* git checkout master
-* git merge experiment
+![变基示意图](./img/basic-rebase.png)
+```cli
+ git checkout master
+ git merge experiment
+```
+
 
 按照上述步骤执行的结果
-![变基示意图](./basic-rebase-4.png)
+![变基示意图](./img/basic-rebase-4.png)
 
 在变基过程中可能会出现冲突，如果出现了冲突就根据git的提示解决冲突，并且继续进行变基。变基过程的原理是首先找到两个分支最近的公共祖先C2，然后对比当前分支(即:experiment)相对与该组件的历次提交，提取相应的修改并保存为临时文件，然后将当前分支指向目标基底C3,最后将之前存为临时文件的修改依序在C3上应用，然后回到目标分支进行一次快进合并。
 
