@@ -4,10 +4,6 @@ module.exports = {
     themeConfig: {
         nav:[
             {
-                text:'首页',
-                link:'/'
-            },
-            {
                 text:'git系列',
                 items:[
                     { text: 'git版本管理规范', link: '/documents/commitNorm/' },
