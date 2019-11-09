@@ -52,6 +52,6 @@ module.exports = {
         sidebarDepth:3,
         sidebar: 'auto'
     },
-    base:'documents',
+    base:'/documents/',
     dest:'docs'
 }
