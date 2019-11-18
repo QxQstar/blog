@@ -48,6 +48,6 @@ module.exports = {
         sidebarDepth:3,
         sidebar: 'auto'
     },
-    base:'/blog/',
+    base:'/',
     dest:'docs'
 }
