@@ -1,3 +1,12 @@
+# [1.8.0](https://github.com/QxQstar/blog/compare/v1.7.1...v1.8.0) (2019-12-18)
+
+
+### Features
+
+* 微前端框架 ([007ed4a](https://github.com/QxQstar/blog/commit/007ed4a))
+
+
+
 ## [1.7.1](https://github.com/QxQstar/blog/compare/v1.7.0...v1.7.1) (2019-12-18)
 
 
