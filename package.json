@@ -1,6 +1,6 @@
 {
   "name": "learn",
-  "version": "1.0.0",
+  "version": "1.7.1",
   "dependencies": {
     "vuepress": "^1.0.2"
   },
