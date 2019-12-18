@@ -6,13 +6,24 @@ module.exports = {
             {
                 text:'git系列',
                 items:[
-                    { text: 'git版本管理规范', link: '/documents/commitNorm/' },
+                    { text: 'git commit message 规范', link: '/documents/webBasic/gitCommit/' },
+                    { text: 'git 分支管理', link: '/documents/webBasic/gitBranch/' },
                     { text: 'git的基本用法', link: '/documents/git/' }
                 ]
             },
             {
-                text:'微前端',
-                link:'/documents/singleSPA/'
+                text:'single-spa微前端系列',
+                items:[
+                    {
+                        text:'single-spa微前端落地',
+                        link:'/documents/singleSPA/'
+                    },
+                    {
+                        text:'微前端框架',
+                        link:'/documents/grape/'
+                    }
+                ],
+
             },
             {
                 text:'早读系列',
