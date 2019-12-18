@@ -12,7 +12,7 @@
 
 ### 规则
 
-使用 `plugin:vue/strongly-recommended` 来校验代码,[查看详情](https://eslint.vuejs.org/rules/)
+使用 `plugin:vue/strongly-recommended` , `vue/attributes-order` 和 `vue/order-in-components` 来校验代码,[查看详情](https://eslint.vuejs.org/rules/)
 
 ### 配置
 
@@ -22,7 +22,49 @@
 module.exports = {
     extends: [
         'plugin:vue/strongly-recommended'
-    ]
+    ],
+    rules:{
+        "vue/attributes-order": ["error", {
+            "order": [
+              "DEFINITION",
+              "LIST_RENDERING",
+              "CONDITIONALS",
+              "RENDER_MODIFIERS",
+              "GLOBAL",
+              "UNIQUE",
+              "TWO_WAY_BINDING",
+              "OTHER_DIRECTIVES",
+              "OTHER_ATTR",
+              "EVENTS",
+              "CONTENT"
+            ]
+          }],
+        "vue/order-in-components": ["error", {
+            "order": [
+              "el",
+              "name",
+              "parent",
+              "functional",
+              ["delimiters", "comments"],
+              ["components", "directives", "filters"],
+              "extends",
+              "mixins",
+              "inheritAttrs",
+              "model",
+              ["props", "propsData"],
+              "fetch",
+              "asyncData",
+              "data",
+              "computed",
+              "watch",
+              "LIFECYCLE_HOOKS",
+              "methods",
+              "head",
+              ["template", "render"],
+              "renderError"
+            ]
+          }]
+    }
 }
 ```
 
