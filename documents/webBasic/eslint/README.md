@@ -153,3 +153,14 @@ npm i husky lint-staged --save-dev
 ## 版本要求
 
  Node.js (^8.10.0, ^10.13.0, or >=11.10.1) built with SSL support. (If you are using an official Node.js distribution, SSL is always built in.)
+ 
+## eslint 忽略
+
+在项目根目录中创建 .eslintignore 文件，在这个文件中写想要 eslint 忽略的文件夹
+
+```
+build/*.js
+src/assets
+public
+dist
+```
