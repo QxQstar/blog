@@ -5,3 +5,5 @@
 1. git commit message 规范
 2. 分支管理规范
 3. eslint 
+4. css 命名规范
+5. stylelint
