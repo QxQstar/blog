@@ -12,7 +12,7 @@
 
 ### 规则
 
-使用 `plugin:vue/strongly-recommended` , `vue/attributes-order` 和 `vue/order-in-components` 来校验代码,[查看详情](https://eslint.vuejs.org/rules/)
+使用 `plugin:vue/essential` ,`eslint:recommended`, `vue/attributes-order` 和 `vue/order-in-components` 来校验代码,[查看详情](https://eslint.vuejs.org/rules/)
 
 ### 配置
 
@@ -26,12 +26,12 @@ module.exports = {
          node: true,
          es6: true,
     },
-    parser: 'babel-eslint',
     parserOptions: {
-         sourceType: 'module'
+        parser: 'babel-eslint',
+        sourceType: 'module'
      },
     extends: [
-        'plugin:vue/strongly-recommended'
+        'plugin:vue/essential','eslint:recommended'
     ],
     rules:{
         "vue/attributes-order": ["error", {
@@ -148,7 +148,7 @@ npm i husky lint-staged --save-dev
 }
 ```
 
-如上配置，每次会在你本地 commit 之前，校验你提交的内容是否符合你本地配置的 eslint规则，如果符合规则，则会提交成功。如果不符合它会自动执行 eslint --fix 尝试帮你自动修复，如果修复成功则会帮你把修复好的代码提交，如果失败，则会提示你错误，让你修好这个错误之后才能允许你提交代码
+如上配置，每次会在你本地 commit 之前，校验你提交的内容是否符合你本地配置的 eslint 规则，如果符合规则，则会提交成功。如果不符合它会自动执行 eslint --fix 尝试帮你自动修复，如果修复成功则会帮你把修复好的代码提交，如果失败，则会提示你错误，让你修好这个错误之后才能允许你提交代码
 
 ## 版本要求
 
