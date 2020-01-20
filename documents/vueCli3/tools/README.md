@@ -17,7 +17,8 @@
 15. semver
 16. webpack
 17. yorkie
-
+18. isbinaryfile
+19. yaml-front-matter
 
 ## gitHooks
 
@@ -124,3 +125,44 @@ var args = minimist(process.argv.slice(2));
 console.log(args)
 
 ```
+
+## rimraf
+
+在 Node 中使用 rm -rf，用来删除文件和文件夹的，不管文件夹是否为空，都可删除
+
+```js
+const rm = require('rimraf');
+const path = require('path');
+rm(path.resolve(__dirname,'config/dist'),function () {
+    console.log('success')
+})
+```
+或者
+```json
+{
+  "scripts": {
+      "rm": "rimraf config/dist"
+    }
+}
+```
+```cli
+npm run rm
+```
+
+## isbinaryfile
+
+在 Node.js 判断文件是否是二进制文件
+
+```js
+
+const {isBinaryFileSync} = require('isbinaryfile')
+const path = require('path');
+const filename = path.resolve(__dirname,'./execa.js')
+ console.log(isBinaryFileSync(filename)); // Boolean
+ 
+```
+
+## yaml-front-matter
+
+Parses yaml or json from the beginning of a string or file
+
