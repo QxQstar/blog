@@ -10,7 +10,7 @@
     "commit": "git cz",
     "login": "ssh root@122.152.199.134",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
-    "deploy": "scp -r ./docs/ root@122.152.199.134:/usr/share/nginx/blog"
+    "deploy": "scp -r ./docs/* root@122.152.199.134:/usr/share/nginx/blog"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.1.0",
