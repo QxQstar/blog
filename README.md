@@ -1,10 +1,17 @@
 ---
 home: true
 heroText: 
-heroImage: https://avatars2.githubusercontent.com/u/17845091?s=400&u=33e33d21f1c8662a781a144f072bf0700e0c679e&v=4
-tagline: 我见青山多妩媚，料青山见我应如是
-actionText: 查看详情 →
-actionLink: /documents/commitNorm/
+heroImage: ./logo.jpeg
+tagline: 何其有幸，今生相遇
+actionText: NEXT →
+actionLink: /documents/webBasic/gitCommit/
+features:
+- title: 简单的自我介绍
+  details: 某不知名大学2017届毕业生，目前在成都从事前端开发工作，常以何遇为名混迹于前端圈
+- title: 何遇的博客
+  details: 前端路上 | 以文字记录日常所思
+- title: 关于logo
+  details: 表妹拍摄的家门口景色
 footer: MIT Licensed | Copyright © 2019-present
 ---
 

@@ -1,6 +1,6 @@
 module.exports = {
-    title: 'Bella\'s blog',
-    description: '我见青山多妩媚，料青山见我应如是',
+    title: '何遇的博客',
+    description: '何其有幸，今生相遇',
     themeConfig: {
         nav:[
             {
@@ -16,11 +16,11 @@ module.exports = {
                 items:[
                     {
                         text:'single-spa微前端落地',
-                        link:'/documents/singleSPA/'
+                        link:'/documents/microFE/singleSPA/'
                     },
                     {
                         text:'微前端框架',
-                        link:'/documents/grape/'
+                        link:'/documents/microFE/grape/'
                     }
                 ],
 
@@ -39,22 +39,37 @@ module.exports = {
                     {
                         text:'session,cookie和token',
                         link:'/documents/morningRead/sessionCookie.html'
+                    },
+                    {
+                        text:'微信小程序',
+                        link:'/documents/morningRead/weixin/'
                     }
                 ]
             },
             {
-                text:'微信小程序',
-                link:'/documents/weixin/'
+                text:'第三方库',
+                items:[
+                    {
+                        text:'element-ui自定义主题原理',
+                        link:'/documents/library/element/'
+                    }
+                ]
             },
             {
-                text:'element-ui自定义主题原理',
-                link:'/documents/element/'
+                text:'总结',
+                items:[
+                    {
+                        text:'2019年度总结',
+                        link:'/documents/summary/2019/'
+                    }
+                ]
             },
             {
                 text:'github',
                 link:'https://github.com/QxQstar',
                 target:'_blank'
             }
+
         ],
         sidebarDepth:3,
         sidebar: 'auto'
