@@ -1,3 +1,13 @@
+# [1.9.0](https://github.com/QxQstar/blog/compare/v1.8.0...v1.9.0) (2020-02-11)
+
+
+### Features
+
+* 新增微前端的在线访问地址 ([069437a](https://github.com/QxQstar/blog/commit/069437a))
+* 调整模块的目录结构 ([734504e](https://github.com/QxQstar/blog/commit/734504e))
+
+
+
 # [1.8.0](https://github.com/QxQstar/blog/compare/v1.7.1...v1.8.0) (2019-12-18)
 
 
