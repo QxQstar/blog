@@ -19,6 +19,8 @@
 17. yorkie
 18. isbinaryfile
 19. yaml-front-matter
+20. ejs
+21. vue-jscodeshift-adapter 和 jscodeshift
 
 ## gitHooks
 
@@ -162,7 +164,17 @@ const filename = path.resolve(__dirname,'./execa.js')
  
 ```
 
+## ejs
+
+Vue CLI 将 EJS 作为 模版渲染引擎
+
 ## yaml-front-matter
 
 Parses yaml or json from the beginning of a string or file
 
+在 Vue CLI 中先使用 yaml-front-matter 将文件转成 JSON，然后将得到的文件内容和其他的 JSON 字段传到 ejs 中得到真正的文件内容
+
+
+## vue-jscodeshift-adapter 和 jscodeshift
+
+Vue CLI 是使用 jscodeshift 和 vue-jscodeshift-adapter 向文件中插入 import 语句。在这个过程中涉及到抽象语法树到概念
