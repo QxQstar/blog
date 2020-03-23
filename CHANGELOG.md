@@ -1,10 +1,31 @@
+# [1.10.0](https://github.com/QxQstar/blog/compare/v1.9.0...v1.10.0) (2020-03-23)
+
+
+### Bug Fixes
+
+* 修改2019年度总结 ([9d82936](https://github.com/QxQstar/blog/commit/9d82936))
+
+
+### Features
+
+* vue create 创建项目 ([606e6b9](https://github.com/QxQstar/blog/commit/606e6b9))
+* 可视化列表 ([e7676f5](https://github.com/QxQstar/blog/commit/e7676f5))
+* 补充 Vue CLI 3.x 中使用的工具 ([1d533c3](https://github.com/QxQstar/blog/commit/1d533c3))
+
+
+
 # [1.9.0](https://github.com/QxQstar/blog/compare/v1.8.0...v1.9.0) (2020-02-11)
 
 
 ### Features
 
+* gitHooks，execa，globby，inquirer，minimist功能 ([9237492](https://github.com/QxQstar/blog/commit/9237492))
+* rimraf，isbinaryfile和yaml-front-matter ([b1849da](https://github.com/QxQstar/blog/commit/b1849da))
+* vue cli 3.x 中的工具 ([828e3b4](https://github.com/QxQstar/blog/commit/828e3b4))
 * 新增微前端的在线访问地址 ([069437a](https://github.com/QxQstar/blog/commit/069437a))
+* 补充目录结构的说明 ([e79e96c](https://github.com/QxQstar/blog/commit/e79e96c))
 * 调整模块的目录结构 ([734504e](https://github.com/QxQstar/blog/commit/734504e))
+* 项目目录结构 ([a6c1110](https://github.com/QxQstar/blog/commit/a6c1110))
 
 
 
