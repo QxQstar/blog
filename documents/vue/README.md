@@ -12,7 +12,7 @@
 
 ## 构建
 
-使用 rollup 构建
+使用 rollup 构建，rollup 只处理 js 代码，它比 webpack 更轻量
 
 ### runtime-only vs runtime+compiler
 
@@ -26,4 +26,9 @@ runtime+compiler 版本的 vue,是在项目运行的时候去编译 vue 的 temp
 
 ## new Vue
 
-在 new Vue 时会设置 vue 实例的父子关系，给 data, props, methods 设置代理等
+在 new Vue 时会设置 vue 实例的父子关系，给 data, props, methods 设置代理，初始化 injections,初始化 provide等
+
+## Vue 实例挂载
+
+![runtime + compiler版本 vue 实例挂载流程图](./img/runtime+compiler版本vue实例挂载流程图.jpg)
+
