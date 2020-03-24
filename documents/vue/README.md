@@ -32,3 +32,11 @@ runtime+compiler 版本的 vue,是在项目运行的时候去编译 vue 的 temp
 
 ![runtime + compiler版本 vue 实例挂载流程图](./img/runtime+compiler版本vue实例挂载流程图.jpg)
 
+## render 方法
+
+调用 $createElement 返回一个 vnode
+
+## $createElement
+
+$createElement 会将传入的 children 转换成一维数组，并且会判断传入的 tag 是否是一个浏览器原生标签
+
