@@ -30,13 +30,22 @@ runtime+compiler 版本的 vue,是在项目运行的时候去编译 vue 的 temp
 
 ## Vue 实例挂载
 
-![runtime + compiler版本 vue 实例挂载流程图](./img/runtime+compiler版本vue实例挂载流程图.jpg)
+![runtime + compiler版本 vue 实例挂载流程图](./img/mounted-flow.jpg)
 
 ## render 方法
 
 调用 $createElement 返回一个 vnode
 
-## $createElement
+## _update
 
-$createElement 会将传入的 children 转换成一维数组，并且会判断传入的 tag 是否是一个浏览器原生标签
+在初始化渲染和数据更新都会调用_update,在 _update 中会调用 patch
 
+## patch
+
+当初始化渲染时
+
+在创建 dom 节点的过程中，总是先将子节点插入到 appDom 中，再将 appDom 插入到 body 中
+
+## new Vue 的过程
+
+![new Vue 流程](./img/new-vue.png)
