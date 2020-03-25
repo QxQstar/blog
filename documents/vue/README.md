@@ -36,6 +36,26 @@ runtime+compiler 版本的 vue,是在项目运行的时候去编译 vue 的 temp
 
 调用 $createElement 返回一个 vnode
 
+### 传给 render 的第一个参数是字符串
+
+例如：
+
+```
+render('div',...)
+```
+
+调用 new VNode 创建 vnode
+
+### 传给 render 的第一个参数是组件
+
+例如：
+
+```
+render(APP)
+```
+
+给组件添加上 Vue 的方法，例如：extend,mixin,use,component 等， 让组件的原型指向 Vue 的原型，将组件的 options 与 Vue 的 options 合并，设置 hooks，最后返回 vnode
+
 ## _update
 
 在初始化渲染和数据更新都会调用_update,在 _update 中会调用 patch
