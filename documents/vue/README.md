@@ -28,9 +28,9 @@ runtime+compiler 版本的 vue,是在项目运行的时候去编译 vue 的 temp
 
 在 new Vue 时会设置 vue 实例的父子关系，给 data, props, methods 设置代理，初始化 injections,初始化 provide等
 
-## Vue 实例挂载
+## Vue 实例创建与挂载
 
-![runtime + compiler版本 vue 实例挂载流程图](./img/mounted-flow.jpg)
+![runtime + compiler版本 vue 实例挂载流程图](./img/newVueFlow.jpg)
 
 ## render 方法
 
@@ -62,10 +62,22 @@ render(APP)
 
 ## patch
 
-当初始化渲染时
+在创建 DOM 节点的过程中，总是先将子节点插入到父组件中，最后再将生成的 DOM 树插入到 body 中。
 
-在创建 dom 节点的过程中，总是先将子节点插入到 appDom 中，再将 appDom 插入到 body 中
+组件创建是一个深度遍历
+
+###  组件的 patch
+
+todo
 
 ## new Vue 的过程
 
 ![new Vue 流程](./img/new-vue.png)
+
+## 合并配置
+
+todo
+
+## 生命周期
+
+![生命周期流程图](./img/lifecycle.jpg)
