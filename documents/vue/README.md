@@ -81,3 +81,9 @@ todo
 ## 生命周期
 
 ![生命周期流程图](./img/lifecycle.jpg)
+
+## 组件的注册
+
+全局注册的组件会被注册到 Vue.options.components 上
+
+局部注册的组件会被注册到这个组件的 options.components 上(即：vm.options.components)，并且会将全局注册的组件合并到 vm.options.components，所以可以在任何一个组件中访问到全局注册的组件
