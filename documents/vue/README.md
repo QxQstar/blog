@@ -34,7 +34,7 @@ runtime+compiler 版本的 vue,是在项目运行的时候去编译 vue 的 temp
 
 ## render 方法
 
-调用 $createElement 返回一个 vnode
+将 $createElement 作为 render 的第一个参数，调用 $createElement 返回一个 vnode
 
 ### 传给 render 的第一个参数是字符串
 
@@ -56,19 +56,17 @@ render(APP)
 
 给组件添加上 Vue 的方法，例如：extend,mixin,use,component 等， 让组件的原型指向 Vue 的原型，将组件的 options 与 Vue 的 options 合并，设置 hooks，最后返回 vnode
 
+![render 过程](./img/vueRender.jpg)
+
 ## _update
 
 在初始化渲染和数据更新都会调用_update,在 _update 中会调用 patch
 
 ## patch
 
-在创建 DOM 节点的过程中，总是先将子节点插入到父组件中，最后再将生成的 DOM 树插入到 body 中。
+在初始化渲染时调用 patch 方法的作用是创建 DOM 节点，并且将子节点插入到父节点中，最后再将生成的 DOM 树插入到 body 中。
 
 组件创建是一个深度遍历
-
-###  组件的 patch
-
-todo
 
 ## new Vue 的过程
 
@@ -76,7 +74,27 @@ todo
 
 ## 合并配置
 
-todo
+合并配置发生在两个时候，一个时候是 new Vue 时，另一个时候是在 render 创建组件的过程中
+
+### new Vue 时合并配置
+
+```js
+vm.$options = mergeOptions(
+        resolveConstructorOptions(vm.constructor),
+        options || {},
+        vm
+      )
+```
+
+会将 vm.constructor 上的配置合并到 vm,所以在 vm 上能够访问到 vm.constructor 上的 filter, directive 等
+
+### 创建组件时合并配置
+
+由于组件的构造函数是通过 Vue.extend 继承自 Vue 的，在组件的构造函数中会将 Vue 上的配置与组件的配置进行合并，所以在组件上可以访问到 Vue 上的配置
+
+```js
+ initInternalComponent(vm, options)
+```
 
 ## 生命周期
 
