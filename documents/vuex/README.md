@@ -28,9 +28,13 @@ function vuexInit () {
 
 在任何 vm beforeCreate 时都会调用 `vuexInit`，所以在任何组件中都可以通过 `this.$store` 访问到 store
 
+## new Vuex.store (option) 流程图
+
+![new Vuex.store (option) 流程图](./img/createStoreFlow.jpg)
+
 ## modules
 
-在 new Vuex.store(options) 时递归 options 中的所有 module，最终生成一个树状结构，new Vuex.store 的参数会被当做 root module
+在 new Vuex.store(option) 时递归 option 中的所有 module，最终生成一个树状结构，new Vuex.store 的参数会被当做 root module
 
 modules 最终会变成如下结构
 
@@ -124,7 +128,7 @@ modules 最终会变成如下结构
     })
 ```
 
-当访问 this.$store.getters.xxx 时会执行 get ,get 会返回 store._vm 中的计算属性，而store._vm 中的计算属性是通过 state 计算得到的，所有 this.$store.getters.xxx 的值会随着 state 的变化而变化
+当访问 this.$store.getters.xxx 时会执行 get ,get 会返回 store._vm 中的计算属性，而store._vm 中的计算属性是通过 state 计算得到的，所有 this.$store.getters.xxx 的值会随着 state 的变化而变化，也正是因为这一步，所以 state 和 getter 才是响应式的
 
 ## store.state
 
