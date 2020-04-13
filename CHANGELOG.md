@@ -1,4 +1,4 @@
-# [1.10.0](https://github.com/QxQstar/blog/compare/v1.9.0...v1.10.0) (2020-03-23)
+# [1.10.0](https://github.com/QxQstar/blog/compare/v1.9.0...v1.10.0) (2020-04-13)
 
 
 ### Bug Fixes
@@ -8,9 +8,21 @@
 
 ### Features
 
+* new Vue 时 render 过程 ([6c16c24](https://github.com/QxQstar/blog/commit/6c16c24))
+* render + mergeOption ([5d0cb4c](https://github.com/QxQstar/blog/commit/5d0cb4c))
+* render 方法 ([40c87d3](https://github.com/QxQstar/blog/commit/40c87d3))
 * vue create 创建项目 ([606e6b9](https://github.com/QxQstar/blog/commit/606e6b9))
+* vue 实例挂载流程图 ([e76c7af](https://github.com/QxQstar/blog/commit/e76c7af))
+* vue 源码解读 ([f975fcc](https://github.com/QxQstar/blog/commit/f975fcc))
+* vue-router 源码解读 ([1dd5ec5](https://github.com/QxQstar/blog/commit/1dd5ec5))
+* vuex API ([ac17cbe](https://github.com/QxQstar/blog/commit/ac17cbe))
+* 分析 render 的第一个参数类型 ([145d902](https://github.com/QxQstar/blog/commit/145d902))
 * 可视化列表 ([e7676f5](https://github.com/QxQstar/blog/commit/e7676f5))
+* 添加 new Vuex.store (option) 流程图 ([fb483fb](https://github.com/QxQstar/blog/commit/fb483fb))
+* 生命周期流程图 ([a1a6b44](https://github.com/QxQstar/blog/commit/a1a6b44))
+* 组件注册 ([bb11b73](https://github.com/QxQstar/blog/commit/bb11b73))
 * 补充 Vue CLI 3.x 中使用的工具 ([1d533c3](https://github.com/QxQstar/blog/commit/1d533c3))
+* 解读 vue-router 源码 ([eb78ee1](https://github.com/QxQstar/blog/commit/eb78ee1))
 
 
 
