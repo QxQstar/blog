@@ -26,6 +26,10 @@ module.exports = {
 
             },
             {
+                text:'可视化页面搭建',
+                link:'/documents/VisualPageCreation/list/'
+            },
+            {
                 text:'早读系列',
                 items:[
                     {
