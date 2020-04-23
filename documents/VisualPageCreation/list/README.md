@@ -17,7 +17,7 @@
 1. 重展示轻逻辑的列表页
 2. 对于列表中有弹窗操作的页面，只适用提示类弹窗和只有一个输入框的弹窗。[支持的弹窗参考 element-ui 中的 MessageBox 弹窗](https://element.eleme.cn/#/zh-CN/component/message-box)
 
-# 在 [saas-测试环境](http://saas-test.dmallmax.com/) 中使用创建的列表
+# 在 [saas](http://saas-test.dmallmax.com/) 中使用创建的列表
 
 列表创建完成之后会生成一个页面 ID
 
@@ -412,7 +412,7 @@ return {
 
 * vm.navTo
 
-通过 vm.navTo 实现页面直接的跳转，vm.navTo 接受两个参数，第一个参数是 vm,第二个参数是一个表示跳转位置的对象。第二个参数的属性如下：
+通过 vm.navTo 实现页面之间的跳转，vm.navTo 接受两个参数，第一个参数是 vm,第二个参数是一个表示跳转位置的对象。第二个参数的属性如下：
 
 |属性名|描述|必填|类型|
 |----|----|----|----|
@@ -531,7 +531,7 @@ vm.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
 });
 ```
 
-* this.$prompt：提交信息。具体使用见 [element-ui 的 MessageBox 弹窗](https://element.eleme.cn/#/zh-CN/component/message-box)
+* pageVm.$prompt：提交信息。具体使用见 [element-ui 的 MessageBox 弹窗](https://element.eleme.cn/#/zh-CN/component/message-box)
 
 ```js
     vm.$prompt('请输入邮箱', '提示', {
