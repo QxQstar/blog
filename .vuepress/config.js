@@ -95,5 +95,8 @@ module.exports = {
         sidebar: 'auto'
     },
     base:'/',
-    dest:'docs'
+    dest:'docs',
+    head: [
+        ['link', { rel: 'shortcut icon', href: './logo-small.png' }]
+    ]
 }
