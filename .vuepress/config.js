@@ -25,10 +25,10 @@ module.exports = {
                 ],
 
             },
-            {
-                text:'可视化页面搭建',
-                link:'/documents/VisualPageCreation/list/'
-            },
+            // {
+            //     text:'可视化页面搭建',
+            //     link:'/documents/VisualPageCreation/list/'
+            // },
             {
                 text:'早读系列',
                 items:[
@@ -56,6 +56,22 @@ module.exports = {
                     {
                         text:'element-ui自定义主题原理',
                         link:'/documents/library/element/'
+                    },
+                    {
+                        text:' Vue 源码解读之 Vue 实例创建与挂载流程 ',
+                        link:'/documents/library/vue/'
+                    },
+                    {
+                        text:'VueRouter 源码解读',
+                        link:'/documents/library/vue-router/'
+                    },
+                    {
+                        text:'Vuex 源码解读',
+                        link:'/documents/library/vuex/'
+                    },
+                    {
+                        text:'VueCli 3.x 工具介绍',
+                        link:'/documents/library/vue-cli 3.x/'
                     }
                 ]
             },
