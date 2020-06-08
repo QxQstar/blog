@@ -12,14 +12,18 @@ module.exports = {
                 ]
             },
             {
-                text:'single-spa微前端系列',
+                text:'微前端系列',
                 items:[
                     {
-                        text:'single-spa微前端落地',
+                        text:'webComponent + 微前端',
+                        link:'/documents/microFE/webComponent/'
+                    },
+                    {
+                        text:'single-spa 微前端落地',
                         link:'/documents/microFE/singleSPA/'
                     },
                     {
-                        text:'微前端框架',
+                        text:'基于 single-spa 的微前端框架',
                         link:'/documents/microFE/grape/'
                     }
                 ],
