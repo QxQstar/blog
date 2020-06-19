@@ -1,10 +1,10 @@
-# 给 Vue 项目配置 webpack
+# vue 服务端渲染
 
 ## 公共配置
 
 无论是本地开发还是生产环境的 webpack 配置，有一些功能的配置，例如：配置 babel、 css 预处理器、vue-loader、postcss、url-loader、环境变量的配置、output、entry 等
 
-## 地址开发配置
+## 本地开发配置
 
 在本地开发需要配置 devServer、热重载、sourceMap。热重载和 sourceMap 不是必须的
 
