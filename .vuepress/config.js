@@ -85,6 +85,10 @@ module.exports = {
                     {
                         text:'2019年度总结',
                         link:'/documents/summary/2019/'
+                    },
+                    {
+                        text:'个人简历',
+                        link:'/documents/summary/resumes/2020.html'
                     }
                 ]
             },
