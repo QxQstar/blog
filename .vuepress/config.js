@@ -19,6 +19,10 @@ module.exports = {
                         link:'/documents/microFE/webComponent/'
                     },
                     {
+                        text:'实现微前端不同方式',
+                        link:'/documents/microFE/mutilResolve/'
+                    },
+                    {
                         text:'single-spa 微前端落地',
                         link:'/documents/microFE/singleSPA/'
                     },
