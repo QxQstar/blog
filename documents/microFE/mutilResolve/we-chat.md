@@ -63,7 +63,7 @@ server {
 
 为了实现更大的独立性，可以有一个单独的服务器负责渲染和服务于每个微应用，前端的一个服务器向其他微前端发出请求。通过对响应进行缓存，可以在不影响延迟的情况下实现这一点。
 
-![](https://martinfowler.com/articles/micro-frontends/ssi.png)4
+![](https://martinfowler.com/articles/micro-frontends/ssi.png)
 
 这个例子说明了微前端不一定是一种新技术，也不一定复杂。只要我们关注我们的设计决策是如何影响我们的代码库和团队的自主权的，不管我们的技术水平如何，我们都可以获得很多好处
 
