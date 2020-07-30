@@ -93,6 +93,10 @@ module.exports = {
                     {
                         text:'个人简历',
                         link:'/documents/summary/resumes/2020.html'
+                    },
+                    {
+                        text:'中后台列表搭建设计思路',
+                        link:'/documents/VisualPageCreation/'
                     }
                 ]
             },
