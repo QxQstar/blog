@@ -156,6 +156,39 @@ table 支持的列的展示形式有：多选、操作、文本。如果某一�
 
 由于 table 中要展示的数据都是从后端提供的接口获取，在我们公司内部这个页面搭建系统要服务于多个独立的系统，这些系统的后端接口规范不尽相同，所以在列表配置页可以根据接口返回的值自定义 table 要展示的数据。自定义接口返回值与自定义接口参数类似，都是在代码编辑框中写函数。
 
+## 如何使用
+
+配置数据保存在数据库，要在项目中使用配置数据生成页面，需要将配置数据下载到项目中的一个特定文件夹中，当在浏览器中访问这个列表页时，会根据页面 ID 到下载好的静态文件中读取页面的配置数据，然后将配置数据传递到列表视图页，列表视图页将页面渲染出来。
+
+从静态文件中读取配置代码如下：
+
+```js
+ import("@static/jsons/tables/table_string_"+id+".json").then(fileContent => {
+        console.log('配置数据：',fileContent)
+    })
+```
+
+在项目中直接获取到的配置数据是一个字符串，但是在使用的时候我们需要的是一个对象，并且某些字段需要是函数。为了将字符串转成需要的格式，我们使用 `new Function('return ' + strConfig)()`,代码如下：
+
+```js
+function parseStrConfig(strConfig) {
+    let result = null
+    try {
+        result = new Function('return ' + strConfig)()
+    } catch (e) {
+        Error('SyntaxError', '解析列表配置出错')
+        this.$message.error('解析列表配置出错')
+    }
+
+    return result;
+}
+```
+
+## 存在的不足
+
+1. 生产出的页面不能独立与页面搭建系统运行。要想在其他系统中使用生成的页面，必须在对应系统中使用 iframe 或者 single-spa 微前端技术引入页面搭建系统
+2. 页面的配置数据没有与页面搭建系统独立。由于每创建一个页面就要该页面的配置数据下载到页面搭建系统中，这导致页面搭建系统需要被频繁的发布，但是页面搭建系统的业务功能相对稳定
+
 ## 一个配置数据例子
 
 ```
@@ -254,38 +287,3 @@ return h('dm-button',{
   }
 }
 ```
-
-## 如何使用
-
-配置数据保存在数据库，要在项目中使用配置数据生成页面，需要将配置数据下载到项目中的一个特定文件夹中，当在浏览器中访问这个列表页时，会根据页面 ID 到下载好的静态文件中读取页面的配置数据，然后将配置数据传递到列表视图页，列表视图页将页面渲染出来。
-
-从静态文件中读取配置代码如下：
-
-```js
- import("@static/jsons/tables/table_string_"+id+".json").then(fileContent => {
-        console.log('配置数据：',fileContent)
-    })
-```
-
-在项目中直接获取到的配置数据是一个字符串，但是在使用的时候我们需要的是一个对象，并且某些字段需要是函数。为了将字符串转成需要的格式，我们使用 `new Function('return ' + strConfig)()`,代码如下：
-
-```js
-function parseStrConfig(strConfig) {
-    let result = null
-    try {
-        result = new Function('return ' + strConfig)()
-    } catch (e) {
-        Error('SyntaxError', '解析列表配置出错')
-        this.$message.error('解析列表配置出错')
-    }
-
-    return result;
-}
-```
-
-## 存在的不足
-
-1. 生产出的页面不能独立与页面搭建系统运行。要想在其他系统中使用生成的页面，必须在对应系统中使用 iframe 或者 single-spa 微前端技术引入页面搭建系统
-2. 页面的配置数据没有与页面搭建系统独立。由于每创建一个页面就要该页面的配置数据下载到页面搭建系统中，这导致页面搭建系统需要被频繁的发布，但是页面搭建系统的业务功能相对稳定
-
-
