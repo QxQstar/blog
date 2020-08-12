@@ -23,6 +23,10 @@ module.exports = {
                         link:'/documents/microFE/mutilResolve/'
                     },
                     {
+                        text:'微前端在 react 项目中应用',
+                        link:'/documents/microFE/reactResolve/'
+                    },
+                    {
                         text:'single-spa 微前端落地',
                         link:'/documents/microFE/singleSPA/'
                     },
