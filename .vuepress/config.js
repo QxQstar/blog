@@ -99,6 +99,10 @@ module.exports = {
                         link:'/documents/summary/resumes/2020.html'
                     },
                     {
+                        text:'前端知识你问我答',
+                        link:'/documents/summary/QA/interview.html'
+                    },
+                    {
                         text:'中后台列表搭建设计思路',
                         link:'/documents/VisualPageCreation/'
                     }
