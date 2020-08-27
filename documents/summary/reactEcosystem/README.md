@@ -74,6 +74,7 @@ props.children 可以是任何类型的值，包括函数
 4. React.pureComponent
 5. 不要直接修改 state 的值，要使用 setState 修改state。对于引用类型，如数组，使用 push,splice 等方法直接修改 state 的值可能会导致界面无法更新
 6. 使用 Profiler API 可以识别应用程序中比较慢的部分
+7. React 的 diff 算法在比较两个节点时，如果新的节点和老的节点是不同类型的组件类型，会销毁整个老节点以及它的子树，所有如果两个组件类型有相似的输出，推荐使用相同的组件类型
 
 ```js
 // 错误的做法
