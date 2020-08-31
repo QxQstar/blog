@@ -98,4 +98,9 @@ this.setState(prevState => {
 使用 [react-hyperscript](https://github.com/mlmorg/react-hyperscript) 和 [hyperscript-helpers](https://github.com/ohanhi/hyperscript-helpers) 可以在没有使用 JSX 的情况下以一种简洁的语法创建模版
 
 
+## Refs and the DOM
+
+从 React 16.3 起可以使用 React.createRef() API 去创建 ref 并且将 ref 传递到 class 组件或者内置的 DOM 元素上。在 React 16.3 之前的版本，可以给 ref 属性传递一个回调函数，以使得在父组件中得到 class 组件的实例或者内置的 DOM 元素节点
+
+给函数组件传递 ref 属性将不会正常工作，从 React 16.3 起，使用 React.forwardRef API 使得可以给函数组件传递 ref 属性。在 React 16.3 之前的版本中要想在父组件中访问子组件中的内置的 DOM 元素节点，可以将父组件中的 ref 作为子组件的另一个属性名传递到子组件中
 
