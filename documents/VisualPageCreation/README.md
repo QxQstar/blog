@@ -351,7 +351,7 @@ x-linkages 字段联动
 |type|联动类型|String|linkage:hidden,linkage:disabled,linkage:value|
 |subscribe|联动订阅器|Function|-|
 
-下面以文本组件和下拉框组件组件进行具体举例说明
+下面以文本组件和下拉框组件进行具体举例说明
 
 ### 文本组件
 
@@ -414,7 +414,200 @@ methods:{
 
 这里使用第三方库 [cool-path](https://github.com/janryWang/cool-path) 来实现路径取值
 
+从上面的配置文件组件的可视化界面中可以看到，我们还可以配置文本组件的枚举数据，这个枚举数据主要是考虑到接口返回的页面数据中的某些字段是数字或者英语单词，但是在界面上我们需要显示这些字段的中文含义，枚举数据可以是从接口中获取会可以在配置页中写死，枚举数据的获取方式与上面介绍的页面数据获取方式类似，在这里不再赘述。
 
+不自定义文本组件显示内容已经可以满足大部分使用场景，这种方式有一个局限性：一个文本组件只能显示一个字段的值，在某些时候可能需要将多个字段合并在一个文本组件中显示在界面，在这种情况下我们使用[Vue的渲染函数](https://cn.vuejs.org/v2/guide/render-function.html)来自定义文本组件的显示内容。自定义的渲染函数类似于下面这样：
+
+```
+    return h('div',[
+        h('span',pageData.user.name),
+        h('span',pageData.uesr.age)
+    ])
+```
+
+在视图页中执行文件组件的渲染函数，代码如下：
+
+````vue
+<template>
+<!--do something-->
+ <span
+      v-if="!fieldSchema['x-props'].render"
+      :class="fieldSchema['x-props'].className"
+    >
+      <v-render
+        :renderFunc="fieldSchema['x-props'].render"
+      />
+    </span>
+</template>
+<script>
+// do something
+components:{
+  vRender:{
+    render(createElement) {
+      const parentVm = this.$parent;
+      return this.renderFunc(createElement,parentVm,parentVm.pageVm,parentVm.pageVm.pageData)
+    },
+    props:{
+      renderFunc:{
+        type:Function,
+        required: true
+      },
+    }
+  }
+}
+</script>
+````
+
+在可视化创建详情页中，除了文本组件支持写渲染函数之外，表格组件中的列也支持写渲染函数
+
+### 下拉框组件
+
+下拉框组件的配置界面如下：
+
+![](./img/select-config.png)
+
+下拉框组件有三个区域进行配置，在这里着重介绍下拉框的显示配置和联动配置，先介绍显示配置再介绍联动配置
+
+下拉框是一个表单组件，它除了可以对数据进行展示还可以对数据进行修改，我将表单组件的值(即：组件 value 对应的值)存放在 vuex 中。对于详情页而言，表单组件需要显示它的初始值，表单的初始值位于页面数据中，为了让表单组件在 vuex 中取到它要展示的值，在表单组件 created 钩子函数中，我将这个表单组件在页面数据中的值另存在 vuex 中，在此之后表单组件取值和修改值都是针对 vuex 中的数据进行操作，简化之后的代码如下：
+
+```vue
+<template>
+  <dm-select
+      v-model="value"
+      v-bind="fieldSchema['x-component-props']"
+      :class="fieldSchema['x-props'].className"
+    >
+     <!--....some options-->
+  </dm-select>
+</template>
+<script>
+  export default {
+    computed:{
+      value:{
+        get() {
+          // 从 Vuex 的 formData 中取值
+          return new Path(this.fieldSchema.key).getIn(this.formData)
+        },
+        set(value){
+          // 将表单字段的保存到 Vuex 的 formData 中
+          this.saveFormData({name:this.fieldSchema.key,value:value})
+        }
+      },
+    },
+    created(){
+      this.setFieldInitValue()
+    },
+    methods:{
+      setFieldInitValue(){
+            // 从页面数据中取表单组件的初始值
+            let initValue = new Path(this.fieldSchema.path).getIn(this.pageData)
+            // 将表单组件的初始值保存到 Vuex 的 formData 中
+            this.saveFormData({name:this.fieldSchema.key,value:initValue})
+      }
+    }
+  }
+</script>
+```
+
+下拉组件除了要显示选中的值，还需要备选数据，它的备选数据可以通过从接口中获取也可以在配置中写死，支持返回一个 promise，返回同步计算的值或者填写 url。在这里下拉框的备选数据获取方式与上面介绍的页面数据的获取方式类似，不再赘述。
+
+select 的联动配置
+
+表单联动是指：这个表单组件的状态受其他表单组件的值的影响，目前支持的联动类型有：隐藏、禁用、组件值联动。联动订阅器用于观察 formData 中值的变化，针对表单组件的联动类型对组件的状态作出影响。联动订阅器是一个函数，在视图页中使用联动订阅器计算计算属性的值，所以只要在联动订阅器中访问的值发生了变化，就会重新计算计算属性，进而影响组件的状态。简化的代码如下：
+
+```vue
+<template>
+  <dm-select
+      v-model="value"
+      :disabled="disabled"
+      :hidden="hidden"
+      v-bind="fieldSchema['x-component-props']"
+      :class="fieldSchema['x-props'].className"
+    >
+     <!--....some options-->
+  </dm-select>
+</template>
+<script>
+export default {
+  computed:{
+    disabled(){
+      if(this.linkages['linkage:disabled']) {
+        return this.linkages['linkage:disabled'](this.pageVm,this.pageVm.pageData,this.formData)
+      } else {
+        return false
+      }
+    },
+    hidden(){
+      if(this.linkages['linkage:hidden']) {
+        return this.linkages['linkage:hidden'](this.pageVm,this.pageVm.pageData,this.formData)
+      } else {
+        return false
+      }
+    },
+    value:{
+      get() {
+        // 从 Vuex 的 formData 中取值
+        return new Path(this.fieldSchema.key).getIn(this.formData)
+      },
+      set(value){
+        // 将表单组件的值保存到 Vuex 的 formData 中
+        this.saveFormData({name:this.fieldSchema.key,value:value})
+      }
+    },
+    valueOfLinkage(){
+      if(this.linkages['linkage:value']) {
+        return this.linkages['linkage:value'](this.pageVm,this.pageVm.pageData,this.formData)
+      } else {
+        return ''
+      }
+    }
+  },
+  watch:{
+    valueOfLinkage(val){
+      this.value = val
+    }
+  }
+}
+</script>
+```
+
+表单组件的值联动比隐藏联动和禁用联动要复杂一些，这是因为联动订阅器可以改变表单组件的值，表单它自身也可以改变它的值。表单组件的值由最后一次变化为准。
+
+对于禁用联动，它的联动订阅器中可填写的内容如下：
+
+```js
+if(formData.status + '' === '2') {
+  return true
+} else {
+  return false
+}
+```
+
+上面的联动订阅器表示：当 vuex 中的 formData.status 等于 2 时，这个表单组件会被禁用
+
+对于隐藏联动，它的联动订阅器中可填写的内容如下：
+
+```js
+if(formData.username.length > 3) {
+  return true
+} else {
+  return false
+}
+```
+
+上面的联动订阅器表示：当 vuex 中的 formData.username 的长度 > 3 时，这个表单组件会被隐藏
+
+对于值联动，它的联动订阅器中可以填写的内容如下：
+
+```js
+if(formData.id) {
+  return 3
+} else {
+  return ''
+}
+```
+
+上面的联动订阅器表示：当 vuex 中的 formData.id 为 truly 时，这个表单组件的值会被置为 3
 
 ## 如何使用
 
