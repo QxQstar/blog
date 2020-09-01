@@ -104,3 +104,23 @@ this.setState(prevState => {
 
 给函数组件传递 ref 属性将不会正常工作，从 React 16.3 起，使用 React.forwardRef API 使得可以给函数组件传递 ref 属性。在 React 16.3 之前的版本中要想在父组件中访问子组件中的内置的 DOM 元素节点，可以将父组件中的 ref 作为子组件的另一个属性名传递到子组件中
 
+## React props 类型检查
+
+从 React 15.5 起 React props 的类型检查从 React.PropTypes 中移入到一个独立的库中：[prop-types](https://www.npmjs.com/package/prop-types)
+
+import PropTypes from 'prop-types'
+
+myComponent.PropTypes = {
+    optionalBool: PropTypes.bool
+}
+
+
+## 不受控组件
+
+对于不受控 form 表单组件，可以配合 ref 得到表单组件的值
+
+对于 radio 和 checkbox 使用 defaultChecked 属性去设置初始值，其他的使用 defaultValue 属性设置初始值
+
+file 组件只能是不受控组件
+
+
