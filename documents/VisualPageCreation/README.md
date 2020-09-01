@@ -206,9 +206,215 @@ export function getParams(params, query) {
 }
 ```
 
-第二种方式在配置页自定义函数得到页面数据，这种方式你只需要写函数体，并且必须有一个返回值，界面如下：
+第二种方式：在配置页自定义函数得到页面数据，这种方式你只需要写函数体，并且必须有一个返回值，界面如下：
 
 ![](./img/detail-config-get-page-data-function.png)
+
+这种方式支持 promise 和同步执行的函数。如果函数返回 promise，视图页会将 promise resolve 的值当作页面数据，如果是同步执行的函数，视图页会将同步函数的返回值当作页面数据。
+
+结合这两种方式视图页获取页面数据的代码如下：
+
+```js
+/**
+ * 获取页面数据
+ * @param pageConfig 页面配置
+ * @param vm 详情页的 Vue 实例
+ * @returns {Promise<any | never>}
+ */
+export function fetchPageData({pageConfig,vm}){
+  return new Promise((resolve, reject) => {
+    // 从接口中获取页面数据
+    if(pageConfig.url) {
+      if(!pageConfig.belong){
+        return resolve({})
+      }
+      const paramsFromUrl = getParamsFromUrl(pageConfig.url)
+      const fullUrl = getFullUrl(pageConfig.belong,paramsFromUrl.origin)
+      if(!fullUrl) reject()
+
+      const fn = pageConfig.method  === 'POST' ? post : fetch
+      fn(fullUrl,getParams(paramsFromUrl.params,vm.$route.query)).then(res => {
+        resolve(res.content)
+      })
+    } 
+    // 通过自定义函数获取页面数据
+    else if(pageConfig.getPageData ){
+      if(typeof pageConfig.getPageData === 'function') {
+        const result = pageConfig.getPageData.call(vm,vm)
+        resolve(result);
+      } else {
+        resolve(pageConfig.getPageData)
+      }
+    } else {
+      resolve({})
+    }
+  }).then((content) => {
+    return content
+  })
+}
+```
+
+### 组件的配置参数
+
+如下是一个输入框组件的配置：
+
+```json
+{
+  "title": "用户名",
+  "path":"user.name",
+  "key":"userName",
+  "type":"string",
+  "visible":true,
+  "x-linkages":[],
+  "x-component":"dm-input",
+  "x-component-props":{
+    "type":"text",
+    "size":"small",
+    "placeholder":"请输入用户名"
+  },
+  "x-props":{
+    "style":{
+      "margin":"7px 5px",
+      "color":"#333333"
+    }
+  },
+  "editable":true,
+  "triggerType":"submit",
+  "events":{},
+  "x-rules":{
+    "format":"",
+    "required":false,
+    "pattern":"",
+    "max":"5",
+    "min":"2"
+  }
+}
+```
+
+组件可配置的字段如下：
+
+|属性名|描述|类型|
+|-----|----|----|
+|title|字段标题|string|
+|path|取值路径|string|
+|key|接口字段名|string|
+|description|字段描述|string|
+|default|UI 组件字段默认值|any|
+|editable|是否可编辑|boolean|
+|type|字段值类型|string,object,array,number,boolean
+|enum|枚举数据|array,object,function|
+|url|获取枚举数据或者 UI 组件数据的接口地址|string
+|items|组件的子组件的配置字段|array|
+|triggerType|字段校验时机|string
+|visible|字段是否可见|boolean
+|events| UI 组件的事件 | Object |
+|x-props|字段的扩展属性|object
+|x-component|字段的 UI 组件名|string
+|x-component-props|字段 UI 组件的属性|object
+|x-linkages|字段联动|array
+|x-rules|字段规则|object
+
+x-props 数据属性
+
+|属性名|描述|类型|
+|----|----|----|
+|style|字段的 UI 组件的 style 样式| object |
+|className|字段的 UI 组件的 className | string|
+|label|字段的 UI 组件的枚举 label 取值路径|string|
+|value|字段的 UI 组件的枚举 value 取值路径|string|
+|buttonType| 按钮的操作类型| string|
+|render|自定义组件的显示内容| function
+|buttonSubmitUrl|提交按钮的接口地址|string
+|paging|列表是否分页|boolean
+
+
+x-rules 数据属性
+
+|属性名|描述|类型|
+|----|----|----|
+|format|正则规范类型|string
+|validator|自定义校验规则|function
+|required|是否必填|boolean
+|pattern|自定义正则|RegExp , string
+|max|最大长度|number
+|min|最小长度|number
+|len|长度|number
+|maximum|最大数值|number
+|minimum|最小数值|number
+|enum|枚举校验规则|array
+|message|错误文案|string
+
+x-linkages 字段联动
+
+|属性名|描述|类型|可选值|
+|----|----|----|----|
+|type|联动类型|String|linkage:hidden,linkage:disabled,linkage:value|
+|subscribe|联动订阅器|Function|-|
+
+下面以文本组件和下拉框组件组件进行具体举例说明
+
+### 文本组件
+
+文件组件用于在详情页中显示某个字段对应的值，他的配置界面如下：
+
+![](./img/detail-config-text.png)
+
+先介绍非自定义文本组件显示内容的情况，这个时候文本组件的取值路径是必填项，视图页会根据取值路径从页面数据中取文本组件的显示内容。取值路径还支持在路径后面增加过滤器，这里的过滤器和[Vue 中的过滤器](https://cn.vuejs.org/v2/guide/filters.html)功能一致。取值路径如下：
+
+```
+create_at|formatDate('datetime')： 从页面数据的 create_at 字段中取值，然后使用 formatDate 格式化 create_at 字段对应值
+```
+
+代码实现如下：
+
+... vue 组件
+```js
+computed:{
+    // 使用计算属性得到文本组件要显示的内容 
+   textContent(){
+    const p = this.fieldSchema.path.split('|')
+    // 如果填写了取值路径
+    if(formatPathStr(p[0])) {
+      const filters = p.slice(1)
+      const path = new Path(p[0]);
+      // 从页面数据中取值
+      let value = path.getIn(this.pageVm.pageData)
+      // 过滤器
+      if (filters && filters.length) {
+        value = filters.reduce((a, b) => {
+          return this.evalFilter(b, a, this)
+        }, value)
+      }
+      return value || '- -'
+    } else {
+      return this.fieldSchema.default ||'- -'
+    }
+  }
+},
+methods:{
+   evalFilter(filterStr,val){
+    const parms = filterStr.match(/^([_$0-9A-Za-z]+)\(([^()]+)\)$/) || ['', filterStr]
+    const fn = parms[1]
+    let args = [val]
+    try {
+      args = args.concat(eval(`[${parms[2]}]`))
+    } catch (e) {
+      console.error(e)
+      this.$message.error(this.fieldSchema.title+'执行过滤器时拼接参数出错了')
+    }
+    // 根据过滤器名得到过滤器对应的方法
+    const filterFn = this.$options.filters && this.$options.filters[fn]
+    if (typeof filterFn == 'function') {
+      return filterFn.apply(this, args)
+    }
+    return val
+  }
+}
+```
+
+这里使用第三方库 [cool-path](https://github.com/janryWang/cool-path) 来实现路径取值
+
+
 
 ## 如何使用
 
