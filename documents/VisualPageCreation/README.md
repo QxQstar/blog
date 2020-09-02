@@ -16,6 +16,13 @@
 
 可创建的页面类型有：列表、详情、表单。详情和表单页的设计思路差别不大，列表页与另外两种页面差别比较大。本篇文章先介绍列表页的设计思路再介绍详情页的设计思路
 
+## 写在前面
+
+1. codemirror
+2. belong
+3. cool-path
+4. new Function
+
 ## 列表页设计
 
 经过分析我们公司的列表页布局有一个统一的模式。列表由右上角的操作按钮、左上角的标题或面包屑、正上面的筛选区域、中间的 table以及正下方的分页器组成，中间的 table 是必须存在的，其他内容可选。如下图所示：
@@ -351,7 +358,7 @@ x-linkages 字段联动
 |type|联动类型|String|linkage:hidden,linkage:disabled,linkage:value|
 |subscribe|联动订阅器|Function|-|
 
-下面以文本组件和下拉框组件进行具体举例说明
+下面以文本组件，下拉框组件，按钮组件为例进行说明
 
 ### 文本组件
 
@@ -365,7 +372,7 @@ x-linkages 字段联动
 create_at|formatDate('datetime')： 从页面数据的 create_at 字段中取值，然后使用 formatDate 格式化 create_at 字段对应值
 ```
 
-代码实现如下：
+简化代码如下：
 
 ... vue 组件
 ```js
@@ -376,6 +383,7 @@ computed:{
     // 如果填写了取值路径
     if(formatPathStr(p[0])) {
       const filters = p.slice(1)
+      // 这里的 Path 指 cool-path
       const path = new Path(p[0]);
       // 从页面数据中取值
       let value = path.getIn(this.pageVm.pageData)
@@ -609,6 +617,86 @@ if(formData.id) {
 
 上面的联动订阅器表示：当 vuex 中的 formData.id 为 truly 时，这个表单组件的值会被置为 3
 
+## 按钮组件
+
+按钮组件的配置界面如下：
+
+![](./img/btn-config.png)
+
+按钮组件是一种比较特别的组件，与其他组件相比它的操作行为不固定而且影响范围比较广。根据业务需求分为三种操作类型，分别是：提交(即：将表单数据提交到服务器)，重置(即：将表单组件的值重置为初始状态)，自定义(即：自定义按钮的点击事件处理程序)。在下面只介绍`提交`和`自定义`这两种类型。
+
+提交操作
+
+通常在将表单数据提交到服务器之前，我们需要对表单数据进行校验，只有所有的数据符合要求，才能将表单数据提交到服务器，否则将错误语显示到界面上。为了满足这个需求，我们需要在按钮提交事件的处理程序中访问到所有的表单数据以及表单组件的数据校验规则，由于表单数据保存在 Vuex 中，并且存放数据校验规则的 json schema 在视图页全局共享，所以在提交事件处理程序中能够很容易拿到想要的数据。需要注意的是，如果某个表单组件的数据没有通过校验，错误信息要显示在表单组件所在的位置，这就意味着消费错误信息的位置和生成错误信息的位置不相同。
+
+我将对错误信息进行操作的方法收集到单独的模块中。简化代码如下：
+
+```js
+/**
+ *表单错误收集器
+ **/
+
+import Vue from 'vue'
+export const errorCollector = new Vue({
+  data(){
+    return {
+      errorObj:{}
+    }
+  },
+  methods:{
+    clearError(){
+      this.errorObj = {}
+    },
+    delError(name){
+      const errorObj = {
+        ... this.errorObj
+      }
+      delete errorObj[name]
+      this.errorObj = errorObj
+    },
+    setError(name,value){
+      this.errorObj = {
+        ... this.errorObj,
+        [name]: value
+      }
+    },
+    initFieldError(name){
+      this.errorObj = {
+        ... this.errorObj,
+        [name]: ''
+      }
+    }
+  }
+})
+```
+
+错误信息收集器是一个 Vue 实例，在每个表单组件中引入实例化的错误信息收集器，并且将它作为组件的一个 data 属性，将表单组件要展示的错误信息作为组件的计算属性，这样一来只要错误信息收集器中的数据发生变化界面就会更新，简化代码如下：
+
+```vue
+<template>
+<!-- do something-->
+<div>{{ errorMsg }}</div>
+</template>
+<script>
+export default {
+  data(){
+    return {
+      errorCollector:errorCollector
+    }
+  },
+  computed:{
+    errorMsg(){
+      return this.errorCollector.errorObj[this.fieldSchema.key]
+    }
+  }
+}
+</script>
+```
+
+自定义操作
+
+自定义操作实际上 json schema 中定义按钮的点击事件处理程序，在视图页中的实现比较简单
+
 ## 如何使用
 
 配置数据保存在数据库，要在项目中使用配置数据生成页面，需要将配置数据下载到项目中的一个特定文件夹中，当在浏览器中访问这个列表页时，会根据页面 ID 到下载好的静态文件中读取页面的配置数据，然后将配置数据传递到列表视图页，列表视图页将页面渲染出来。
@@ -621,19 +709,11 @@ if(formData.id) {
     })
 ```
 
-在项目中直接获取到的配置数据是一个字符串，但是在使用的时候我们需要的是一个对象，并且某些字段需要是函数。为了将字符串转成需要的格式，我们使用 `new Function('return ' + strConfig)()`,代码如下：
+在视图页中直接获取到的配置数据是一个字符串，但是在视图页渲染界面的时候需要的是一个对象，并且对象的某些字段必须是函数。为了将字符串转成需要的格式，我们使用 `new Function('return ' + strConfig)()` 来完成这一需求,简化代码如下：
 
 ```js
 function parseStrConfig(strConfig) {
-    let result = null
-    try {
-        result = new Function('return ' + strConfig)()
-    } catch (e) {
-        Error('SyntaxError', '解析列表配置出错')
-        this.$message.error('解析列表配置出错')
-    }
-
-    return result;
+    return  new Function('return ' + strConfig)();
 }
 ```
 
