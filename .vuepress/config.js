@@ -103,7 +103,7 @@ module.exports = {
                         link:'/documents/summary/QA/interview.html'
                     },
                     {
-                        text:'中后台列表搭建设计思路',
+                        text:'页面可视化搭建系统设计思路',
                         link:'/documents/VisualPageCreation/'
                     }
                 ]
