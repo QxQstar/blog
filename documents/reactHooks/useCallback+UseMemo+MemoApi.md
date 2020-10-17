@@ -1,5 +1,7 @@
 # useMemo,useCallback,React's memo API 很香?
 
+![](./banner.jpg)
+
 在这篇文章中将介绍如何在 React 应用程序中使用 useMemo、useCallback、React's memo API 去优化性能，但是需要注意的是不要滥用这些 API。
 
 > 不要将 React 的 useMemo Hook 与 React 的 memo API 混淆了。useMemo 被用于缓存值，memo API 被用于包裹 React 组件去阻止组件重新渲染。
@@ -99,7 +101,7 @@ function App() {
 
 你可能会想知道为什么不在所有的值计算中使用 useMemo Hook 或者 React 为什么不默认给所有的值计算使用 useMemo Hook。这是因为在每一次组件重新渲染时，useMemo Hook 都会比较依赖数组中的每一个依赖项以决定是否要重新计算值，进行依赖项的比较可能比重新计算值更耗费性能。
 
-总结：如果给 useMemo 传递了依赖项数组，只有在依赖项发生变化时 useMemo 才会重新计算新的值（如果依赖项数据是个空数组，只在组件第一次渲染时计算值），如果没有给 useMemo 传递依赖数组，在每一次渲染时都比重新计算新的值。
+总结：如果给 useMemo 传递了依赖项数组，只有在依赖项发生变化时 useMemo 才会重新计算新的值（如果依赖项数据是个空数组，只在组件第一次渲染时计算值），如果没有给 useMemo 传递依赖数组，在每一次渲染时都会重新计算新的值。
 
 ## 在 React 中怎么使用 memo API
 
@@ -370,4 +372,4 @@ const App = () => {
 
 总之，React 的 useCallback Hook 用于缓存函数。当函数被当作 props 传递给其他组件我们不用担心函数会因为父组件重新渲染而被重新初始化。然而，正如你所看到的，当与 React 的 memo API 一起使用时，React 的 useCallback 钩子开始发挥作用
 
-总结：如果给 useCallback 传递了依赖项数组，只有在依赖项发生变化时 useCallback 才会重新定义函数（如果依赖项数据是个空数组，只在组件第一次渲染时重新定义函数），如果没有给 useCallback 传递依赖数组，在每一次渲染时都比重新定义函数。useCallback(fn, deps) 等同于 useMemo(() => fn, deps)。
+总结：如果给 useCallback 传递了依赖项数组，只有在依赖项发生变化时 useCallback 才会重新定义函数（如果依赖项数据是个空数组，只在组件第一次渲染时重新定义函数），如果没有给 useCallback 传递依赖数组，在每一次渲染时都会重新定义函数。useCallback(fn, deps) 等同于 useMemo(() => fn, deps)。
