@@ -102,7 +102,7 @@ module.exports = {
                         link: '/documents/VisualPageCreation/'
                     },
                     {
-                        text: "useMemo,useCallback,React's memo API 很香?",
+                        text: "是时候用 useMemo,useCallback,React's memo API 优化性能了?",
                         link: '/documents/reactHooks/useCallback+UseMemo+MemoApi.html'
                     }
                 ]
