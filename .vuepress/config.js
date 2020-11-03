@@ -104,6 +104,9 @@ module.exports = {
                     {
                         text: "是时候用 useMemo,useCallback,React's memo API 优化性能了?",
                         link: '/documents/reactHooks/useCallback+UseMemo+MemoApi.html'
+                    },{
+                        text: "手把手带你实现一个简易版 React",
+                        link: '/documents/analyseReact/'
                     }
                 ]
             },
