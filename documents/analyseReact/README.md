@@ -217,6 +217,63 @@ setState(newState: {[attr: string]: any}) {
 }
 ```
 
+### rerender
+
+我们先回头看一下前面的代码是如何将组件渲染在界面上的，在前面我们使用了 appendChild API 将子元素添加到父元素中，但是当我们需要根据新的 state 重新渲染界面时，appendChild API 就不满足需求了，我们需要使用更精细化操作 dom 的 API，在 Mini React 中，我使用 HTML5 中的 Range API 来更新界面上的 DOM。
+
+回到重新渲染这个话题上，在 state 发生变化之后，我们是在原来的 range 上进行增删改，所有在初始渲染上，我们需要将最开始的 range 保存下来，然后在重新渲染的时候再使用这个 range。我们要将所有使用 (node as HTMLElement).appendChild 的地方全部替换成 Range。我们首先改造 renderDom。
+
+```typescript
+function renderDom(compnent: Component | ElementNode, parent: HTMLElement) {
+    const range = document.createRange()
+    range.setStart(parent,0)
+    range.setEnd(parent,parent.childNodes.length)
+    range.deleteContents()
+    compnent[RENDER_TO_DOM](range)
+}
+```
+
+接下来实现上面三种组件类型的`[RENDER_TO_DOM]`方法，总的来说`[RENDER_TO_DOM]`方法就是将组件的 root 插入到 range 中，TextNode 和 ElementNode 的 `[RENDER_TO_DOM]` 是一样的，如下：
+
+```typescript
+[RENDER_TO_DOM](range: Range) {
+    range.deleteContents()
+    range.insertNode(this.root)
+}
+```
+
+自定义组件（即：Component）的`[RENDER_TO_DOM]`与其他的两种类型的`[RENDER_TO_DOM]`有所不同，这源于 Component 的真实 DOM 树是从它的 render 方法中返回的，并且 Component.render 返回的可能依然是一个 Component 而非 ElementNode，但是 range 中只能插入真实的 DOM，在我们前面使用 appendChild 时，Component.root 实际上是 Component.render 返回值的 root，并且会触发递归调用。所以现在的`Component[RENDER_TO_DOM]`类似,  `Component[RENDER_TO_DOM]`实际上调用的是 `Component.render()[RENDER_TO_DOM]`,这里也有触发递归调用，代码如下：
+
+```typescript
+[RENDER_TO_DOM](range: Range) {
+    // 将 range 保存下来，供 rerender 的时候使用
+    this._range = range
+    // 这里会导致一个递归调用，一直到 render 方法返回的是一个 ElementNode 类型为止
+    this.render()[RENDER_TO_DOM](range)
+}
+```
+
+现在三种组件类型的`[RENDER_TO_DOM]`方法已经实现了，我们还需要改造 ElementNode.appendChild 方法，因为在这个方法我们依然使用的是 (node as HTMLElement).appendChild, 我们要将它改成 Range API,如下：
+
+```typescript
+appendChild(component: Component | ElementNode | TextNode) {
+    const range: Range = document.createRange()
+    // 因为是在节点的最后添加子元素，所以将 range 移动到末尾
+    range.setStart(this.root, this.root.childNodes.length)
+    range.setEnd(this.root,this.root.childNodes.length)
+    component[RENDER_TO_DOM](range)
+}
+```
+
+最后实现 Component.rerender，它只是使用 _range 重新调用一次`Component[RENDER_TO_DOM]`,如下：
+
+```typescript
+rerender() {
+    this._range.deleteContents()
+    this[RENDER_TO_DOM](this._range)
+}
+```
+
 ## 创建虚拟 DOM 以及虚拟 DOM 的 diff 算法
 
 ## Mini React 运行流程图
