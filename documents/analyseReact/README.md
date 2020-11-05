@@ -40,16 +40,10 @@ module: {
 经过分析可知 createElement 的第一个参数是被创建元素的类型，它可能是字符串也可能是一个自定义组件，第二个参数是被创建的元素的属性，它可以是 null，剩余的参数是被创建的元素的子元素。createElement 的声明如下：
 
 ```javascript
-function createElement(type: any, attrs: IBaseObject, ...children: []): CustomNode | ElementNode;
+function createElement(type: any, attrs: {[attr: string]: any}, ...children: (string |  Component | ElementNode)[]): Component | ElementNode;
 ```
 
 在 DOM 中有两种常见的节点，分别是元素节点和文本节点，在 Mini React 中我们除了要实现这两种浏览器内置的 DOM 节点类型之外还要实现一个自定义组件类型。
-
-首先定义一个 Mini React 组件类型
-
-```typescript
-type MiniComponent = ElementNode | Component | TextNode
-```
 
 ### 文本节点类型
 
@@ -81,7 +75,7 @@ class ElementNode {
         this.root.setAttribute(name,value);
     }
 
-    appendChild(component: MiniComponent) {
+    appendChild(component: TextNode | ElementNode | Component) {
         this.root.appendChild(component.root)
     }
 }
@@ -95,7 +89,7 @@ class ElementNode {
 abstract class Component {
     props: {[attr: string]: any}
     _root?: HTMLElement
-    children: MiniComponent[]
+    children: (TextNode | ElementNode | Component)[]
 
     abstract render() : ElementNode | Component
 
@@ -108,7 +102,7 @@ abstract class Component {
         this.props[name] = value
     }
 
-    appendChild(component: MiniComponent) {
+    appendChild(component: TextNode | ElementNode | Component) {
         this.children.push(component)
     }
 
@@ -124,7 +118,7 @@ abstract class Component {
 这里的 get root 会导致一个递归调用，一直到 render 方法返回的是一个 ElementNode 类型为止。实现了这三个类型之后，我们开始实现 createElement，在 createElement 函数内部就是根据 type 的类型创建出不同的 Node，然后调用这些 Node 的方法，代码如下：
 
 ```typescript
-function createElement(type: any, attrs: {[attr: string]: any}, ...children: any[]): Component | ElementNode {
+function createElement(type: any, attrs: {[attr: string]: any}, ...children: (string | Component | ElementNode)[]): Component | ElementNode {
     let component: Component | ElementNode;
     if (typeof type === 'string') {
         component = new ElementNode(type)
@@ -137,7 +131,7 @@ function createElement(type: any, attrs: {[attr: string]: any}, ...children: any
     }
     function insertChildren(children: any[]) {
         for (let child of children) {
-            let childComponent: MiniComponent
+            let childComponent: Component | ElementNode | TextNode
             if (child === null) {
                 continue;
             }
@@ -162,8 +156,8 @@ function createElement(type: any, attrs: {[attr: string]: any}, ...children: any
 到目前为止我们已经实现了 createElement 方法，但是只有 createElement 还不够，我们还缺少将组件渲染到浏览器 DOM 树的方法，在这里将它命名为 renderDom，renderDom 参照 ReactDOM.render 的用法，它的实现很简单：
 
 ```typescript
-function renderDom (compnent: Component | ElementNode, parent: HTMLElement) {
-    parent.appendChild(compnent.root);
+function renderDom (component: Component | ElementNode, parent: HTMLElement) {
+    parent.appendChild(component.root);
 }
 ```
 
