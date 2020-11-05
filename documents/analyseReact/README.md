@@ -14,7 +14,7 @@
 
 从上图可以看出 JSX 被转换成了 React.createElement 函数调用的形式，这就是在使用 JSX 的作用域中需要能够访问到 React 的原因。@babel/plugin-transform-react-jsx 将 JSX 转换成 React.createElement 函数调用这是它的默认行为，我们通过修改它的配置来改变函数名，配置如下：
 
-```json
+```js
 module: {
         rules: [{
             test: /\.js$/,
@@ -275,6 +275,155 @@ rerender() {
 ```
 
 ## 创建虚拟 DOM 以及虚拟 DOM 的 diff 算法
+
+在现在为止 Mini React 已经实现了重新渲染，但是我们一直操作的是真实 DOM 并且更新范围非常大。接下来我们要实现虚拟 DOM 并且减少更新范围。
+
+虚拟 DOM 和 虚拟 DOM 的 diff 算法主要是为了优化重新渲染的性能，在重新渲染的时候会将新旧虚拟 DOM 进行对比，然后只将有变更的虚拟 DOM 反映到真实的 DOM 上。既然要对比新旧虚拟 DOM，那么我们就要将旧的虚拟 DOM 保存下来供重新渲染的时候使用。我们给每一个组件类型都增加 vdom 属性，vdom 用于保存虚拟 DOM。
+
+diff 算法有很多种类型，在 Mini React 中使用的是一种非常简单的 diff 算法，它的思想如下：
+
+1. 如果两个新旧 vNode 的 type 不同就认为它们是不同的 Node，然后 diff 算法终止
+2. 如果两个文本 vNode 的内容不同就认为它们是不同的 Node，然后 diff 算法终止
+3. 如果两个 vNode 的 props 中相同的属性不相同就认为它们是不同的 Node，然后 diff 算法终止
+4. 如果新的 vNode.props 的数量小于旧的 vNode.props 的数量就认为它们是不同的 Node，然后 diff 算法终止
+5. 如果经过前面 4 条规则之后确定两个 vNode 是一样的 Node，就遍历新旧 vNode 的子 vNode，并且使用 1-4 条中的规则去对比子 vNode
+
+如果认为新旧 vNode 是不同的 Node，那么就销毁整个旧的 vNode 对应的 DOM 树并且使用新的 vNode 重新渲染 DOM 树
+
+对于 TextNode 而言，它有一个 type 属性 (表示这是一个文本 vNode，type 为固定的值)，content 属性（文本 vNode 的内容），_range 属性（文本 vNode 的插入范围）,vdom 属性（返回文本 vNode 自身）还有一个 `[RENDER_TO_DOM]`方法，这个方法用于将 vNode 渲染到界面上。
+
+```typescript
+class TextNode {
+    type: string;
+    content: string;
+    _range: Range;
+    constructor(content: string) {
+        this.type = '#text';
+        this.content = content;
+        this._range = null
+    }
+    get vdom(): TextNode {
+        return this;
+    }
+    [RENDER_TO_DOM](range: Range) {
+        const root = document.createTextNode(this.content)
+        range.deleteContents()
+        this._range = range;
+        range.insertNode(root)
+    }
+}
+```
+
+与前面的 TextNode 相比，新的 TextNode 去掉了一些属性也新增了一些属性，需要注意的是去掉了 root 属性，这是因为我们创建的是一个 vNode，root 是一个真实的 DOM Node, 它不应该保存在 vNode 中，它只能在 vNode render to dom 的时候被创建并作为临时使用。
+
+ElementNode 在 render to dom 之前也不能有任何关于真实 DOM 的操作，所以我们要修改 ElementNode.setAttribute 和 ElementNode.appendChild，我们要把真实的 DOM 操作放在 `[RENDER_TO_DOM]`中。简化代码如下：
+
+```typescript
+class ElementNode {
+    ... dosomething
+    setAttribute(name: string,value: any) {
+        this.props[name] = value
+    }
+    appendChild(component: Component | ElementNode | TextNode) {
+        this.children.push(component)
+    }
+    [RENDER_TO_DOM](range: Range) {
+        const root = document.createElement(this.type);
+        range.deleteContents()
+        for (const name in this.props) {
+            const value = this.props[name]
+            ... dosomething
+            root.setAttribute(name,value);
+        }
+        if (!this.vChildren) {
+            this.vChildren = this.children.map(child => child.vdom);
+        }
+        for (const child of this.vChildren) {
+            const childRange = document.createRange()
+            childRange.setStart(root, root.childNodes.length)
+            childRange.setEnd(root, root.childNodes.length)
+            child[RENDER_TO_DOM](childRange)
+        }
+        this._range = range;
+        range.insertNode(root)
+    }
+}
+```
+
+我们将 setAttribute 和 appendChild 修改成只是往 vNode 上增加属性，在`[RENDER_TO_DOM]`中才操作真实的 DOM。现在我将 ElementNode 和 TextNode 改造的差不多了，接下来轮到改造 Component 了。回到 vdom 这个属性上，vdom 保存是虚拟 DOM (即：vNode)，对于 ElementNode 和 TextNode 而言它的 vdom 是它的实例本身，但是 Component.vdom 不再是 Component 的实例本身了，Component.vdom 等于 Component.render().vdom，这是因为Component 中与渲染结果相关的是从 render 方法中返回的对象。在前面我们提到需要将旧的 vNode 保存下来，在这里我将它保存到 _vdom 中。
+
+```typescript
+class Component {
+    ... do something
+    get vdom(): ElementNode {
+        // 这里会触发递归调用，一直到 render 返回是非 Component 结束
+        return this.render().vdom
+    }
+    [RENDER_TO_DOM](range: Range) {
+        this._range = range
+        // 将本次用于渲染的 vNode 保存下来
+        this._vdom = this.vdom;
+        this._vdom[RENDER_TO_DOM](range)
+    }
+}
+```
+
+在前面为了实现用户界面更新我们定义了 rerender 方法，但是这个方法的弊端是：不管怎么修改 Component.state 的值，当重新渲染的时候 Component.range 对应的整个 DOM 树都会摧毁重建。我们现在要做的是利用 diff 算法对比新旧 vNode 的变更，减少真实 DOM 的更新范围。现在给 Component 增加一个 update 方法，这个方法用于对比新旧 vNode，然后调用新的`vNode[RENDER_TO_DOM]`去更新界面，代码如下：
+
+```typescript
+class Component {
+    ... do something
+    update() {
+        // 利用前面提到的 diff 算法规则比较两个 vNode 是否是相同的
+        function isSameNode(oldNode: TextNode | ElementNode, newNode: TextNode | ElementNode): boolean {
+            ... dosomething
+        }
+        const update = (oldNode: TextNode | ElementNode, newNode: TextNode | ElementNode) => {
+            if (!isSameNode(oldNode, newNode)) {
+                // 如果不是相同的 vNode，则重建整个新 vNode 对应的 DOM 树
+                newNode[RENDER_TO_DOM](oldNode._range)
+                return;
+            }
+            newNode._range = oldNode._range
+
+            ... dosomething
+
+            // 得到子 vNode
+            const newChildren = newNode.vChildren;
+            const oldChildren = oldNode.vChildren;
+
+            // 最后一个 node 所在的 range
+            let tailRange = oldChildren[oldChildren.length - 1]._range
+
+            for (let i = 0; i < newChildren.length; i++) {
+                let newChild = newChildren[i];
+                let oldChild = oldChildren[i];
+
+                if (i < oldChildren.length) {
+                    update(oldChild, newChild)
+                }
+
+                // 如果 newChildren 的长度大于 oldChildren 的长度，将新的 node 插入到末尾
+                else {
+                    let range = document.createRange()
+                    // 将 range 移动到末尾
+                    range.setStart(tailRange.endContainer, tailRange.endOffset);
+                    range.setEnd(tailRange.endContainer, tailRange.endOffset);
+
+                    newChild[RENDER_TO_DOM](range)
+                    tailRange = range;
+                }
+            }
+        }
+        const vdom = this.vdom;
+        update(this._vdom,vdom);
+        // 保存本次更新的 vdom
+        this._vdom = vdom;
+    }
+}
+```
+
+现在删除 rerender 方法，并且将 setState 方法中调用 rerender 的地方改成调用 update。现在 ini React 可以支持局部更新了。
 
 ## Mini React 运行流程图
 
