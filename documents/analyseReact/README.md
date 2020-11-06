@@ -71,7 +71,8 @@ class ElementNode {
         this.root = document.createElement(type)
     }
 
-    setAttribute(name: string, value: string) {
+    setAttribute(name: string, value: any) {
+        ... something
         this.root.setAttribute(name,value);
     }
 
@@ -218,12 +219,12 @@ setState(newState: {[attr: string]: any}) {
 回到重新渲染这个话题上，在 state 发生变化之后，我们是在原来的 range 上进行增删改，所有在初始渲染上，我们需要将最开始的 range 保存下来，然后在重新渲染的时候再使用这个 range。我们要将所有使用 (node as HTMLElement).appendChild 的地方全部替换成 Range。我们首先改造 renderDom。
 
 ```typescript
-function renderDom(compnent: Component | ElementNode, parent: HTMLElement) {
+function renderDom(component: Component | ElementNode, parent: HTMLElement) {
     const range = document.createRange()
     range.setStart(parent,0)
     range.setEnd(parent,parent.childNodes.length)
     range.deleteContents()
-    compnent[RENDER_TO_DOM](range)
+    component[RENDER_TO_DOM](range)
 }
 ```
 
@@ -344,20 +345,23 @@ class ElementNode {
 }
 ```
 
-我们将 setAttribute 和 appendChild 修改成只是往 vNode 上增加属性，在`[RENDER_TO_DOM]`中才操作真实的 DOM。现在我将 ElementNode 和 TextNode 改造的差不多了，接下来轮到改造 Component 了。回到 vdom 这个属性上，vdom 保存是虚拟 DOM (即：vNode)，对于 ElementNode 和 TextNode 而言它的 vdom 是它的实例本身，但是 Component.vdom 不再是 Component 的实例本身了，Component.vdom 等于 Component.render().vdom，这是因为Component 中与渲染结果相关的是从 render 方法中返回的对象。在前面我们提到需要将旧的 vNode 保存下来，在这里我将它保存到 _vdom 中。
+我们将 setAttribute 和 appendChild 修改成只是往 vNode 上增加属性，在`[RENDER_TO_DOM]`中才操作真实的 DOM。现在我将 ElementNode 和 TextNode 改造的差不多了，接下来轮到改造 Component 了。回到 vdom 这个属性上，vdom 保存是虚拟 DOM (即：vNode)，对于 ElementNode 和 TextNode 而言它的 vdom 是它的实例本身，但是 Component.vdom 不再是 Component 的实例本身了，Component.vdom 等于 Component.render().vdom，这是因为Component 的渲染结果取决于从 render 方法中返回的对象。在前面我们提到需要将旧的 vNode 保存下来，在这里我将它保存到 _vdom 中。
 
 ```typescript
 class Component {
     ... do something
     get vdom(): ElementNode {
         // 这里会触发递归调用，一直到 render 返回是非 Component 结束
-        return this.render().vdom
+        const vdom = this.render().vdom
+        // 将本次用于渲染的 vNode 保存下来
+        if (!this._vdom) {
+            this._vdom = vdom
+        }
+        return vdom
     }
     [RENDER_TO_DOM](range: Range) {
         this._range = range
-        // 将本次用于渲染的 vNode 保存下来
-        this._vdom = this.vdom;
-        this._vdom[RENDER_TO_DOM](range)
+        this.vdom[RENDER_TO_DOM](range)
     }
 }
 ```
