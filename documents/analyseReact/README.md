@@ -164,6 +164,8 @@ function renderDom (component: Component | ElementNode, parent: HTMLElement) {
 
 在目前为止我们已经可以将一些简单的组件显示到界面上了，但是这些组件还不能根据用户的交互而更新。在 react 中，组件的 props 或者 state 发生了变化就会触发组件的重新渲染，但是组件不能改变它的 props，它只能改变它的 state，自定义组件的 setState 方法用于去更新 state。接下来我们就开始实现 setState 方法
 
+[查看源码](https://github.com/QxQstar/min-react/tree/master/src/part1)
+
 ## 更新界面
 
 首先我们先在 Component 抽象类中增加 state 属性，setState 方法，rerender 方法。setState 用于修改 state，rerender 使用新的 state 重新渲染组件。
@@ -268,6 +270,8 @@ rerender() {
     this[RENDER_TO_DOM](this._range)
 }
 ```
+
+[查看源码](https://github.com/QxQstar/min-react/tree/master/src/part2)
 
 ## 创建虚拟 DOM 以及虚拟 DOM 的 diff 算法
 
@@ -423,6 +427,10 @@ class Component {
 
 现在删除 rerender 方法，并且将 setState 方法中调用 rerender 的地方改成调用 update。现在 ini React 可以支持局部更新了。
 
+[查看源码](https://github.com/QxQstar/min-react/tree/master/src/part3)
+
 ## Mini React 运行流程图
+
+![](./flowChart.jpg)
 
 ## 在 Preact 中虚拟 DOM 算法流程图
