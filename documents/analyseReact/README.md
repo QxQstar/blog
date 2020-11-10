@@ -40,7 +40,7 @@ module: {
 经过分析可知 createElement 的第一个参数是被创建元素的类型，它可能是字符串也可能是一个自定义组件，第二个参数是被创建的元素的属性，它可以是 null，剩余的参数是被创建的元素的子元素。createElement 的声明如下：
 
 ```javascript
-function createElement(type: any, attrs: {[attr: string]: any}, ...children: (string |  Component | ElementNode)[]): Component | ElementNode;
+function createElement(type: string | ConstructorOf<Component>, attrs: {[attr: string]: any}, ...children: (string |  Component | ElementNode)[]): Component | ElementNode;
 ```
 
 在 DOM 中有两种常见的节点，分别是元素节点和文本节点，在 Mini React 中我们除了要实现这两种浏览器内置的 DOM 节点类型之外还要实现一个自定义组件类型。
@@ -119,7 +119,7 @@ abstract class Component {
 这里的 get root 会导致一个递归调用，一直到 render 方法返回的是一个 ElementNode 类型为止。实现了这三个类型之后，我们开始实现 createElement，在 createElement 函数内部就是根据 type 的类型创建出不同的 Node，然后调用这些 Node 的方法，代码如下：
 
 ```typescript
-function createElement(type: any, attrs: {[attr: string]: any}, ...children: (string | Component | ElementNode)[]): Component | ElementNode {
+function createElement(type: string | ConstructorOf<Component>, attrs: {[attr: string]: any}, ...children: (string | Component | ElementNode)[]): Component | ElementNode {
     let component: Component | ElementNode;
     if (typeof type === 'string') {
         component = new ElementNode(type)
