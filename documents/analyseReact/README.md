@@ -1,10 +1,22 @@
 # 手把手带你实现一个 Mini React
 
+![](./mini_React.jpg)
+
+这篇文章将介绍如何实现一个迷你版的 React，我将这个库称为 Mini React。在 React 中有两种类型的组件，分别是函数组件和类组件，在 Mini React 中只实现类组件。
+
+这篇文章的内容如下：
+
+1. Babel 与 JSX
+2. 实现 createElement 和 renderDom 方法让组件渲染在界面上
+3. setState 让组件具备交互性
+4. 虚拟 DOM 以及虚拟 DOM 的 diff 算法
+5. Mini React 运行流程图
+
 ## Babel 与 JSX
 
-在 React 的官网中推荐使用 JSX 描述 UI，可以将 JSX 当作模版语言。但是 JSX 不是合法的 html 片段也不是合法的 Javascript 语法。在 React 官网上还提到 JSX 最终会被转化为 JS 函数调用并且在使用 JSX 的作用域中需要能够访问到 React。那么是谁将 JSX 转化成 JS 函数滴调用的呢？为什么在使用 JSX 的作用域中需要访问到 React？
+在 React 的官网中推荐使用 JSX 描述 UI，我们可以将 JSX 当作模版语言。但是 JSX 不是合法的 html 也不是合法的 Javascript 语法。在 React 官网上还提到 JSX 最终会被转化为 JS 函数调用并且在使用 JSX 的作用域中要能够访问到 React。那么是谁将 JSX 转化成 JS 函数调用的呢？为什么在使用 JSX 的作用域中要能够访问到 React呢？
 
-@babel/plugin-transform-react-jsx 将 JSX 转化成了 JS 函数调用，它是 Babel 的一个插件，它只是遍历每个 JSX 节点并将它们转换为函数调用。
+@babel/plugin-transform-react-jsx 将 JSX 转化成了 JS 函数调用，它是 Babel 的一个插件，这个插件的作用是遍历每个 JSX 节点并将它们转换为函数调用。
 
 ![](./JSX.png)
 
@@ -12,7 +24,7 @@
 
 ![](./createElement.png)
 
-从上图可以看出 JSX 被转换成了 React.createElement 函数调用的形式，这就是在使用 JSX 的作用域中需要能够访问到 React 的原因。@babel/plugin-transform-react-jsx 将 JSX 转换成 React.createElement 函数调用这是它的默认行为，我们通过修改它的配置来改变函数名，配置如下：
+从上图可以看出 JSX 被转换成了 React.createElement 函数调用的形式，这就是在使用 JSX 的作用域中要能够访问到 React 的原因。@babel/plugin-transform-react-jsx 将 JSX 转换成 React.createElement 函数调用这是它的默认行为，我们通过修改它的配置来改变函数名，配置如下：
 
 ```js
 module: {
@@ -35,9 +47,9 @@ module: {
 
 将 @babel/plugin-transform-react-jsx 的 pragma 参数改成 createElement，这使得 JSX 被转化为 createElement 函数调用。这时我们需要在使用 JSX 的作用域中能够访问到 createElement 函数。下面我们开始实现 createElement
 
-## 实现 createElement
+## 实现 createElement 和 renderDom 方法让 Mini React 组件渲染在界面上
 
-经过分析可知 createElement 的第一个参数是被创建元素的类型，它可能是字符串也可能是一个自定义组件，第二个参数是被创建的元素的属性，它可以是 null，剩余的参数是被创建的元素的子元素。createElement 的声明如下：
+经过分析可知 createElement 的第一个参数表示被创建的组件，它可能是字符串也可能是一个自定义组件，第二个参数是被创建组件的属性，它可以是 null，剩余的参数是被创建组件的子组件。createElement 的声明如下：
 
 ```javascript
 function createElement(type: string | ConstructorOf<Component>, attrs: {[attr: string]: any}, ...children: (string |  Component | ElementNode)[]): Component | ElementNode;
@@ -45,9 +57,9 @@ function createElement(type: string | ConstructorOf<Component>, attrs: {[attr: s
 
 在 DOM 中有两种常见的节点，分别是元素节点和文本节点，在 Mini React 中我们除了要实现这两种浏览器内置的 DOM 节点类型之外还要实现一个自定义组件类型。
 
-### 文本节点类型
+### 文本组件
 
-文本节点的实现非常简单，它只需要文件节点对应的内容，代码如下：
+文本组件的实现非常简单，它只需要文件组件对应的内容，代码如下：
 
 ```typescript
 class TextNode {
@@ -59,9 +71,9 @@ class TextNode {
 }
 ```
 
-### 元素节点类型
+### 元素组件
 
-对于元素节点，我们需要根据元素类型（这里的元素类型指标签名）创建出这个类型的 Node，并且这个 Node 要有给自己设置属性的方法和添加子 Node 的方法，代码如下：
+对于元素组件，我们需要根据元素类型（这里的元素类型指标签名）创建出元素组件，并且元素组件要有设置属性和添加子组件的方法，代码如下：
 
 ```typescript
 class ElementNode {
@@ -116,7 +128,7 @@ abstract class Component {
 }
 ```
 
-这里的 get root 会导致一个递归调用，一直到 render 方法返回的是一个 ElementNode 类型为止。实现了这三个类型之后，我们开始实现 createElement，在 createElement 函数内部就是根据 type 的类型创建出不同的 Node，然后调用这些 Node 的方法，代码如下：
+这里的 get root 会导致一个递归调用，一直到 render 方法返回的是一个 ElementNode 类型为止。实现了这三个类型之后，我们开始实现 createElement，在 createElement 函数内部根据 type 的类型创建出不同的组件，然后调用这些组件的方法，代码如下：
 
 ```typescript
 function createElement(type: string | ConstructorOf<Component>, attrs: {[attr: string]: any}, ...children: (string | Component | ElementNode)[]): Component | ElementNode {
@@ -166,7 +178,7 @@ function renderDom (component: Component | ElementNode, parent: HTMLElement) {
 
 [查看源码](https://github.com/QxQstar/min-react/tree/master/src/part1)
 
-## 更新界面
+## 实现 setState 让组件具备交互性
 
 首先我们先在 Component 抽象类中增加 state 属性，setState 方法，rerender 方法。setState 用于修改 state，rerender 使用新的 state 重新渲染组件。
 
@@ -190,7 +202,7 @@ abstract class Component {
 
 ### setState
 
-我们先实现 setState，setState 只是将新的 state 与旧的 state 进行合并得到一个最终的 state。
+我们先实现 setState，setState 将新的 state 与旧的 state 进行合并得到一个最终的 state。
 
 ```typescript
 setState(newState: {[attr: string]: any}) {
@@ -216,7 +228,7 @@ setState(newState: {[attr: string]: any}) {
 
 ### rerender
 
-我们先回头看一下前面的代码是如何将组件渲染在界面上的，在前面我们使用了 appendChild API 将子元素添加到父元素中，但是当我们需要根据新的 state 重新渲染界面时，appendChild API 就不满足需求了，我们需要使用更精细化操作 dom 的 API，在 Mini React 中，我使用 HTML5 中的 Range API 来更新界面上的 DOM。
+我们先回头看一下前面的代码是如何将组件渲染在界面上的，在前面我们使用了 appendChild API 将子元素添加到父元素中，但是当我们需要根据新的 state 重新渲染界面时，appendChild API 就不满足需求了，我们需要使用更精细化操作 dom 的 API，在这里，我使用 HTML5 中的 Range API 来更新界面上的 DOM。
 
 回到重新渲染这个话题上，在 state 发生变化之后，我们是在原来的 range 上进行增删改，所有在初始渲染上，我们需要将最开始的 range 保存下来，然后在重新渲染的时候再使用这个 range。我们要将所有使用 (node as HTMLElement).appendChild 的地方全部替换成 Range。我们首先改造 renderDom。
 
@@ -239,7 +251,7 @@ function renderDom(component: Component | ElementNode, parent: HTMLElement) {
 }
 ```
 
-自定义组件（即：Component）的`[RENDER_TO_DOM]`与其他的两种类型的`[RENDER_TO_DOM]`有所不同，这源于 Component 的真实 DOM 树是从它的 render 方法中返回的，并且 Component.render 返回的可能依然是一个 Component 而非 ElementNode，但是 range 中只能插入真实的 DOM，在我们前面使用 appendChild 时，Component.root 实际上是 Component.render 返回值的 root，并且会触发递归调用。所以现在的`Component[RENDER_TO_DOM]`类似,  `Component[RENDER_TO_DOM]`实际上调用的是 `Component.render()[RENDER_TO_DOM]`,这里也有触发递归调用，代码如下：
+自定义组件（即：Component）的`[RENDER_TO_DOM]`与其他的两种类型的`[RENDER_TO_DOM]`有所不同，这源于 Component 的真实 DOM 树是从它的 render 方法中返回的，并且 Component.render 返回的可能依然是一个 Component 而非 ElementNode，但是 range 中只能插入真实的 DOM，在前一个章节，当我们访问 Component.root 时会触发递归调用，Component.root 的值等于 Component.render 返回值的 root。现在的`Component[RENDER_TO_DOM]`类似,  `Component[RENDER_TO_DOM]` 实际上调用的是 `Component.render()[RENDER_TO_DOM]`,这里也有触发递归调用，代码如下：
 
 ```typescript
 [RENDER_TO_DOM](range: Range) {
@@ -277,7 +289,7 @@ rerender() {
 
 在现在为止 Mini React 已经实现了重新渲染，但是我们一直操作的是真实 DOM 并且更新范围非常大。接下来我们要实现虚拟 DOM 并且减少更新范围。
 
-虚拟 DOM 和 虚拟 DOM 的 diff 算法主要是为了优化重新渲染的性能，在重新渲染的时候会将新旧虚拟 DOM 进行对比，然后只将有变更的虚拟 DOM 反映到真实的 DOM 上。既然要对比新旧虚拟 DOM，那么我们就要将旧的虚拟 DOM 保存下来供重新渲染的时候使用。我们给每一个组件类型都增加 vdom 属性，vdom 用于保存虚拟 DOM。
+　vNode(即：虚拟 DOM )和 vNode 的 diff 算法主要是为了优化重新渲染的性能，在重新渲染的时候会将新旧 vNode 进行对比，然后只将有变更的 vNode 反映到真实的 DOM 上。既然要对比新旧vNode，那么我们就要将旧的　vNode 保存下来供重新渲染的时候使用。我们给每一个组件类型都增加 vdom 属性，vdom 用于保存 vNode。
 
 diff 算法有很多种类型，在 Mini React 中使用的是一种非常简单的 diff 算法，它的思想如下：
 
