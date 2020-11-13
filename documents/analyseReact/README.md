@@ -2,7 +2,7 @@
 
 ![](./mini_React.jpg)
 
-这篇文章将介绍如何实现一个迷你版的 React，我将这个库称为 Mini React。在 React 中有两种类型的组件，分别是函数组件和类组件，在 Mini React 中只实现类组件。
+这篇文章将介绍如何实现一个迷你版的 React，我将这个库称为 Mini React，我将 Mini react 的源码对应它实现的能力分为了 3 部分。在 React 中有两种类型的自定义组件，分别是函数组件和类组件，在 Mini React 中只实现类组件。
 
 这篇文章的内容如下：
 
@@ -45,7 +45,7 @@ module: {
     }
 ```
 
-将 @babel/plugin-transform-react-jsx 的 pragma 参数改成 createElement，这使得 JSX 被转化为 createElement 函数调用。这时我们需要在使用 JSX 的作用域中能够访问到 createElement 函数。下面我们开始实现 createElement
+将 @babel/plugin-transform-react-jsx 的 pragma 参数改成 createElement，这使得 JSX 被转化为 createElement 函数调用。这时我们需要在使用 JSX 的作用域中能够访问到 createElement 函数。下面我们开始实现 createElement。
 
 ## 实现 createElement 和 renderDom 方法让 Mini React 组件渲染在界面上
 
@@ -174,7 +174,7 @@ function renderDom (component: Component | ElementNode, parent: HTMLElement) {
 }
 ```
 
-在目前为止我们已经可以将一些简单的组件显示到界面上了，但是这些组件还不能根据用户的交互而更新。在 react 中，组件的 props 或者 state 发生了变化就会触发组件的重新渲染，但是组件不能改变它的 props，它只能改变它的 state，自定义组件的 setState 方法用于去更新 state。接下来我们就开始实现 setState 方法
+在目前为止我们已经可以将一些简单的组件显示到界面上了，但是这些组件还不能根据用户的交互而更新。在 react 中，组件的 props 或者 state 发生了变化就会触发组件的重新渲染，但是组件不能改变它的 props，它只能改变它的 state，自定义组件的 setState 方法用于去更新 state。接下来我们就开始实现 setState 方法。
 
 [查看源码](https://github.com/QxQstar/min-react/tree/master/src/part1)
 
@@ -299,7 +299,7 @@ diff 算法有很多种类型，在 Mini React 中使用的是一种非常简单
 4. 如果新的 vNode.props 的数量小于旧的 vNode.props 的数量就认为它们是不同的 Node，然后 diff 算法终止
 5. 如果经过前面 4 条规则之后确定两个 vNode 是一样的 Node，就遍历新旧 vNode 的子 vNode，并且使用 1-4 条中的规则去对比子 vNode
 
-如果认为新旧 vNode 是不同的 Node，那么就销毁整个旧的 vNode 对应的 DOM 树并且使用新的 vNode 重新渲染 DOM 树
+如果认为新旧 vNode 是不同的 Node，那么就销毁整个旧的 vNode 对应的 DOM 树并且使用新的 vNode 重新渲染 DOM 树。
 
 对于 TextNode 而言，它有一个 type 属性 (表示这是一个文本 vNode，type 为固定的值)，content 属性（文本 vNode 的内容），_range 属性（文本 vNode 的插入范围）,vdom 属性（返回文本 vNode 自身）还有一个 `[RENDER_TO_DOM]`方法，这个方法用于将 vNode 渲染到界面上。
 
@@ -361,13 +361,13 @@ class ElementNode {
 }
 ```
 
-我们将 setAttribute 和 appendChild 修改成只是往 vNode 上增加属性，在`[RENDER_TO_DOM]`中才操作真实的 DOM。现在我将 ElementNode 和 TextNode 改造的差不多了，接下来轮到改造 Component 了。回到 vdom 这个属性上，vdom 保存是虚拟 DOM (即：vNode)，对于 ElementNode 和 TextNode 而言它的 vdom 是它的实例本身，但是 Component.vdom 不再是 Component 的实例本身了，Component.vdom 等于 Component.render().vdom，这是因为Component 的渲染结果取决于从 render 方法中返回的对象。在前面我们提到需要将旧的 vNode 保存下来，在这里我将它保存到 _vdom 中。
+我们将 setAttribute 和 appendChild 修改成只是往 vNode 上增加属性，在`[RENDER_TO_DOM]`中才操作真实的 DOM。现在我将 ElementNode 和 TextNode 改造的差不多了，接下来轮到改造 Component 了。回到 vdom 这个属性上，vdom 保存是虚拟 DOM (即：vNode)，对于 ElementNode 和 TextNode 而言它的 vdom 是它的实例本身，但是 Component.vdom 不再是 Component 的实例本身了，Component.vdom 等于 Component.render().vdom，这是因为Component 的渲染结果取决于从 render 方法的返回值。在前面我们提到需要将旧的 vNode 保存下来，在这里我将它保存到 _vdom 中。
 
 ```typescript
 class Component {
     ... do something
     get vdom(): ElementNode {
-        // 这里会触发递归调用，一直到 render 返回是非 Component 结束
+        // 这里会触发递归调用，一直到 render 返回值是非 Component 结束
         const vdom = this.render().vdom
         // 将本次用于渲染的 vNode 保存下来
         if (!this._vdom) {
@@ -444,5 +444,3 @@ class Component {
 ## Mini React 运行流程图
 
 ![](./flowChart.jpg)
-
-## 在 Preact 中虚拟 DOM 算法流程图
