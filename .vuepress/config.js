@@ -107,6 +107,10 @@ module.exports = {
                     },{
                         text: "手把手带你实现一个简易版 React",
                         link: '/documents/analyseReact/'
+                    },
+                    {
+                        text: '前端状态管理的历史回溯与思考',
+                        link :'/documents/summary/stateManager/'
                     }
                 ]
             },
