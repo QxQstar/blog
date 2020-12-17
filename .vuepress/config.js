@@ -111,6 +111,10 @@ module.exports = {
                     {
                         text: '前端状态管理的历史回溯与思考',
                         link :'/documents/summary/stateManager/'
+                    },
+                    {
+                        text: '写给 2020 年的何遇',
+                        link :'/documents/summary/2020/'
                     }
                 ]
             },
