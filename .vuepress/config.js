@@ -113,7 +113,7 @@ module.exports = {
                         link :'/documents/summary/stateManager/'
                     },
                     {
-                        text: '写给 2020 年的何遇',
+                        text: '2020 总结｜何遇 - 写给 2020 年的何遇',
                         link :'/documents/summary/2020/'
                     }
                 ]
