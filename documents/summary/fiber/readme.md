@@ -591,3 +591,124 @@ function workLoop(isYieldy) {
 ```
 
 它很好地映射到我上面介绍的算法。它将对当前 fiber 节点的引用保存在充当顶层帧的 nextUnitOfWork 变量中。这个算法能够异步的遍历组件树并且为树中的每一个 fiber 节点执行任务。函数 shouldYield 根据 deadlineDidExpire 和 deadline 变量返回结果，这些变量在 React 为 fiber 节点执行工作时不断更新。
+
+# 深入 React Fiber 内部
+
+在这篇文章中我会使用下面这个例子
+
+![](https://admin.indepth.dev/content/images/2019/07/tmp1.gif)
+
+代码如下：
+
+```javascript
+class ClickCounter extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {count: 0};
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick() {
+        this.setState((state) => {
+            return {count: state.count + 1};
+        });
+    }
+
+
+    render() {
+        return [
+            <button key="1" onClick={this.handleClick}>Update counter</button>,
+            <span key="2">{this.state.count}</span>
+        ]
+    }
+}
+```
+
+这个组件非常简单，它的 render 方法返回两个子元素，分别是 button 和 span，只要点击按钮组件的状态就会更新，这进而导致了 span 元素的文本更新。
+
+在 reconciliation 期间，React 执行了各种各样的活动。在上面的实例中，React 在第一次 render 和修改 state 之后执行的操作如下：
+
+* 更新 ClickCounter 组件的 state 中的 count 属性值
+* 检索并且对比 ClickCounter 组件的 children 和它们的 props
+* 更新 span 元素的 props
+
+在 reconciliation 期间这儿还有其他的活动需要执行，比如调用生命周期方法和更新 refs，在 fiber 架构中这些活动被统称为工作。工作的类型取决于 react elemen 的类型，例如：对于 class 组件而言，React 需要创建一个实例，但是对于函数组件而言，它不需要这么做。在 React 中有很多种类型的 elements，例如：class 和函数组件、浏览器宿主组件(即：DOM nodes)，portals 等。React element 的类型由 createElement 函数的第一个参数定义，这个方法通常在 render 方法中用于创建 element。
+
+在我们探索 fiber 算法之前，我们先熟悉一下 React 内部使用的数据结构。
+
+## 从 React elememts 到 fiber 节点
+
+在 React 中每个组件都对应了一个 UI 表现，它被 render 方法返回，我们可以将它称为模版。这是 ClickCounter 组件的模版：
+
+```javascript
+<button key="1" onClick={this.onClick}>Update counter</button>
+<span key="2">{this.state.count}</span>
+```
+
+### React Elements
+
+只要模版通过 JSX 编译器，我们将会得到一推 React Elements，这是 React 组件的 render 方法返回的结果，而不是 HTML。在 React 中我们不是必须要使用 JSX，我们可以像下面这样重写 ClickCounter 组件的 render 方法：
+
+```javascript
+class ClickCounter {
+    ...
+    render() {
+        return [
+            React.createElement(
+                'button',
+                {
+                    key: '1',
+                    onClick: this.onClick
+                },
+                'Update counter'
+            ),
+            React.createElement(
+                'span',
+                {
+                    key: '2'
+                },
+                this.state.count
+            )
+        ]
+    }
+}
+```
+
+在 render 方法中调用 createElement 方法将会返回像下面这样的两个数据结构：
+
+```javascript
+[
+    {
+        $$typeof: Symbol(react.element),
+        type: 'button',
+        key: "1",
+        props: {
+            children: 'Update counter',
+            onClick: () => { ... }
+        }
+    },
+    {
+        $$typeof: Symbol(react.element),
+        type: 'span',
+        key: "2",
+        props: {
+            children: 0
+        }
+    }
+]
+```
+
+从上面的数据结构中，我们可以看出 React 给这两个 elements 添加了 $$typeof 属性以标识他们是 React elements，然后用 key、type 和 props 描述 element，这些属性的值来自于我们传递给 createElement 函数的参数。
+
+ClickCounter 对应的 React element 没有任何 props 它也没有 key:
+
+```javascript
+{
+    $$typeof: Symbol(react.element),
+    key: null,
+    props: {},
+    ref: null,
+    type: ClickCounter
+}
+```
+
