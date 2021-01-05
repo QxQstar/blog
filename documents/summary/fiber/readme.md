@@ -712,3 +712,85 @@ ClickCounter 对应的 React element 没有任何 props 它也没有 key:
 }
 ```
 
+### Fiber 节点
+
+在 reconciliation 阶段，从 render 函数返回的 react element 的数据将合并到 fiber 节点树中，每一个 react element 都有一个相应的 fiber 节点，与 react element 不同的是：在每一次 render 的时候不会重新创建 fiber 节点，fiber 节点是可变的，它用于保存组件的状态和 DOM。
+
+在前面我们提到过，针对不同类型的 React element 框架需要做不同的工作，对于 class 组件 ClickCounter 而言，它调用生命周期和 render 方法，然而对于 span 这种宿主组件，它执行 DOM 变更。不同类型的 React element 对应的 fiber 节点也不相同。下面罗列出所有的类型
+
+```javascript
+export type WorkTag =
+| 0
+| 1
+| 2
+| 3
+| 4
+| 5
+| 6
+| 7
+| 8
+| 9
+| 10
+| 11
+| 12
+| 13
+| 14
+| 15
+| 16
+| 17
+| 18;
+export const FunctionComponent = 0;
+export const ClassComponent = 1;
+export const IndeterminateComponent = 2; // Before we know whether it is function or class
+export const HostRoot = 3; // Root of a host tree. Could be nested inside another node.
+export const HostPortal = 4; // A subtree. Could be an entry point to a different renderer.
+export const HostComponent = 5;
+export const HostText = 6;
+export const Fragment = 7;
+export const Mode = 8;
+export const ContextConsumer = 9;
+export const ContextProvider = 10;
+export const ForwardRef = 11;
+export const Profiler = 12;
+export const SuspenseComponent = 13;
+export const MemoComponent = 14;
+export const SimpleMemoComponent = 15;
+export const LazyComponent = 16;
+```
+
+您可以将 fiber 看作用来表示要做的某些工作的数据结构，或者换句话说，它是一个工作单元。Fiber 架构还提供了一种方便的方式来跟踪、调度、暂停和中止工作。
+
+当 React element 第一次被转化成 fiber 节点的时候，React 使用 element 上的数据来创建一个 fiber，源代码位于：[createFiberFromTypeAndProps](https://github.com/facebook/react/blob/769b1f270e1251d9dbdce0fcbd9e92e502d059b8/packages/react-reconciler/src/ReactFiber.js#L414)，在随后的更新中，React 会重用已经创建的 fiber 节点，只是使用来自 React element 的数据更新 fiber 节点上的的属性。
+
+React 会为每个 react elements 创建一个 fiber，因为 react elements 是树状结构的，所以我们最终也会得到一个 fiber 树，在上面的例子中，fiber 树像下面这个样子：
+
+![](https://admin.indepth.dev/content/images/2019/07/image-51.png)
+
+通过 fiber 节点上的 child, sibling 和 return 属性，所有的 fiber 节点被连接成一个链表
+
+### Current and work in progress trees
+
+在第一次 render 之后，React 会得到一个反映当前应用程序的状态fiber 树，这个 fiber 树通常被称为 `current`。当 React 开始处理更新时，它会构建一个 workInProgress 树，workInProgress 树反映了将来应用程序的状态。
+
+所有的工作都在 workInProgress 树的 fiber 上执行。当 React 遍历 `current` 树时，它会为`current`树中的每个节点创建一个替代节点，这些替代节点构成 workInProgress 树，替代节点是使用 render 方法返回的 React element 的数据创建的。一旦更新被处理并且所有相关工作都完成了，React 会将 workInProgress 树准备被刷新到屏幕上，只要 workInProgress 树被渲染到屏幕上，workInProgress 树会变成 current 树。
+
+React的核心原则之一是一致性。React总是一次性更新 DOM，它不显示部分结果。workInProgress 树充当 draft(草稿)，它对用户不可见的，因此 React 可以首先处理所有组件，然后将它们的更改刷新到屏幕上。
+
+在源码中，你可以看到很多函数从 current 树和 workInProgress 树中获取 fiber 节点。函数签名大概是这样的：
+
+```javascript
+function updateHostComponent(current, workInProgress, renderExpirationTime) {...}
+```
+
+每个 fiber 节点中都保存了一个它在其他树中的替代节点，即：current 树中的 fiber 节点指向 workInProgress 树中的 fiber 节点，反之亦然。
+
+### Side-effects
+
+你可以将 React 组件看作一个函数，它使用 state 和 props 来计算视图，像改变 DOM 或调用生命周期方法这样的活动都应该被认为是 Side-effects。大多数 state 和 props 的更新会导致 Side-effects，由于在 Fiber 架构中应用 side-effects 被当作一个工作类型，所以 fiber 节点是一种方便跟踪 side-effects 的机制，每一个 fiber 节点都有与之相关联的 side-effects，它们被保存到 effectTag 字段中。fiber 中的 side-effects 基本上定义了在处理更新后需要为实例做的工作。对于宿主组件而言，需要做的工作有：添加、更新和移除元素；对于 class components 而言，需要做的工作有：更新 refs、调用 componentDidMount 和 componentDidUpdate 生命周期方法，这儿还有其他类型的 fiber 对应的其他 side-effects。
+
+### Effects list
+
+React 会以非常快的速度去处理更新，为了达到高的性能水平，它使用了一些有趣的技术。其中一种方法是：创建一个线性的 fiber 节点列表，以致于快速的迭代 side-effects。迭代线性列表比树要快得多，而且没有必要在没有 side-effects 的节点上花费时间。
+
+这个列表的目标是标记具有 DOM 更新或与之相关的其他 side-effects 的节点。此列表是 finishedWork 树的子集，并使用 nexteeffect 属性进行链接。
+
