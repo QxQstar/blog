@@ -115,6 +115,10 @@ module.exports = {
                     {
                         text: '2020 总结｜何遇 - 写给 2020 年的何遇',
                         link :'/documents/summary/2020/'
+                    },
+                    {
+                        text: '深入学习 React Fiber',
+                        link: '/documents/summary/fiber/result.html'
                     }
                 ]
             },

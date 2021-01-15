@@ -870,16 +870,10 @@ type BaseFiberRootProperties = {|
 const fiberRoot = query('#container')._reactRootContainer._internalRoot
 ```
 
-fiber root 是 React 用来保存 fiber 树引用的地方，fiber 树存储在 fiber root 的 current 属性中。
+fiber root 是 React 用来保存 fiber 树引用的地方，fiber 树存储在 fiber root 的 current 属性中。在前面的章节中，我们提到每个 fiber 节点都对应了一个类型，fiber 树以一个特定类型(即：HostRoot)的 fiber 节点开始，它是在内部创建的，并且它作为最顶层组件的 parent。使用下面的方式可以访问到 HostRoot
 
 ```javascript
 const hostRootFiberNode = fiberRoot.current
-```
-
- 在前面的章节中，我们提到每个 fiber 节点都对应了一个类型，fiber 树以一个特定类型(即：HostRoot)的 fiber 节点开始，它是在内部创建的，并且它作为最顶层组件的父组件。有下面的关系：
-
-```javascript
-fiberRoot.current.stateNode === fiberRoot; // true
 ```
 
 通过 fiberRoot 访问最顶层的 fiber 节点（即：HostRoot ）可以查看 fiber 树，你也可以从组件实例中得到一个单独的 fiber 节点：
@@ -1163,4 +1157,10 @@ function commitAllHostEffects() {
 ### Post-mutation lifecycle methods
 
 [commitAllLifecycles](https://github.com/facebook/react/blob/95a313ec0b957f71798a69d8e83408f40e76765b/packages/react-reconciler/src/ReactFiberScheduler.js#L465) 是 React 调用 componentDidUpdate 和 componentDidMount 的函数。
+
+# 介绍 React Fiber - React 背后的算法
+
+从 React 16 开始，React 使用 Fiber 作为新的 reconciliation 算法，它也被称为 Fiber Reconciler。在 React 16 之前你可以听说过 virtualDOM，那是老的 reconciler 算法。老的 reconciler 算法在内部使用了堆栈，所以它也被称为 Stack Reconciler。
+
+Stack Reconciler 允许您将工作划分为多个块，并在多个帧上划分渲染工作，它还为每个工作单元定义了优先级，能够暂停、重用和中止工作。React 为每个更新都在内部定义了优先级，高优先级的工作可以跳过低优先级的工作。
 
