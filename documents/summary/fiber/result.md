@@ -158,7 +158,7 @@ class ClickCounter extends React.Component {
 
 在 reconciliation 期间这儿还有其他的活动需要执行，比如调用生命周期方法和更新 refs，在 Fiber 架构中这些活动被统称为工作。工作的类型取决于 react element 的类型，例如：对于 class 组件而言，React 需要创建一个实例，但是对于函数组件而言，它不需要这么做。在 React 中有多种不同类型的 elements，例如：类组件、函数组件、浏览器宿主组件(即：DOM nodes)和 portals 等。React element 的类型由 createElement 函数的第一个参数解决，这个方法通常在 render 方法中用于创建 element。
 
-## 从 React Elements 到 fiber 节点
+## React Elements 和 fiber 节点
 
 在 React 中每个组件都对应了一个 UI 表现，它被 render 方法返回，我们可以将它称为模板。这是 ClickCounter 组件的模板：
 
@@ -297,35 +297,35 @@ span 的 fiber 节点的数据构建
 
 在 fiber 节点中有很多字段，在后面的章节中我会描述 alternate, effectTag 和 nextEffect 字段的用处，现在我们来看一下其他字段的含义：
 
-#### stateNode
+stateNode 字段
 
 保存与这个 fiber 节点相关的 DOM 节点或者其他类型的 react elements 的实例。
 
-#### type
+type 字段
 
 保存与这个 fiber 节点相关的函数或者类。对类组件而言，它指向构造函数；对于 DOM 元素而言，它是 HTML 标签。
 
-#### tag
+tag 字段
 
 保存这个 fiber 节点的类型，在前面的部分我已经罗列出了所有的 fiber 节点类型。tag 字段决定了在 reconciliation 算法中 fiber 需要做哪些工作，正如前面提到的，要做哪些工作取决于 react element 的类型。在我们的例子中，ClickCounter 组件对应的 fiber 节点的 tag 属性值等于 1，它代表这是 ClassComponent，span 对应的 fiber 节点的 tag 属性值等于 5，它代表这是 HostComponent。
 
-#### updateQueue
+updateQueue 字段
 
 状态更新、callback 调用和 DOM 更新的队列。
 
-#### memoizedState
+memoizedState 字段
 
 上一次 render 时 fiber 节点的 state。当处理 update 时，它反映当前呈现在屏幕上的状态。
 
-#### memoizedProps
+memoizedProps 字段
 
 上一次 render 时 fiber 节点的 props
 
-#### pendingProps
+pendingProps 字段
 
 从 react element 上得到的新的 props，需要被应用到子组件或者 DOM 元素上
 
-#### key
+key 字段
 
 children group 上的唯一标识符，以帮助 React 找出哪些项目已更改，已添加或从列表中删除。它与React官方网站中描述[lists and keys](https://reactjs.org/docs/lists-and-keys.html#keys)有关。
 
@@ -558,7 +558,7 @@ function completeWork(workInProgress) {
 
 正如你从前面代码中看到的那样，completeUnitOfWork 用于迭代，而进行工作发生在 beginWork 和 completeWork 函数中。
 
-## Commit 阶段
+### Commit 阶段
 
 Commit 阶段从 [completeRoot](https://github.com/facebook/react/blob/95a313ec0b957f71798a69d8e83408f40e76765b/packages/react-reconciler/src/ReactFiberScheduler.js#L2306) 函数开始，这是 React 更新 DOM 并调用 pre 和 post mutation 生命周期的地方
 
@@ -590,7 +590,7 @@ function commitRoot(root, finishedWork) {
 
 每个子函数都执行遍历，遍历 side-effects 列表并检查 effect 的类型。当它发现与函数的用途有关的 effect 时就执行它。
 
-### DOM 突变之前的 lifecycle methods（即：pre-mutation 生命周期）
+#### DOM 突变之前的 lifecycle methods（即：pre-mutation 生命周期）
 
 下面是在 side-effects 列表上迭代并检查节点是否具有 Snapshot effect 的代码，[commitBeforeMutationLifecycles](https://github.com/facebook/react/blob/95a313ec0b957f71798a69d8e83408f40e76765b/packages/react-reconciler/src/ReactFiberScheduler.js#L442)
 
@@ -617,7 +617,7 @@ function commitBeforeMutationLifecycles() {
 
 对于类组件而言，这种 effect 意味着调用 getSnapshotBeforeUpdate 生命周期方法。
 
-### DOM updates
+#### DOM updates
 
 [commitAllHostEffects](https://github.com/facebook/react/blob/95a313ec0b957f71798a69d8e83408f40e76765b/packages/react-reconciler/src/ReactFiberScheduler.js#L376) 是 React 执行 DOM 更新的函数。该函数基本上定义了节点需要执行的操作类型并执行操作.
 
@@ -677,7 +677,7 @@ function commitAllHostEffects() {
 }
 ```
 
-### DOM 突变之后的 lifecycle methods（即：Post-mutation 生命周期）
+#### DOM 突变之后的 lifecycle methods（即：Post-mutation 生命周期）
 
 [commitAllLifecycles](https://github.com/facebook/react/blob/95a313ec0b957f71798a69d8e83408f40e76765b/packages/react-reconciler/src/ReactFiberScheduler.js#L465) 是 React 调用所有剩余生命周期的地方，如： componentDidUpdate 和 componentDidMount。
 
