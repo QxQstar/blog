@@ -119,6 +119,10 @@ module.exports = {
                     {
                         text: '深入学习 React Fiber',
                         link: '/documents/summary/fiber/result.html'
+                    },
+                    {
+                        text: '深入讲解 React 中的 state 和 props 更新',
+                        link: '/documents/summary/reactUpdate/'
                     }
                 ]
             },
