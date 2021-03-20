@@ -13,22 +13,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-function Button(props) {
-    return <button>{props.children}</button>
-}
-
-class App extends React.Component {
-    render() {
-        return (
-            <Form>
-                <Button>
-                    Submit
-                </Button>
-            </Form>
-        )
-    }
-}
-
 class Form extends React.Component {
     render() {
         return (
@@ -38,7 +22,13 @@ class Form extends React.Component {
         )
     }
 }
-
+class App extends React.Component {
+    render() {
+        return (
+            <Form> Submit </Form>
+        )
+    }
+}
 ReactDOM.render(<App />, document.getElementById('root'))
 
 ```
@@ -129,23 +119,17 @@ class ClickCounter extends React.Component {
     constructor(props) {
         super(props);
         this.state = {count: 0};
-        this.handleClick = this.handleClick.bind(this);
     }
-
-    handleClick() {
-        this.setState((state) => {
-            return {count: state.count + 1};
-        });
-    }
-
 
     render() {
         return [
-            <button key="1" onClick={this.handleClick}>Update counter</button>,
+            <button key="1">Update counter</button>,
             <span key="2">{this.state.count}</span>
         ]
     }
 }
+
+ReactDOM.render(<ClickCounter />, document.getElementById('root'))
 ```
 
 这个组件非常简单，它的 render 方法返回两个元素，分别是 button 和 span，只要点击按钮， ClickCounter 的状态就会更新，这进而导致 span 元素的文本更新。
