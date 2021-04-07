@@ -118,7 +118,7 @@ context.putImageData(imageData, 0, 0)
 
 ![](./img/yansejuzhentuidao.jpeg)
 
-像素矩阵与像素的颜色向量相乘之后能够得到 `R'`、`G'`、`B'`和`A'`，我们将新得到通道值赋给原来的通道，就能得到新的滤镜效果了。
+颜色矩阵与像素的颜色向量相乘之后能够得到 `R'`、`G'`、`B'`和`A'`，我们将新得到通道值赋给原来的通道，就能得到新的滤镜效果了。
 
 下面是一些简单的颜色矩阵
 
@@ -207,3 +207,97 @@ export function brightness(p: number) {
 颜色矩阵和颜色向量相乘可以得到新的滤镜效果，根据矩阵运算的性质，我们可以将多次颜色变换的过程，简化为将相应的颜色矩阵相乘，然后用最终的那个矩阵与颜色向量相乘。流程图如下：
 
 ![](./img/juzhenflow.png)
+
+接下来我们需要实现颜色矩阵与颜色矩阵相乘以及颜色矩阵与颜色向量的函数，下面是颜色矩阵与颜色向量相乘的函数
+
+```javascript
+export function transformColor(color: number[], ...matrixs: number[][]) {
+  const [r, g, b, a] = color;
+  // 颜色矩阵相乘
+  const matrix: number[] = matrixs.reduce((m1, m2) => multiply(m1, m2));
+
+  color[0] = matrix[0] * r + matrix[1] * g + matrix[2] * b + matrix[3] * a + matrix[4];
+  color[1] = matrix[5] * r + matrix[6] * g + matrix[7] * b + matrix[8] * a + matrix[9];
+  color[2] = matrix[10] * r + matrix[11] * g + matrix[12] * b + matrix[13] * a + matrix[14];
+  color[3] = matrix[15] * r + matrix[16] * g + matrix[17] * b + matrix[18] * a + matrix[19];
+  return color;
+}
+```
+
+矩阵与矩阵相乘就不在文章中展示了。
+
+现在我同时增强图片的饱和度、图片的亮度以及红色通道
+
+```javascript
+  for(let i = 0, len = imageData.data.length; i < len; i += 4) {
+    const data = imageData.data[i];
+    const r = data[i],
+      g = data[i + 1],
+      b = data[i + 2],
+      a = data[i + 3];
+
+    const color = transformColor([r,g,b,a], saturate(1.5), brightness(1.5), channel({r: 1.5}));
+
+    data[i] = color[0];
+    data[i + 1] = color[1];
+    data[i + 2] = color[2];
+    data[i + 3] = color[3];
+  }
+```
+
+得到的结果如下：
+
+![](./img/zengqiang.png)
+
+### 图片融合
+
+在前面的两个滤镜案例中我们使用了像素点的颜色通道，在接下来的这个滤镜效果中我们要用像素点的坐标来实现两张图的叠加。我要将一张透明的 PNG 图叠加到前面用到的事例图上来实现阳光照射的效果
+
+![](./img/sunlightresult.png)
+
+现在我们需要加载两张图片，一张纹理图，另一张是主图，我们要从纹理中得到与主图对应的像素点的颜色值
+
+```javascript
+const Img = await loadImg('/WechatIMG27.jpeg')
+const texture = await loadImg('/sunlight.png')
+const textureImagedata = getImageData(texture);
+const imageData = getImageData(Img);
+
+for(let i = 0, len = imageData.data.length; i < len; i += 4) {
+  const data = imageData.data[i];
+  const r = data[i],
+    g = data[i + 1],
+    b = data[i + 2],
+    a = data[i + 3];
+  
+  // 得到纹理中的像素颜色值，在这里只需要使用到透明度
+  const { a: aOfTexture } = getPixels(textureImagedata, i);
+
+  const color = transformColor([r,g,b,a], saturate(2 - aOfTexture), brightness(1 + 0.7 * aOfTexture))
+
+  data[i] = color[0];
+  data[i + 1] = color[1];
+  data[i + 2] = color[2];
+  data[i + 3] = color[3];
+}
+
+function getPixels(imageData: ImageData, index: number) {
+  const data = imageData.data;
+  if (!data[index]) {
+      return {
+          r: 0,
+          g: 0,
+          b: 0,
+          a: 0
+      }
+  }
+  return {
+      r: data[index] / 255,
+      g: data[index + 1] / 255,
+      b: data[index + 2] / 255,
+      a: data[index + 3] / 255
+  }
+}
+```
+
+## 给图片添加模糊效果
