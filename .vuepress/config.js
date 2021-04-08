@@ -126,7 +126,7 @@ module.exports = {
                     },
                     {
                         text: '图片美化',
-                        link: 'documents/visualization/beautify/'
+                        link: '/documents/visualization/beautify/'
                     }
                 ]
             },

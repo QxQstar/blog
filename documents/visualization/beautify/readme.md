@@ -302,11 +302,11 @@ function getPixels(imageData: ImageData, index: number) {
 
 ## 给图片添加模糊效果
 
-图片模糊在日常中应用非常广泛，例如：磨皮，图片数据的降噪，图片的有损压缩等，模糊算法也有很多，在这个章节我只介绍均值模糊和高斯模糊。图片模糊的原理非常简单——图片上每个像素都是它周围像素的平均，图片模糊就是对原图从上到下从左到右做卷积，在这个过程中会涉及到一个矩阵，在数学上将这个矩阵成为卷积核。我画了一个图帮助大家理解这个过程
+图片模糊在日常中应用非常广泛，例如：磨皮，图片数据的降噪，图片的有损压缩等，模糊算法也有很多，在这个章节我只介绍均值模糊和高斯模糊。图片模糊的原理非常简单——图片上每个像素都是它周围像素的平均，图片模糊就是对原图从上到下从左到右做卷积核变换，在这个过程中会涉及到一个矩阵，在数学上将这个矩阵成为卷积核。我画了一个图帮助大家理解这个过程
 
 ![](./img/juanji.png)
 
-6 * 6 的矩阵代表图片像素，3 * 3 的矩阵代表卷积核。卷积核在图片上从上到下从左到右移动，每步只移动一个像素，卷积核中红色的格子对应的像素就是需要求卷积的像素。对于任何一个像素来说，我取它周围 3 * 3 的格子，也就是 9 个数做一次卷积操作，然后再把结果写回像素本身，这样一来图片就模糊了
+6 * 6 的矩阵代表图片像素，3 * 3 的矩阵代表卷积核。卷积核在图片上从上到下从左到右移动，每步只移动一个像素，卷积核中红色的格子对应的像素就是要做卷积核变换的像素。对于任何一个像素来说，我取它周围 3 * 3 的格子，也就是 9 个数做一次卷积核变换，然后再把结果写回像素本身，这样一来图片就模糊了。3 * 3 的格子说明模糊半径为 1，我们可以取更大的模糊半径，模糊半径越大，图像就越模糊。
 
 为了方便理解我先介绍均值模糊
 
@@ -314,4 +314,129 @@ function getPixels(imageData: ImageData, index: number) {
 
 ![](./img/junzhi.png)
 
-均值模糊，也称为均值滤波，相当于卷积核的矩阵值全部为1/(卷积SIZE)，如上图所示都是 1/9。进行卷积操作绿色格子的值就是 `2 * 1/9 + 3 * 1/9 + 3 * 1/9 + 1 * 1/9 + 3 * 1/9 + 4 * 1/9 + 1 * 1/9 + 2 * 1/9 + 2 * 1/9 = 2.33`，将得到的结果写回绿色格子。
+均值模糊，也称为均值滤波，相当于卷积核的矩阵值全部为1/(卷积SIZE)，如上图所示都是 1/9。进行卷积核变换之后绿色格子的值就是 `2 * 1/9 + 3 * 1/9 + 3 * 1/9 + 1 * 1/9 + 3 * 1/9 + 4 * 1/9 + 1 * 1/9 + 2 * 1/9 + 2 * 1/9 = 2.33`，将得到的结果写回绿色格子。
+
+### 高斯模糊
+
+高斯模糊与均值模糊很类似，它们都会使用到卷积核，不同点是高斯模糊使用的卷积核矩阵值不一样。在均值模糊中，像素周围每个点的权重是一样的，在前面的例子中都是 1/9，如果使用简单平均，显然不是很合理，因为图像都是连续的，越靠近的点关系越密切，越远离的点关系越疏远。因此，加权平均更合理，距离越近的点权重越大，距离越远的点权重越小，高斯模糊使用正态分布（也称为高斯分布）计算像素周围每个点的权重
+
+![](./img/zhengtai.png)
+
+因为正态分布涉及比较专业的数学知识，这里不做介绍，我们来看一下高斯公式，在 N 维空间定义为
+
+![](./img/gaosin.svg)
+
+在二维空间定义为
+
+![](./img/gaosi2.svg)
+
+其中 r 是模糊半径 （r * r = u * u + v * v），σ是正态分布的标准偏差
+
+在实际应用中，在计算高斯函数的离散近似时，在大概 3σ 距离之外的像素都可以看作不起作用，这些像素的计算也就可以忽略。通常，图像处理程序只需要计算 （6σ + 1）x (6σ + 1) 的矩阵就可以保证相关像素影响。对于边界上的点，通常采用复制周围的点到另一面再进行加权平均运算。
+
+这是一个计算σ = 0.84089642的高斯函数生成的示例矩阵。注意中心元素 (4,4)处有最大值，随着距离中心越远数值对称地减小。
+![](./img/gaosifenbu.png)
+
+由于图片是二维的，所以在整个图片模糊章节，为了方便大家理解，所有的图例我都使用了二维的卷积核，但是在本篇文章中我们使用的 canvas 2D 上下文的 ImageData 对象保存的像素像素是一维的，在这里我们使用一维的高斯公式计算卷积核，高斯公式在一维空间定义为
+
+![](./img/gaosi1.png)
+
+运用高斯公式生成卷积核，代码如下：
+
+```javascript
+function gaussianMatrix(radius: number, sigma: number = radius / 3): {matrix: number[], sum: number} {
+  const a = 1 / (Math.sqrt(2 * Math.PI) * sigma);
+  const b = -1 / (2 * sigma ** 2);
+  let sum = 0;
+  const matrix = [];
+  for(let x = -radius; x <= radius; x++) {
+    const g = a * Math.exp(b * x ** 2);
+    matrix.push(g);
+    sum += g;
+  }
+
+  for(let i = 0, len = matrix.length; i < len; i++) {
+    matrix[i] /= sum;
+  }
+  return {matrix, sum};
+}
+```
+
+高斯模糊可以在二维图像上对两个独立的一维空间分别进行计算，这叫作线性可分。这也就是说，使用二维卷积核变换得到的效果可以通过在水平方向进行一维卷积核变换再加上在竖直方向的一维卷积核变换得到，这样以来我们通过一维高斯公式得到的一维卷积核就可以使用了。
+
+![](./img/gaosiyiwei.jpeg)
+
+实现代码如下：
+
+```javascript
+/**
+  * 高斯模糊
+  * @param  {Array} pixes  pix array 对应 ImageData.data
+  * @param  {Number} width 图片的宽度
+  * @param  {Number} height 图片的高度
+  * @param  {Number} radius 取样区域半径, 正数, 可选, 默认为 3.0
+  * @param  {Number} sigma 标准方差, 可选, 默认取值为 radius / 3
+  * @return {Array}
+  */
+export function gaussianBlur(pixels: Uint8ClampedArray, width: number, height: number, radius: number = 3, sigma: number = radius / 3): Uint8ClampedArray {
+    // 运用高斯公式得到卷积核
+    const {matrix, sum} = gaussianMatrix(radius, sigma);
+    // x 方向一纬卷积核变换
+    for(let y = 0; y < height; y++) {
+      for(let x = 0; x < width; x++) {
+        let r = 0,
+          g = 0,
+          b = 0;
+  
+        for(let j = -radius; j <= radius; j++) {
+          const k = x + j;
+          if(k >= 0 && k < width) {
+            const i = (y * width + k) * 4;
+            r += pixels[i] * matrix[j + radius];
+            g += pixels[i + 1] * matrix[j + radius];
+            b += pixels[i + 2] * matrix[j + radius];
+          }
+        }
+        const i = (y * width + x) * 4;
+        // 除以 sum 是为了消除处于边缘的像素, 高斯运算不足的问题
+        pixels[i] = r / sum;
+        pixels[i + 1] = g / sum;
+        pixels[i + 2] = b / sum;
+      }
+    }
+  
+    // y 方向一纬卷积核变换
+    for(let x = 0; x < width; x++) {
+      for(let y = 0; y < height; y++) {
+        let r = 0,
+          g = 0,
+          b = 0;
+  
+        for(let j = -radius; j <= radius; j++) {
+          const k = y + j;
+          if(k >= 0 && k < height) {
+            const i = (k * width + x) * 4;
+            r += pixels[i] * matrix[j + radius];
+            g += pixels[i + 1] * matrix[j + radius];
+            b += pixels[i + 2] * matrix[j + radius];
+          }
+        }
+        const i = (y * width + x) * 4;
+        pixels[i] = r / sum;
+        pixels[i + 1] = g / sum;
+        pixels[i + 2] = b / sum;
+      }
+    }
+    return pixels;
+  }
+```
+
+执行完 gaussianBlur 函数之后，我们就修改了 ImageData.data 中的像素值，然后将 ImageData 绘制到 canvas 画布上，得到的结果如下
+
+![](./img/persion.jpeg)
+
+## 总结
+
+在本片文章中不管是给图片添加滤镜还是做模糊操作，我们都是对图片中的像素进行处理，这种处理图像的思路就叫做像素化，不过，不管我们是用 Canvas 的 ImageData API 应用滤镜、模糊还是纹理合成都有一个弊端，那就是我们必须循环遍历图片上的每个像素点。如果这个图片很大，比如它是 2000px 宽、2000px 高，我们就需要遍历 400 万像素！这个计算量是相当大的。
+
+因为在前面的例子中，我们生成的都只是静态的图片效果，所以这个计算量的问题还不明显。一旦我们想要利用像素处理，制作出更酷炫的动态效果，这样的计算量注定会成为性能瓶颈，这种时候我们可以使用 WebGL 这个神器
