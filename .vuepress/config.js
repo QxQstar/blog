@@ -127,6 +127,10 @@ module.exports = {
                     {
                         text: '图片美化',
                         link: '/documents/visualization/beautify/'
+                    },
+                    {
+                        text: '用 Lerna 管理 TypeScript monorepo',
+                        link: '/documents/summary/lernaWithTs/'
                     }
                 ]
             },
