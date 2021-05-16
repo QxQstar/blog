@@ -77,7 +77,7 @@ packages/*/lib
 
 ![](./math-demo-create.png)
 
-重复上面的过程创建 request-demo。创建完成之后目录结构：
+重复上面的过程创建 request-demo，创建完成之后目录结构如下：
 
 ![](./project-dir.png)
 
@@ -126,7 +126,7 @@ lerna add typescript --dev
 }
 ```
 
-在为每个包添加 tsconfig.json 之后，我还为每个包创建了 src 目录，src 目录中保存这个包的 TS 文件。为了让 TS 文件能够被编译成 JS 文件，我还在每个包中的 package.json 中定义的 tsc 脚步，结果如下：
+在为每个包添加 tsconfig.json 之后，我还为每个包创建了 src 目录，src 目录中保存这个包的 TS 源文件，为了让 TS 文件能够被编译成 JS 文件，我还在每个包中的 package.json 中定义的 tsc 脚步，结果如下：
 
 ![](./math-detail.png)
 
@@ -144,7 +144,7 @@ lerna run tsc
 
 ![](./math-package.png)
 
-这些对我们来说非常重要，因为它们控制着哪些文件将被推送到NPM，也决定了我们库的入口。
+这些对我们来说非常重要，因为它们控制着哪些文件将被推送到NPM，也决定了我们 npm 包的入口。
 
 ### 将代码托管到 gitHub
 
