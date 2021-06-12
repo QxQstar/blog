@@ -131,6 +131,10 @@ module.exports = {
                     {
                         text: '用 Lerna 管理 TypeScript monorepo',
                         link: '/documents/summary/lernaWithTs/'
+                    },
+                    {
+                        text: '颜色空间的基本指南',
+                        link: '/documents/summary/colorSpace/result'
                     }
                 ]
             },
