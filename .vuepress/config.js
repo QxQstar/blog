@@ -135,6 +135,10 @@ module.exports = {
                     {
                         text: '颜色空间的基本指南',
                         link: '/documents/summary/colorSpace/result'
+                    },
+                    {
+                        text: '给视频和图片添加特效',
+                        link: '/documents/summary/realTimeEffectForVideo/'
                     }
                 ]
             },
