@@ -139,6 +139,10 @@ module.exports = {
                     {
                         text: '给视频和图片添加特效',
                         link: '/documents/summary/realTimeEffectForVideo/'
+                    },
+                    {
+                        text:'Web 性能优化第一篇',
+                        link: '/documents/summary/fastLoadTime/result'
                     }
                 ]
             },
