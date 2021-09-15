@@ -143,6 +143,10 @@ module.exports = {
                     {
                         text:'Web 性能优化第一篇',
                         link: '/documents/summary/fastLoadTime/result'
+                    },
+                    {
+                        text:'优化网站中的图片和视频',
+                        link: '/documents/summary/optimizeYourImages/result'
                     }
                 ]
             },
