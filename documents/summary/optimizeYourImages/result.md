@@ -45,7 +45,7 @@
 
 ## 位图
 
-根据位深度，可将位图分为1、4、8、16、24及32位图像等，每个像素使用的信息位数越多，可用的颜色就越多，颜色表现就越逼真，相应的文件越大。RGB 图像由三个颜色通道组成，8 位/通道的 RGB 图像中的每个通道有 256(2 ^ 8 = 256) 个可能的值，这意味着该图像可以表示 16,777,216(256 ^ 3)种颜色。有时将带有 8 位/通道 (bpc) 的 RGB 图像称作 24 位图像（8 位 x 3 通道 = 24 位数据/像素）
+根据位深度可将位图分为1、4、8、16、24及32位图像等，每个像素使用的信息位数越多，可用的颜色就越多，颜色表现就越逼真，相应的文件越大。RGB 图像由三个颜色通道组成，8 位/通道的 RGB 图像中的每个通道有 256(2 ^ 8 = 256) 个可能的值，这意味着该图像可以表示 16,777,216(256 ^ 3)种颜色。有时将带有 8 位/通道 (bpc) 的 RGB 图像称作 24 位图像（8 位 x 3 通道 = 24 位数据/像素）
 
 知道图像的位深度和像素数，我们可以计算出图像文件的大小
 
@@ -55,7 +55,7 @@
 
 ### 位图的格式
 
-PNG、JPEG、WebP 都是不同的位图格式，PNG 和 JPEG 得到了浏览器广泛的尺寸，现代浏览器支持 WebP，WebP 图像比 JPEG 和 PNG 图像要小，通常在文件大小上减少25-35%，这将减少网站负载，WebP 是 JPEG、PNG 和 GIF 图像的绝佳替代品。下面是 PNG、JPEG、WebP 的特性
+PNG、JPEG、WebP 都是不同的位图格式，PNG 和 JPEG 得到了浏览器广泛的支持，现代浏览器支持 WebP，WebP 图像比 JPEG 和 PNG 图像要小，通常在文件大小上减少25-35%，这将减少网站负载，WebP 是 JPEG、PNG 和 GIF 图像的绝佳替代品。下面是 PNG、JPEG、WebP 的特性
 
 ![](./img/format.png)
 
@@ -79,7 +79,7 @@ Imagemin CLI
 
 Imagemin node 模块
 
-可以将 Imagemin 与 webpack、gulp 或 grunt 配合使用，还可以单独使用 Imagemin，这段代码使用 imagemin-mozjpeg 插件将 JPEG 文件压缩到50的质量(“0”是最差的;“100”是最好的):
+可以将 Imagemin 与 webpack、gulp 或 grunt 配合使用，还可以单独使用 Imagemin，这段代码使用 imagemin-mozjpeg 插件将 JPEG 文件压缩到 50 的质量(“0”是最差的;“100”是最好的):
 
 ```javascript
 const imagemin = require('imagemin');
@@ -184,7 +184,7 @@ ffmpeg -i my-animation.gif -c vp9 -b:v 0 -crf 41 my-animation.webm
 </video>
 ```
 
-浏览器不会猜测哪个视频资源是最优的，所以源代码的顺序很重要。例如，如果你先指定一个MP4视频，而浏览器支持WebM，浏览器将跳过 WebM 而使用 MPEG4，如果你想先使用WebM ，要先指定它
+浏览器不会猜测哪个视频资源是最优的，所以源代码的顺序很重要。例如，如果你先指定一个 MPEG4 视频，而浏览器支持WebM，浏览器将跳过 WebM 而使用 MPEG4，如果你想先使用 WebM ，要先指定它
 
 ### 使用响应式图片
 
@@ -209,7 +209,7 @@ sizes 属性告诉浏览器图像显示时的宽度，然而，sizes 属性对�
 
 20% （sizes属性不能使用百分比）
 
-如果想要更花哨，还可以使用 sizes 属性指定多个插槽大小，这适用于不同视口大小使用不同布局的网站。
+如果想要更花哨，还可以使用 sizes 属性指定多种插槽大小，这适用于不同视口大小使用不同布局的网站。
 
 ```html
 <img src="flower.jpg"
@@ -246,7 +246,7 @@ Chrome 和 Firefox 都通过 loading 属性支持延迟加载。这个属性可�
 
 为了 polyfill img 元素 loading="lazy" 的延迟加载，我们使用 Intersection Observer API 来检查它们是否在视口中，如果答案是，它们的 src 属性将使用图像的 url 填充。并不是所有的浏览器都支持 Intersection Observer，尤其是 IE11及以下，如果跨浏览器的兼容性非常重要，请务必阅读下一节，下一节将介绍如何使用性能较差但更兼容的滚动和调整事件处理程序延迟加载图像。
 
-与依赖于各种事件处理程序的代码相比，Intersection Observer 更简洁，因为您只需要注册一个观察者来监视元素，而不需要编写冗长的元素可见性检测代码，剩下要做的就是决定当元素可见时该做什么。我们假设延迟加载的 img 元素有以下基本标记模式:
+与依赖于各种事件处理程序的代码相比，Intersection Observer 更简洁，因为你只需要注册一个观察者来监视元素，而不需要编写冗长的元素可见性检测代码，剩下要做的就是决定当元素可见时该做什么。我们假设延迟加载的 img 元素有以下基本标记模式:
 
 ```html
 <img class="lazy" src="placeholder-image.jpg" data-src="image-to-lazy-load-1x.jpg" data-srcset="image-to-lazy-load-2x.jpg 2x, image-to-lazy-load-1x.jpg 1x" alt="I'm an image!">
@@ -460,7 +460,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 ```
 
-当延迟加载视频元素时，需要遍历所有 source 元素，并将它们的 data-src 属性转换为 src 属性，然后你需要调用 video 的 load 方法来触发视频的加载，之后媒体将根据 autopla属性自动播放视频
+当延迟加载视频元素时，需要遍历所有 source 元素，并将它们的 data-src 属性转换为 src 属性，然后你需要调用 video 的 load 方法来触发视频的加载，之后媒体将根据 autoplay 属性自动播放视频
 
 ## 总结
 
