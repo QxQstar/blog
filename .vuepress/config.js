@@ -147,6 +147,10 @@ module.exports = {
                     {
                         text:'优化网站中的图片和视频',
                         link: '/documents/summary/optimizeYourImages/result'
+                    },
+                    {
+                        text:'优化 JS 的加载性能之 Tree Shaking',
+                        link: '/documents/summary/treeshaking/treeShaking'
                     }
                 ]
             },
