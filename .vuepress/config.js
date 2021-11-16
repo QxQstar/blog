@@ -11,6 +11,15 @@ module.exports = {
                 ]
             },
             {
+                text: '低代码',
+                items: [
+                    {
+                        text: '关于低代码的思考',
+                        link: '/documents/lowCode/lowCode'
+                    }
+                ]
+            },
+            {
                 text: '微前端系列',
                 items: [{
                         text: 'webComponent + 微前端',
@@ -35,10 +44,6 @@ module.exports = {
                 ],
 
             },
-            // {
-            //     text:'可视化页面搭建',
-            //     link:'/documents/VisualPageCreation/list/'
-            // },
             {
                 text: '早读系列',
                 items: [{
