@@ -16,6 +16,10 @@ module.exports = {
                     {
                         text: '关于低代码的思考',
                         link: '/documents/lowCode/lowCode'
+                    },
+                    {
+                        text: '基础理论知识 -- Promise',
+                        link: '/documents/lowCode/基础理论知识/TypeScript 开发基础/ES6 ES7 语法基础/Promise'
                     }
                 ]
             },
