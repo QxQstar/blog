@@ -397,7 +397,7 @@ Promise.allSettled([promise1, promise2])
 
 ### Promise.any(iterable)
 
-Promise.any 接收一个可迭代对象作为参数，返回一个 promise 对象，在这里记为 P。如果 iterable 中存在数据项不是 promise，那么会用 Promise.resolve 将它转成 promise。P 的状态与最先被兑现的 promise 的状态相同，如果输入的所有 promise 都变成了 rejected，那么 P 会变成 rejected，并且被拒绝原因是 AggregateError 类型的对象。
+Promise.any 接收一个可迭代对象作为参数，返回一个 promise 对象，在这里记为 P。如果 iterable 中存在数据项不是 promise，那么会用 Promise.resolve 将它转成 promise。P 会以最先被兑现的 promise 的结果兑现，如果输入的所有 promise 都变成了 rejected，那么 P 会变成 rejected，并且被拒绝原因是 AggregateError 类型的对象。
 
 ```javascript
 const promise1 = Promise.reject(0);
