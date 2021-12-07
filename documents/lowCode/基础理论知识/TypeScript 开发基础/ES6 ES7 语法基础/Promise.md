@@ -43,7 +43,7 @@ const myPromise = new Promise((resolve, reject) => {
 
 promise 有两种互斥的结果：
 
-1. resolved：已解决。如果一个 promise P 的状态跟随另一个 promise Q 的状态、P 的状态变成 fulfilled 或者 P 的状态变成 rejected，当出现这三种情况中的任意一种，那么 Q 的结果就变成了 resolved。如何让 P 跟随 Q？在后面会详细介绍。
+1. resolved：已解决。如果一个 promise P 的状态跟随另一个 promise Q 的状态、P 的状态变成 fulfilled 或者 P 的状态变成 rejected，当出现这三种情况中的任意一种，那么 P 的结果就变成了 resolved。如何让 P 跟随 Q？在后面会详细介绍。
 1. unresolved：未解决。
 
 ## Promise 构造函数
@@ -65,14 +65,14 @@ interface PromiseConstructor {
 }
 ```
 
-我们先用 Promise 构建函数创建一个 promise 对象，记为 P。通过上面的接口，我们可以得出如下结论：
+我们用 Promise 构建函数创建一个 promise 对象，记为 P。通过上面的接口，我们可以得出如下结论：
 
 1. Promise 构建函数接受一个函数作为参数，在这里记为 executor，executor 没有返回值。即使你在代码中写了返回值，返回值也会被忽略。
 2. executor 的参数 resolve 和 reject 依然是函数。
 3. reject 接受任意类型作为参数，它会将 P 的状态变成 rejected。
-4. resolve 的行为比 reject 的行为要复杂一些。如果 resolve 的参数类型是 PromiseLike，例如是另一个 promise 对象，记为 Q，那么 Q 会被动态插入到 promise 链中，P 的状态跟随 Q 的状态。如果 resolve 的参数类型不是 PromiseLike，那么 P 的状态会变成 fulfilled。
+4. resolve 的行为比 reject 的行为要复杂一些。如果 resolve 的参数的类型是 PromiseLike，例如是另一个 promise 对象，在这里记为 Q，那么 Q 会被动态插入到 promise 链中，这时 P 的状态会跟随 Q 的状态。如果 resolve 的参数的类型不是 PromiseLike，那么 P 的状态会变成 fulfilled。
 
-补充：结合术语部分介绍的内容，我们总结一下。当调用 resolve 或者 reject 之后，我们可以说 P 被 `resolved`，但是我们不能说 P 是 `settled`
+补充：结合术语部分介绍的内容，我们总结一下。当调用 resolve 或者 reject 之后，我们可以说 P 被 `resolved`，但是我们不能说 P 的状态是 `settled`
 
 分析下面这段代码，并在浏览器中运行它，看看你分析的结果与浏览器实际的结果是否一致
 
@@ -112,9 +112,9 @@ Q 是一个新的 promise 对象，所以你能继续 Q.then(...)：
 * Q 会被 P.then 中 onFulfilled 或 onRejected 的返回值 resolve。
 * 如果 P.then 中的 onFulfilled 或 onRejected 抛出异常，Q 的状态会变成 rejected。
 
-### 用 non-thenable 类型的值 resolve Q
+### 用 non-thenable 类型的值 resolve
 
-这种方式比较简单，它指的是，在 onFulfilled 或 onRejected 中返回一个 non-thenable 类型的值，这个返回值可以在后续的 then 中获取到。
+这种方式比较简单，它指的是，在 onFulfilled 或 onRejected 中返回一个 non-thenable 类型的值，这个返回值可以在后续的 then 中获取到，Q 的状态会马上变成 fulfilled。
 
 ```javascript
 P
@@ -126,9 +126,9 @@ P
 })
 ```
 
-### 用 thenable 类型的值 resolve Q
+### 用 thenable 类型的值 resolve
 
-在 onFulfilled 或 onRejected 中返回一个 thenable 类型的值，比如，在 onFulfilled 中返回 promise R，R 会被插入到 promise 链中。
+在 onFulfilled 或 onRejected 中返回一个 thenable 类型的值，比如，在 onFulfilled 中返回 promise R，R 会被插入到 promise 链中。可以用这一特性来中断 promise 链。
 
 ![](./img/chain.jpeg)
 
@@ -149,6 +149,7 @@ asyncFunc1()
 ```javascript
 asyncFunc1()
 .then(function (value1) {
+    // 如果 asyncFunc2() 返回的 thenable 一直是 pending 状态，那么程序进不到下一个节点。 
     return asyncFunc2();
 })
 .then(function (value2) {
@@ -156,9 +157,9 @@ asyncFunc1()
 })
 ```
 
-### 通过抛出异常的方式 reject Q
+### 通过抛出异常的方式 reject
 
-在 then 或 catch 中抛出的异常会被一下错误处理器捕获。
+在 then 或 catch 中抛出的异常会被下一个错误处理器捕获。
 
 ```javascript
 asyncFunc()
@@ -179,21 +180,21 @@ asyncFunc1()
 .then(asyncFunc2)
 .then(asyncFunc3)
 .catch(function (reason) {
-    // Something went wrong above
+    // 捕获上面的错误
 });
 ```
 
-上面使用 catch 捕获错误
+上面的代码使用 catch 捕获错误
 
 ```javascript
 asyncFunc1()
 .then(asyncFunc2)
 .then(asyncFunc3, function (reason) {
-    // Something went wrong above
+    // 捕获上面的错误
 })
 ```
 
-上面代码使用 then 的第二个参数 onRejected 捕获错误。
+上面的代码使用 then 的第二个参数 onRejected 捕获错误。
 
 这两种捕获方式有什么差异呢？答案是，catch 能够捕获到 asyncFunc2 和 asyncFunc3 中发生的错误，onRejected 只能捕获到 asyncFunc2 发生的错误。我们改写第二段程序
 
@@ -210,7 +211,7 @@ asyncFunc1()
 
 总结：catch 和 then onRejected 都只能捕获它所在节点前面发生的错误。
 
-## Promise 链的常见错误
+## 使用 Promise 链的常见错误
 
 ### 错误一：丢失 promise 链的尾巴
 
@@ -298,7 +299,7 @@ Promise.reject(myError)
 
 ### Promise.resolve(value)
 
-Promise.resolve 返回一个 promise 对象，在这里记为 P，使用它可以将任何类型的值转成 promise，至于返回的 P 是什么状态，这取决于 value 的类型，value 的类型可以分为三大类：
+Promise.resolve 返回一个 promise 对象，在这里记为 P，使用 Promise.resolve 可以将任何类型的值转成 promise，至于返回的 P 是什么状态，这取决于 value 的类型，value 的类型可以分为三大类：
 
 * 如果 value 是一个 non-thenable，那么 Promise.resolve 返回一个用 value 兑现的 P，P 的状态为 fulfilled
 
@@ -332,7 +333,7 @@ const fulfilledThenable = {
 ```javascript
 const fulfilledThenable = {
       then(resolve, reject) {
-          reject('reject hello');
+          reject('reject hello'); // 注意这个地方
       }
   };
   const promise = Promise.resolve(fulfilledThenable);
@@ -344,7 +345,7 @@ const fulfilledThenable = {
 
 ### Promise.all(iterable)
 
-Promise.all 接收一个可迭代对象作为参数，返回一个 promise 对象，在这里记为 P。如果 iterable 中存在数据项不是 promise，那么会用 Promise.resolve 将它转成 promise。当输入的 promise 全部变成 fulfilled 之后，P 会以输入的 promise 兑现结果的数组兑现。当任意一个输入的 promise 变成 rejected，P 会立即变成 rejected，并且 P 被拒绝的原因与第一个变成 rejected 状态的 promise 的被拒绝的原因相同。
+Promise.all 接收一个可迭代对象作为参数，返回一个 promise 对象，在这里记为 P。如果 iterable 中存在数据项不是 promise，那么会用 Promise.resolve 将它转成 promise。当输入的 promise 全部变成 fulfilled 之后，P 会以输入的 promise 兑现的数组兑现。当任意一个输入的 promise 变成 rejected，P 会立即变成 rejected，并且 P 被拒绝的原因与首先变成 rejected 状态的 promise 被拒绝的原因相同。
 
 ```javascript
 const promise1 = Promise.resolve(3);
@@ -442,7 +443,7 @@ Promise.race([promise1, promise2]).then((value) => {
 
 ```javascript
 const promise1 = new Promise((resolve, reject) => {
-  setTimeout(reject, 500, 'one error');
+  setTimeout(resolve, 500, 'one');
 });
 
 const promise2 = new Promise((resolve, reject) => {
