@@ -28,6 +28,10 @@ module.exports = {
                     {
                         text: '基础理论知识 -- async/await',
                         link: '/documents/lowCode/basicTheory/TypeScript/ES6ES7/asyncAwait'
+                    },
+                    {
+                        text: '基础理论知识 -- class',
+                        link: '/documents/lowCode/basicTheory/TypeScript/ES6ES7/class'
                     }
                 ]
             },
