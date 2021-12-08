@@ -12,7 +12,7 @@ features:
   details: 前端路上 | 以文字记录日常所思
 - title: 关于logo
   details: 表妹拍摄的家门口景色
-footer: MIT Licensed | Copyright © 2019-present
+footer: 蜀ICP备19040311号-1
 ---
 
 

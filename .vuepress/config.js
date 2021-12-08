@@ -1,7 +1,11 @@
 module.exports = {
+    theme: 'reco',
     title: '何遇的博客',
     description: '何其有幸，今生相遇',
     themeConfig: {
+        record: '蜀ICP备19040311号-1',
+        recordLink: 'https://beian.miit.gov.cn/',
+        startYear:'2019',
         nav: [{
                 text: 'git系列',
                 items: [
@@ -19,11 +23,11 @@ module.exports = {
                     },
                     {
                         text: '基础理论知识 -- Promise',
-                        link: '/documents/lowCode/基础理论知识/TypeScript 开发基础/ES6 ES7 语法基础/Promise'
+                        link: '/documents/lowCode/basicTheory/TypeScript/ES6ES7/Promise'
                     },
                     {
                         text: '基础理论知识 -- async/await',
-                        link: '/documents/lowCode/基础理论知识/TypeScript 开发基础/ES6 ES7 语法基础/asyncAwait'
+                        link: '/documents/lowCode/basicTheory/TypeScript/ES6ES7/asyncAwait'
                     }
                 ]
             },
