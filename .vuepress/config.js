@@ -1,5 +1,6 @@
-module.exports = {
-    theme: 'reco',
+const { config } = require("vuepress-theme-hope");
+
+module.exports = config({
     title: '何遇的博客',
     description: '何其有幸，今生相遇',
     themeConfig: {
@@ -190,4 +191,4 @@ module.exports = {
     head: [
         ['link', { rel: 'shortcut icon', href: './logo-small.png' }]
     ]
-}
+})

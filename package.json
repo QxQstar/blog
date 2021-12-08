@@ -1,10 +1,6 @@
 {
   "name": "learn",
   "version": "1.10.0",
-  "dependencies": {
-    "@vuepress/theme-default": "^1.8.2",
-    "vuepress-theme-reco": "^1.6.10"
-  },
   "scripts": {
     "docs:dev": "vuepress dev",
     "docs:build": "vuepress build",
@@ -32,5 +28,8 @@
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
+  },
+  "dependencies": {
+    "vuepress-theme-hope": "^1.21.0"
   }
 }
