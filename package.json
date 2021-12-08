@@ -17,7 +17,8 @@
     "cz-conventional-changelog": "^3.0.2",
     "husky": "^3.0.4",
     "validate-commit-msg": "^2.14.0",
-    "vuepress": "^1.6.0"
+    "vuepress": "^1.6.0",
+    "vuepress-theme-hope": "^1.21.0"
   },
   "config": {
     "commitizen": {
@@ -28,8 +29,5 @@
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
-  },
-  "dependencies": {
-    "vuepress-theme-hope": "^1.21.0"
   }
 }
