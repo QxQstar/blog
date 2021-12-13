@@ -11,13 +11,13 @@
 
 ### 状态
 
-Promise 有三种互斥的状态：
+promise 有三种互斥的状态：
 
-1. fulfilled：被兑现。如果 promise 的状态变成 fulfilled，那么 promise.then(f) 中的 f 会被调用。
-2. rejected：被拒绝。如果 promise 的状态变成 rejected，那么 promise.then(undefined, r) 中的 r 会被调用。
-3. pending：promise 的状态既不是 fulfilled 也不是 rejected，它是 promise 的初始状态。
+1. fulfilled：已经被兑现了。如果 promise 的状态变成 fulfilled，那么 promise.then(f) 中的 f 会被调用。
+2. rejected：已经被拒绝了。如果 promise 的状态变成 rejected，那么 promise.then(undefined, r) 中的 r 会被调用。
+3. pending：promise 的初始状态，promise 的状态既不是 fulfilled 也不是 rejected。
 
-你可能会听到有人说某个 promise 是 settled，他的意思是这个 promise 不是 pending 状态，它是 fulfilled 或者 rejected 状态。settled 不是 promise 的状态，它只是语言上的便利。
+你可能会听到有人说某个 promise 已经被 settled 了，他的意思是这个 promise 不是 pending 状态，它是 fulfilled 或者 rejected 状态。settled 不是 promise 的状态，它只是语言上的便利。
 
 promise 的状态一旦确定就不可变更，示意图如下：
 
@@ -28,22 +28,22 @@ promise 的状态一旦确定就不可变更，示意图如下：
 ```javascript
 const myPromise = new Promise((resolve, reject) => {
   //  在此之前 promise 的状态是 pending
-  resolve(someValue)        // line A。状态变成 fulfilled？maybe
+  resolve(someValue)        // line A。promise 的状态会变成 fulfilled？maybe
   // or
-  reject("failure reason")  // lineB。状态变成 rejected
+  reject("failure reason")  // lineB。promise 的状态变成 rejected
 });
 ```
 
-你可能已经发现，lineA 比 lineB 的注释多了一个问号。调用 reject 一定会让 myPromise 的状态变成 rejected，但是调用 resolve 不一定会让 myPromise 的状态变成 fulfilled。那么调用 resolve 之后，myPromise 的状态会变成什么呢？答案是，这取决于 someValue 的类型。
+你可能已经发现，lineA 比 lineB 的注释多了一个问号。调用 reject 一定会让 myPromise 的状态变成 rejected，但是调用 resolve 不一定会让 myPromise 的状态变成 fulfilled。那么调用 resolve 之后，myPromise 的状态会变成什么呢？这取决于 someValue 的类型。
 
-* 如果 someValue 是一个 non-thenable 值，那么 myPromise 的状态会变成 fulfilled
+* 如果 someValue 是一个 non-thenable，那么 myPromise 的状态会变成 fulfilled
 * 如果 someValue 是一个 thenable 值，那么 myPromise 的状态会跟随 someValue 的状态
 
-### 结局
+### 结果
 
 promise 有两种互斥的结果：
 
-1. resolved：已解决。如果一个 promise P 的状态跟随另一个 promise Q 的状态、P 的状态变成 fulfilled 或者 P 的状态变成 rejected，当出现这三种情况中的任意一种，那么 P 的结果就变成了 resolved。如何让 P 跟随 Q？在后面会详细介绍。
+1. resolved：已解决。如果一个 promise P 的状态跟随另一个 promise Q 的状态、P 的状态变成 fulfilled 或者 P 的状态变成 rejected，当出现这三种情况中的任意一种，那么就能认为 P 被 resolved。如何让 P 跟随 Q？在后面会详细介绍。
 1. unresolved：未解决。
 
 ## Promise 构造函数
@@ -59,7 +59,7 @@ interface PromiseConstructor {
 }
 ```
 
-我们用 Promise 构建函数创建一个 promise 对象，记为 P。通过上面的接口，我们可以得出如下结论：
+我们用 Promise 构建函数创建一个 promise 对象，记为 P。通过上面的 PromiseConstructor 接口，我们可以得出如下结论：
 
 1. Promise 构建函数接受一个函数作为参数，在这里记为 executor，executor 没有返回值。即使你在代码中写了返回值，返回值也会被忽略。
 2. executor 的参数 resolve 和 reject 依然是函数。
@@ -71,7 +71,7 @@ interface PromiseConstructor {
 分析下面这段代码，并在浏览器中运行它，看看你分析的结果与浏览器实际的结果是否一致
 
 ```javascript
-function getMyPromise(p:any, finish: boolean = false) {
+function getMyPromise(p, finish = false) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
         if (finish) {
@@ -83,15 +83,17 @@ function getMyPromise(p:any, finish: boolean = false) {
   })
 }
 
-const myPromise1 = getMyPromise('it will be rejected', false)
+const myPromise1 = getMyPromise('我的状态会变成 rejected', false)
 const myPromise2 = getMyPromise(myPromise1, true)
 
 myPromise2.then((val) => {
-    console.log(`i was fulfilled with ${val}`)
+    console.log(`我被兑现了，并且兑现的值是: ${val}`)
 }).catch((error) => {
-    console.log(`i was rejected, reason is "${error}"`)
+    console.log(`我被拒绝了, 理由是: "${error}"`)
 })
 ```
+
+浏览器打印的结果是：我被拒绝了, 理由是: "我的状态会变成 rejected"。从浏览器打印结果中可以看出：myPromise2 的状态跟随了 myPromise1 的状态，所以说，promise 的状态会变成 fulfilled 还是 rejected，这与调用 resolve 函数还是调用 reject 函数没有必然关系。
 
 ## promise 链
 
