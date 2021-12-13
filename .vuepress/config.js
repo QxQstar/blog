@@ -173,6 +173,10 @@ module.exports = config({
                     {
                         text:'优化 JS 的加载性能之 Tree Shaking',
                         link: '/documents/summary/treeshaking/treeShaking'
+                    },
+                    {
+                        text: 'Javascript 异步编程',
+                        link: '/documents/asynchronous/'
                     }
                 ]
             },
