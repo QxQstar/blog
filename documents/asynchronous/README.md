@@ -4,7 +4,7 @@
 
 Callback Hell 是最古老的方式，它使用嵌套回调函数的方式实现异步编程，这种方式的函数前套层级可能会很深，它的代码结构看上去如下图：
 
-![](./img/callback hell.jpeg)
+![](./img/callback-hell.jpeg)
 
 通过 Promise 实现异步编程减少了回调函数的嵌套，但是它依然没有摆脱回调函数。它违背了 Don’t Repeat Yourself (DRY) 原则，另外它也不好 Debug。
 
