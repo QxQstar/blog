@@ -327,12 +327,12 @@ const fulfilledThenable = {
 再看一个例子
 
 ```javascript
-const fulfilledThenable = {
+const rejectedThenable = {
       then(resolve, reject) {
           reject('reject hello'); // 注意这个地方
       }
   };
-  const promise = Promise.resolve(fulfilledThenable);
+  const promise = Promise.resolve(rejectedThenable);
   console.log(promise instanceof Promise); // true
   promise
     .then(x => console.log(x))
