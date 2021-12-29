@@ -117,6 +117,12 @@ console.log(student);
 
 In computer science, syntactic sugar is syntax within a programming language that is designed to make things easier to read or to express. It makes the language "sweeter" for human use: things can be expressed more clearly, more concisely, or in an alternative style that some may prefer.
 
-它的意思是：在计算机科学中，语法糖是编程语言中的语法，其设计目的是使内容更易于阅读或表达。使用语法糖可以将事物表达得更清楚、更简洁，或者用一些人们可能更喜欢的风格来表达。
+它的意思是：在计算机科学中，语法糖是编程语言中的语法，其设计目的是使内容更易于阅读或表达。使用语法糖可以将事物表达得更清楚、更简洁，或者用一些人们更喜欢的风格来表达。
 
 换句话说，使用语法糖就是换一种表达方式，它让代码更易于阅读，它不会添加新的行为。
+
+接下来我从 3 个方面来证明，class语法不仅仅是语法糖
+
+1. 必须使用 new 关键字调用
+2. class实例方法不可枚举
+3. class 语法运行在严格模式下
