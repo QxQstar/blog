@@ -139,6 +139,10 @@ module.exports = config({
                         link :'/documents/summary/2020/'
                     },
                     {
+                        text: '2021 总结｜2021年年终自述',
+                        link :'/documents/summary/2021/'
+                    },
+                    {
                         text: '深入学习 React Fiber',
                         link: '/documents/summary/fiber/result.html'
                     },
