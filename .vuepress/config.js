@@ -181,6 +181,10 @@ module.exports = config({
                     {
                         text: 'Javascript 异步编程',
                         link: '/documents/asynchronous/'
+                    },
+                    {
+                        text: 'ECMAScript modules 详解',
+                        link: '/documents/summary/esModules/index'
                     }
                 ]
             },

@@ -268,7 +268,7 @@ export {} // 将这个文件标记成模块
 
 下图展示了浏览器获取外部模块脚本和常规脚本的流程
 
-![](./img/browser-fetch-js.png)
+![](./browser-fetch-js.png)
 
 上图源于 (https://html.spec.whatwg.org/multipage/scripting.html#the-script-element)
 
