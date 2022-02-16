@@ -185,6 +185,10 @@ module.exports = config({
                     {
                         text: 'ECMAScript modules 详解',
                         link: '/documents/summary/esModules/index'
+                    },
+                    {
+                        text: 'TypeScript 类型系统和自定义数据类型',
+                        link: '/documents/lowCode/basicTheory/TypeScript/typesystem'
                     }
                 ]
             },
