@@ -189,6 +189,10 @@ module.exports = config({
                     {
                         text: 'TypeScript 类型系统和自定义数据类型',
                         link: '/documents/lowCode/basicTheory/TypeScript/typesystem'
+                    },
+                    {
+                        text: '类型断言 VS 类型守卫',
+                        link: '/documents/lowCode/basicTheory/TypeScript/typeGuard'
                     }
                 ]
             },
