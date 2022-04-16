@@ -15,7 +15,7 @@ getName 是一个纯函数，不产生任何副作用，当执行结束，它的
 
 要对比函数组件和类组件的区别，下面用类组件和函数组件实现相同的功能，即：在浏览器显示一个按钮，点击按钮调用 props 中的方法去更新父组件的 state，隔 1s 之后打印 props.count 的值。类组件的代码如下：
 
-```typescript
+```jsx
 class ClassCom extends React.Component<Props, never> {
     render(): React.ReactNode {
         return (
