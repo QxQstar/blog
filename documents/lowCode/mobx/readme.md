@@ -15,8 +15,6 @@ mobx 的版本为：6.5.0
 
 本书将 MobX 开发者工具以  Chrome 插件的形式安装，在谷歌商店搜索 MobX Developer Tools。
 
-
-
 ## 从一个 demo 开始
 
 ### 不与 React 结合
