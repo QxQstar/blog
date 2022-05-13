@@ -197,6 +197,10 @@ module.exports = config({
                     {
                         text: '我搞懂了 React 的函数组件',
                         link: '/documents/summary/functionComponent/index'
+                    },
+                    {
+                        text: '我搞懂了 React 的 useState 和 useEffect',
+                        link: '/documents/summary/useStateAndUseEffect/index'
                     }
                 ]
             },
