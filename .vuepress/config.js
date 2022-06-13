@@ -201,6 +201,10 @@ module.exports = config({
                     {
                         text: '我搞懂了 React 的 useState 和 useEffect',
                         link: '/documents/summary/useStateAndUseEffect/index'
+                    },
+                    {
+                        text: 'TypeScript 类型兼容',
+                        link: '/documents/lowCode/basicTheory/TypeScript/typeCompatibility'
                     }
                 ]
             },
