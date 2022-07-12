@@ -205,6 +205,10 @@ module.exports = config({
                     {
                         text: 'TypeScript 类型兼容',
                         link: '/documents/lowCode/basicTheory/TypeScript/typeCompatibility'
+                    },
+                    {
+                        text: 'HTML5 拖放操作',
+                        link: '/documents/summary/dragAndDrop/index'
                     }
                 ]
             },
