@@ -1,6 +1,6 @@
 # HTML5 拖放操作
 
-在定位设备的可视化媒体上，drag 操作是 mousedown 事件的默认行为，随后是一系列 mousemove 事件，最后通过释放鼠标来触发 drop 操作。
+在有定位设备的可视化媒体上，drag 操作是 mousedown 事件的默认行为，随后是一系列 mousemove 事件，最后通过释放鼠标来触发 drop 操作。
 
 ## 创建可拖动的内容
 
@@ -62,7 +62,7 @@ draggableItems.forEach(item => {
 })
 ```
 
-在 dragstart 事件处理程序中，将被拖动的元素设置成半透明，在 dragend 事件处理程序中，将被拖动的元素设置成不透明。
+上述代码在 dragstart 事件处理程序中，将被拖动的元素设置成半透明，在 dragend 事件处理程序中，将被拖动的元素设置成不透明。
 
 ### dragenter, dragover 和 dragleave
 
@@ -96,7 +96,7 @@ dropTargets.forEach(dropTarget => {
 
 ### drop
 
-在 drop target 上绑定 drop 事件，在它的事件处理程序中完成最终的拖放操作，释放鼠标时要想 drop target 触发 drop 事件，必须取消 dragover 事件的默认行为。
+给 drop target 绑定 drop 事件，在它的事件处理程序中完成最终的拖放操作，释放鼠标时要想 drop target 触发 drop 事件，必须取消 dragover 事件的默认行为。
 
 ```javascript
 dropTarget.addEventListener('drop', (e: DragEvent) => {
@@ -175,7 +175,7 @@ function onDragStart(event) {
 }
 ```
 
-得到的效果区如下：
+得到的效果图如下：
 
 ![](./img/drag-fallback.png)
 
