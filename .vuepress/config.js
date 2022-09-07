@@ -209,6 +209,14 @@ module.exports = config({
                     {
                         text: 'HTML5 拖放操作',
                         link: '/documents/summary/dragAndDrop/index'
+                    },
+                    {
+                        text: '前端录制回放',
+                        link: '/documents/summary/recordWeb/index'
+                    },
+                    {
+                        text: 'webpack output.library 详解',
+                        link: '/documents/webpack/library/index'
                     }
                 ]
             },
