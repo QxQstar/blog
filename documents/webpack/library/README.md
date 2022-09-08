@@ -444,3 +444,7 @@ System.register("MyLibrary", [], function(__WEBPACK_DYNAMIC_EXPORT__, __system_c
 ```
 
 将你的库公开为一个[System](https://github.com/systemjs/systemjs) 模块。
+
+## 总结
+
+当你的库导出的内容需要在另外的地方（通常是另一个项目）访问，那么你应该给 webpack 配置 library 字段，library 究竟要配置成什么值，这取决于你希望你的库怎么被引入。 
