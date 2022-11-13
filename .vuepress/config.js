@@ -221,6 +221,10 @@ module.exports = config({
                     {
                         text: '开发一个前端脚手架',
                         link: '/documents/summary/cli/index'
+                    },
+                    {
+                        text: 'React 状态的不变性',
+                        link: '/documents/summary/Immutability/index'
                     }
                 ]
             },
