@@ -225,6 +225,10 @@ module.exports = config({
                     {
                         text: 'React 状态的不变性',
                         link: '/documents/summary/Immutability/index'
+                    },
+                    {
+                        text: 'React 高阶组件与 Render Props 的劣与优',
+                        link: '/documents/summary/HOC&TS/index'
                     }
                 ]
             },
