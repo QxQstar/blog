@@ -217,6 +217,10 @@ module.exports = config({
                     {
                         text: 'webpack output.library 详解',
                         link: '/documents/webpack/library/index'
+                    },
+                    {
+                        text: '开发一个前端脚手架',
+                        link: '/documents/summary/cli/index'
                     }
                 ]
             },
