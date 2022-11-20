@@ -229,6 +229,10 @@ module.exports = config({
                     {
                         text: 'React 高阶组件与 Render Props 的劣与优',
                         link: '/documents/summary/HOC&TS/index'
+                    },
+                    {
+                        text: '讲清楚 React 的重新渲染',
+                        link: '/documents/summary/rerender/index'
                     }
                 ]
             },
