@@ -5,7 +5,7 @@ Web 前端开发者对渲染和重新渲染应该不陌生，在 React 中，它
 * 渲染：React 让组件根据当前的 props 和 state 描述它要展示的内容。
 * 重新渲染：React 让组件重新描述它要展示的内容。
 
-渲染与更新 DOM 是不同的事情，组件经历了渲染，DOM 不一定会更新，React 渲染一个组件，如果组件返回的结果与上次的相同，那么它的 DOM 节点不需要有任何更新。本文主要介绍与 React 渲染相关的知识。要将组件显示到屏幕上，React 的工作主要分为两个阶段：
+要将组件显示到屏幕上，React 的工作主要分为两个阶段，本文介绍与 React 渲染相关的知识。
 
 * render 阶段（渲染阶段）：计算组件的输出并收集所有需要应用到 DOM 上的变更。
 * commit 阶段（提交阶段）：将 render 阶段计算出的变更应用到 DOM 上。
@@ -132,3 +132,6 @@ function Parent() {
 
 上述代码中，Parent 组件重新渲染会创建新的 onClick 函数，所以对 MemoizedChildren 而言，props.onClic k的引用有变化，最终被 React.memo 包裹的Children 会重新渲染,如果让组件跳过重新渲染对你真的很重要，那么在上述代码中将 React.memo 与 useCallback 配合使用才能达到目的。
 
+## 总结
+
+渲染与更新 DOM 是不同的事情，组件经历了渲染，DOM 不一定会更新，如果渲染组件返回的结果与上次的相同，那么它的 DOM 节点不需要有任何更新。与 React 渲染密切相关的还有另一个概念，即 Immutability，[React 状态的不变性](/documents/summary/Immutability/index)一文已介绍过它。
