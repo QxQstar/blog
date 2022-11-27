@@ -23,6 +23,10 @@ module.exports = config({
                         link: '/documents/lowCode/lowCode'
                     },
                     {
+                        text: '开发一个前端脚手架',
+                        link: '/documents/summary/cli/index'
+                    },
+                    {
                         text: '基础理论知识 -- Promise',
                         link: '/documents/lowCode/basicTheory/TypeScript/ES6ES7/Promise'
                     },
@@ -33,6 +37,22 @@ module.exports = config({
                     {
                         text: '基础理论知识 -- class',
                         link: '/documents/lowCode/basicTheory/TypeScript/ES6ES7/class'
+                    },
+                    {
+                        text: 'React 状态的不变性',
+                        link: '/documents/summary/Immutability/index'
+                    },
+                    {
+                        text: 'React 高阶组件与 Render Props 的劣与优',
+                        link: '/documents/summary/HOC&TS/index'
+                    },
+                    {
+                        text: '讲清楚 React 的重新渲染',
+                        link: '/documents/summary/rerender/index'
+                    },
+                    {
+                        text: '低代码跨 iframe 拖拽',
+                        link: '/documents/lowCode/drag/index'
                     }
                 ]
             },
@@ -217,22 +237,6 @@ module.exports = config({
                     {
                         text: 'webpack output.library 详解',
                         link: '/documents/webpack/library/index'
-                    },
-                    {
-                        text: '开发一个前端脚手架',
-                        link: '/documents/summary/cli/index'
-                    },
-                    {
-                        text: 'React 状态的不变性',
-                        link: '/documents/summary/Immutability/index'
-                    },
-                    {
-                        text: 'React 高阶组件与 Render Props 的劣与优',
-                        link: '/documents/summary/HOC&TS/index'
-                    },
-                    {
-                        text: '讲清楚 React 的重新渲染',
-                        link: '/documents/summary/rerender/index'
                     }
                 ]
             },
