@@ -53,6 +53,10 @@ module.exports = config({
                     {
                         text: '低代码跨 iframe 拖拽',
                         link: '/documents/lowCode/drag/index'
+                    },
+                    {
+                        text: '用 Mobx 实现 React 应用的状态管理',
+                        link: '/documents/lowCode/mobx/mobxAndReact'
                     }
                 ]
             },
