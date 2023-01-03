@@ -241,6 +241,10 @@ module.exports = config({
                     {
                         text: 'webpack output.library 详解',
                         link: '/documents/webpack/library/index'
+                    },
+                    {
+                        text: '我的 2022 年，写书，房子，车子，晋升',
+                        link: '/documents/summary/2022/index'
                     }
                 ]
             },
