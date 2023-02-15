@@ -57,6 +57,10 @@ module.exports = config({
                     {
                         text: '用 Mobx 实现 React 应用的状态管理',
                         link: '/documents/lowCode/mobx/mobxAndReact'
+                    },
+                    {
+                        text: '低代码组件显示',
+                        link: '/documents/lowCode/showComponent/index'
                     }
                 ]
             },
