@@ -61,6 +61,10 @@ module.exports = config({
                     {
                         text: '低代码组件显示',
                         link: '/documents/lowCode/showComponent/index'
+                    },
+                    {
+                        text: '在低代码中使用 GitLab API',
+                        link: '/documents/lowCode/gitlab/index'
                     }
                 ]
             },
