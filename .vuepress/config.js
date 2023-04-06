@@ -253,6 +253,10 @@ module.exports = config({
                     {
                         text: '我的 2022 年，写书，房子，车子，晋升',
                         link: '/documents/summary/2022/index'
+                    },
+                    {
+                        text: 'Typescript 装饰器',
+                        link: 'documents/lowCode/basicTheory/TypeScript/decorator/index'
                     }
                 ]
             },
