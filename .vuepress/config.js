@@ -65,6 +65,10 @@ module.exports = config({
                     {
                         text: '在低代码中使用 GitLab API',
                         link: '/documents/lowCode/gitlab/index'
+                    },
+                    {
+                        text: '低代码的发展',
+                        link: '/documents/lowCode/development/index'
                     }
                 ]
             },
