@@ -265,6 +265,27 @@ module.exports = config({
                 ]
             },
             {
+                text: '摘抄与感悟',
+                items:[
+                    {
+                        text: '爱情之于女人',
+                        link: '/documents/excerpt/LoveForWomen.html'
+                    },
+                    {
+                        text: '对小女孩的教育',
+                        link: '/documents/excerpt/girlEdu.html'
+                    },
+                    {
+                        text: '男女关系',
+                        link: '/documents/excerpt/fight.html'
+                    },
+                    {
+                        text: '成为一个有创造力的人',
+                        link: '/documents/excerpt/creation.html'
+                    }
+                ]
+            },
+            {
                 text: 'github',
                 link: 'https://github.com/QxQstar',
                 target: '_blank'
