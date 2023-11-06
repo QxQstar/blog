@@ -2,9 +2,9 @@ const { config } = require("vuepress-theme-hope");
 
 module.exports = config({
     title: '何遇的博客',
-    description: '何其有幸，今生相遇',
+    description: '写过小说，写过技术书的前端工程师',
     themeConfig: {
-        record: '蜀ICP备19040311号-1',
+        record: '蜀ICP备19040311号-1ee',
         recordLink: 'https://beian.miit.gov.cn/',
         startYear:'2019',
         nav: [{

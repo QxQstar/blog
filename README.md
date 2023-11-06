@@ -1,17 +1,35 @@
 ---
 home: true
-heroText: 
-heroImage: ./logo.jpeg
-tagline: 何其有幸，今生相遇
+heroText: 何遇的博客
+heroImage: ./logo-small.jpg
+tagline: 写过小说，写过技术书的前端工程师
 actionText: NEXT →
-actionLink: /documents/webBasic/gitCommit/
+actiondetails: /documents/webBasic/gitCommit/
 features:
-- title: 简单的自我介绍
-  details: 某不知名大学2017届毕业生，目前在成都从事前端开发工作，常以何遇为名混迹于前端圈
-- title: 何遇的博客
-  details: 前端路上 | 以文字记录日常所思
-- title: 关于logo
-  details: 表妹拍摄的家门口景色
+- title: React
+  details: /documents/summary/rerender/index
+- title: Vue
+  details: /documents/library/vue/
+- title: 低代码
+  details: /documents/lowCode/lowCode
+- title: MongoDB
+  details: /MongoDB
+- title: JS/TS
+  details: /documents/lowCode/basicTheory/TypeScript/ES6ES7/class
+- title: 小说
+  details: /note
+- title: Git
+  details: /documents/webBasic/gitCommit/
+- title: Node.js
+  details: /node.js
+- title: 摘抄与感悟
+  details: /documents/excerpt/LoveForWomen.html
+- title: 技术调研
+  details: /documents/microFE/mutilResolve/
+- title: 年终总结
+  details: /documents/summary/2022/index
+- title: 基础设施
+  details: /documents/library/vue-cli 3.x/
 footer: <a href="https://beian.miit.gov.cn/">蜀ICP备19040311号-1</a>
 copyrightText: MIT LICENSE
 ---
