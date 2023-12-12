@@ -260,7 +260,19 @@ module.exports = config({
                     },
                     {
                         text: 'Typescript 装饰器',
-                        link: 'documents/lowCode/basicTheory/TypeScript/decorator/index'
+                        link: '/documents/lowCode/basicTheory/TypeScript/decorator/index'
+                    },
+                    {
+                        text: '详解 HTTP 中间人攻击',
+                        link: '/documents/HTTP/MitM.html'
+                    },
+                    {
+                        text: 'TCP 三次握手过程分析',
+                        link: '/documents/HTTP/TCP-Hello.html'
+                    },
+                    {
+                        text: 'TCP 四次挥手过程分析',
+                        link: '/documents/HTTP/TCP-bye.html'
                     }
                 ]
             },
@@ -282,6 +294,14 @@ module.exports = config({
                     {
                         text: '成为一个有创造力的人',
                         link: '/documents/excerpt/creation.html'
+                    },
+                    {
+                        text: '怎么学习之学习的框架',
+                        link: '/documents/excerpt/learn.html'
+                    },
+                    {
+                        text: '卢梭对金钱的看法',
+                        link: '/documents/excerpt/lusuo-money.html'
                     }
                 ]
             },
