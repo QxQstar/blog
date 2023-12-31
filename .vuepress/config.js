@@ -161,7 +161,7 @@ module.exports = config({
                     },
                     {
                         text: "是时候用 useMemo,useCallback,React's memo API 优化性能了?",
-                        link: '/documents/reactHooks/useCallback+UseMemo+MemoApi.html'
+                        link: '/documents/react/useCallback+UseMemo+MemoApi.html'
                     },{
                         text: "手把手带你实现一个简易版 React",
                         link: '/documents/analyseReact/'
@@ -302,6 +302,10 @@ module.exports = config({
                     {
                         text: '卢梭对金钱的看法',
                         link: '/documents/excerpt/lusuo-money.html'
+                    },
+                    {
+                        text: '第三种报答方式',
+                        link: '/documents/excerpt/repay.html'
                     }
                 ]
             },
