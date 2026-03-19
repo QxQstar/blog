@@ -14,12 +14,7 @@ export default defineUserConfig({
   bundler: viteBundler(),
   theme: hopeTheme(
     {
-      logo: "/logo-small.jpg",
-      // footer: '<a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">蜀ICP备19040311号-1</a>',
-      copyright: false,
-      navbar: false,
-      sidebar: "structure",
-      headerDepth: 3,
+      darkmode: "enable",
     },
     { custom: true },
   ),
