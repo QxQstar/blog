@@ -2,32 +2,13 @@
   "name": "learn",
   "version": "1.10.0",
   "scripts": {
-    "docs:dev": "vuepress dev",
-    "docs:build": "vuepress build",
-    "commit": "git cz",
-    "login2": "ssh root@122.152.199.134",
-    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
-    "deploy": "scp -r ./docs/* root@122.152.199.134:/usr/share/nginx/blog"
+    "docs:dev": "vuepress dev .",
+    "docs:build": "vuepress build ."
   },
   "devDependencies": {
-    "@commitlint/cli": "^8.1.0",
-    "@commitlint/config-conventional": "^8.1.0",
-    "commitizen": "^4.0.3",
-    "conventional-changelog-cli": "^2.0.23",
-    "cz-conventional-changelog": "^3.0.2",
-    "husky": "^3.0.4",
-    "validate-commit-msg": "^2.14.0",
-    "vuepress": "^1.6.0",
-    "vuepress-theme-hope": "^1.21.0"
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
+    "@vuepress/bundler-vite": "^2.0.0-rc.26",
+    "sass-embedded": "^1.98.0",
+    "vuepress": "^2.0.0-rc.26",
+    "vuepress-theme-hope": "^2.0.0-rc.103"
   }
 }

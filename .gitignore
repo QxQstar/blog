@@ -2,3 +2,7 @@
 /node_modules/
 /test
 /docs
+.DS_Store
+.vuepress/.cache/
+.vuepress/.temp/
+dist/

@@ -1,0 +1,32 @@
+h1 {
+  font-size: 22px;
+}
+
+h2 {
+  font-size: 20px;
+}
+
+h3 {
+  font-size: 16px;
+}
+
+p,
+li {
+  font-size: 14px;
+}
+
+.vp-sidebar {
+  width: 18rem;
+}
+
+.content-markdown p > img,
+.content-markdown img {
+  max-width: 100%;
+}
+
+.content-markdown li,
+.content-markdown li a
+ {
+  font-weight: 400;
+  color: rgb(29, 133, 75);
+}
