@@ -13,6 +13,11 @@ h3 {
 p,
 li {
   font-size: 14px;
+  line-height: 1.8;
+}
+
+p {
+  margin-top: 25px;
 }
 
 .vp-sidebar {
@@ -24,7 +29,6 @@ li {
   max-width: 100%;
 }
 
-.content-markdown li,
 .content-markdown li a
  {
   font-weight: 400;
