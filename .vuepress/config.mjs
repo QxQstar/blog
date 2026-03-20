@@ -41,6 +41,19 @@ export default defineUserConfig({
     ["meta", { name: "twitter:title", content: siteName }],
     ["meta", { name: "twitter:description", content: siteDescription }],
     ["link", { rel: "canonical", href: `${siteUrl}/` }],
+    [
+      "script",
+      { type: "text/javascript" },
+      `
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?88e6dabe0a7f95b8cdd6d0eed9bb88b6";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+`,
+    ],
   ],
   bundler: viteBundler(),
   theme: hopeTheme(
