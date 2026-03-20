@@ -24,6 +24,8 @@
         >
           <h3>{{ item.title }}</h3>
           <p>{{ item.description }}</p>
+
+          <div class="go-to-detail">查看详细</div>
         </RouterLink>
       </div>
     </section>
@@ -151,6 +153,11 @@ const sections = [
     transform 0.2s ease,
     border-color 0.2s ease,
     box-shadow 0.2s ease;
+}
+
+.card .go-to-detail {
+  text-align: right;
+  font-size: 14px;
 }
 
 .card:hover {
