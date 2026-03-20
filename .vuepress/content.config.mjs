@@ -5,12 +5,12 @@ export const contentSections = [
     link: "/documents/workplace/",
     prefix: "/documents/workplace/",
   },
-  {
-    id: "organization",
-    title: "组织观察",
-    link: "/documents/organization/",
-    prefix: "/documents/organization/",
-  },
+  // {
+  //   id: "organization",
+  //   title: "组织观察",
+  //   link: "/documents/organization/",
+  //   prefix: "/documents/organization/",
+  // },
   {
     id: "relationship",
     title: "关系社会",

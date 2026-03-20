@@ -45,12 +45,12 @@ const sections = [
     description:
       "写求职、面试、薪酬、晋升、离职与管理，关注个体如何在工作中做更划算的选择。",
   },
-  {
-    title: "组织观察",
-    link: "/documents/organization/",
-    description:
-      "写权力、协作、资源分配、话语权与办公室政治。关注组织表面流程背后的真实激励。",
-  },
+  // {
+  //   title: "组织观察",
+  //   link: "/documents/organization/",
+  //   description:
+  //     "写权力、协作、资源分配、话语权与办公室政治。关注组织表面流程背后的真实激励。",
+  // },
   {
     title: "关系社会",
     link: "/documents/relationship/",
