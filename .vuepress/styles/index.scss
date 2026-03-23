@@ -34,3 +34,12 @@ p {
   font-weight: 400;
   color: rgb(29, 133, 75);
 }
+
+
+.content-markdown strong {
+  color: rgb(29, 133, 75);
+}
+
+.content-markdown blockquote {
+  border-inline-start: 0.2rem solid rgb(29, 133, 75);
+}
